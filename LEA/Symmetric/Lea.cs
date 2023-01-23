@@ -81,9 +81,9 @@ public static class Lea
     /// <summary>
     /// CBC-MAC mode
     /// </summary>
-    public sealed class Cmac : CMac
+    public sealed class CMac : Mac.CMac
     {
-        public Cmac() : base(GetEngine())
+        public CMac() : base(GetEngine())
         {
         }
     }

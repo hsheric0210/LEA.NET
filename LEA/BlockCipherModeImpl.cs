@@ -25,7 +25,7 @@ public abstract class BlockCipherModeImpl : BlockCipherMode
         if (part1.Length > 0)
             part1.CopyTo(output);
         if (part2.Length > 0)
-            part2.CopyTo(output[part1.Length..]);
+            part2.CopyTo(output.AsSpan()[part1.Length..]);
         return output;
     }
 

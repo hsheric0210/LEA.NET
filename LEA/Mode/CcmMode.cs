@@ -87,7 +87,7 @@ public class CcmMode : BlockCipherModeAE
         else
         {
             mac = mac[..taglen].ToArray();
-            if (!Equals(tag, mac))
+            if (!tag.SequenceEqual(mac))
                 output.Fill(0);
         }
 

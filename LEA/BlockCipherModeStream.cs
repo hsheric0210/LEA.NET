@@ -26,9 +26,6 @@ public abstract class BlockCipherModeStream : BlockCipherModeImpl
 
     public override ReadOnlySpan<byte> Update(ReadOnlySpan<byte> bytes)
     {
-        if (bytes == null)
-            return Array.Empty<byte>();
-
         var length = bytes.Length;
         var gap = buffer.Length - bufferOffset;
         var inOffset = 0;
@@ -36,7 +33,7 @@ public abstract class BlockCipherModeStream : BlockCipherModeImpl
         var output = new byte[GetUpdateOutputSize(length)];
         if (length >= gap)
         {
-            bytes.Slice(inOffset, gap).CopyTo(buffer[bufferOffset..]);
+            bytes.Slice(inOffset, gap).CopyTo(buffer.AsSpan()[bufferOffset..]);
             //Array.Copy(bytes, inOffset, buffer, bufferOffset, gap);
             outOffset += ProcessBlock(buffer, 0, output, outOffset);
             bufferOffset = 0;
@@ -52,7 +49,7 @@ public abstract class BlockCipherModeStream : BlockCipherModeImpl
 
         if (length > 0)
         {
-            bytes.Slice(inOffset, length).CopyTo(buffer[bufferOffset..]);
+            bytes.Slice(inOffset, length).CopyTo(buffer.AsSpan()[bufferOffset..]);
             //Array.Copy(bytes, inOffset, buffer, bufferOffset, length);
             bufferOffset += length;
             //len = 0;

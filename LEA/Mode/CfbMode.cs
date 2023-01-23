@@ -30,10 +30,10 @@ public class CFBMode : BlockCipherModeStream
         Buffer.BlockCopy(iv, 0, feedback, 0, blockSize);
     }
 
-    protected override int ProcessBlock(ReadOnlySpan<byte> input, int inOffset, Span<byte> output, int outOffset, int length)
+    protected override int ProcessBlock(ReadOnlySpan<byte> input, int inOffset, Span<byte> output, int outOffset, int outLength)
     {
-        var processed = engine.ProcessBlock(feedback, 0, block, 0);
-        XOR(output, outOffset, input, inOffset, block, 0, length);
+        var length = engine.ProcessBlock(feedback, 0, block, 0);
+        XOR(output, outOffset, input, inOffset, block, 0, outLength);
         if (mode == OperatingMode.Encrypt)
         {
             output.Slice(outOffset, blockSize).CopyTo(feedback);
@@ -43,6 +43,6 @@ public class CFBMode : BlockCipherModeStream
             input.Slice(inOffset, blockSize).CopyTo(feedback);
         }
 
-        return processed;
+        return length;
     }
 }
