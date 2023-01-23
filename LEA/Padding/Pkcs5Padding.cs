@@ -2,77 +2,72 @@ namespace LEA.Padding;
 
 public class Pkcs5Padding : PaddingBase
 {
-	public Pkcs5Padding(int blocksize) : base(blocksize)
-	{
-	}
+    public Pkcs5Padding(int blocksize) : base(blocksize)
+    {
+    }
 
-	public override byte[] Pad(byte[] input)
-	{
-		if (input == null)
-			throw new ArgumentNullException(nameof(input));
+    public override ReadOnlySpan<byte> Pad(ReadOnlySpan<byte> input)
+    {
+        if (input == null)
+            throw new ArgumentNullException(nameof(input));
 
-		if (input.Length > blocksize)
-			throw new InvalidOperationException("input should be shorter than blocksize");
+        if (input.Length > blockSize)
+            throw new InvalidOperationException("input should be shorter than blocksize");
 
-		var output = new byte[blocksize];
-		Array.Copy(input, 0, output, 0, input.Length);
-		Pad(output, input.Length);
-		return output;
-	}
+        Span<byte> output = new byte[blockSize];
+        input.CopyTo(output);
+        Pad(output, input.Length);
+        return output;
+    }
 
-	public override void Pad(byte[] input, int inOffset)
-	{
-		if (input == null)
-			throw new ArgumentNullException(nameof(input));
+    public override void Pad(Span<byte> bytes, int offset)
+    {
+        if (bytes.Length < offset)
+            throw new ArgumentException("Index out of bounds: " + nameof(bytes));
 
-		if (input.Length < inOffset)
-			throw new ArgumentException("Index out of bounds: " + nameof(input));
+        var code = (byte)(bytes.Length - offset);
+        bytes[offset..].Fill(code);
+    }
 
-		var code = (byte)(input.Length - inOffset);
-		Array.Fill(input, code, inOffset, input.Length);
-	}
+    public override ReadOnlySpan<byte> Unpad(ReadOnlySpan<byte> input)
+    {
+        if (input.Length < 1)
+            throw new ArgumentException("Empty array: " + nameof(input));
+        if (input.Length % blockSize != 0)
+            throw new ArgumentException("Bad padding"); // FIXME: Padding oracle attack
 
-	public override byte[] Unpad(byte[] input)
-	{
-		if (input == null)
-			throw new ArgumentNullException(nameof(input));
-		if (input.Length < 1)
-			throw new ArgumentException("Empty array: " + nameof(input));
-		if (input.Length % blocksize != 0)
-			throw new ArgumentException("Bad padding"); // FIXME: Padding oracle attack
+        var cnt = input.Length - GetPadCount(input);
+        if (cnt == 0)
+            return Array.Empty<byte>();
 
-		var cnt = input.Length - GetPadCount(input);
-		if (cnt == 0)
-			return Array.Empty<byte>();
+        Span<byte> output = new byte[cnt];
+        input[..cnt].CopyTo(output);
+        return output;
+    }
 
-		var output = new byte[cnt];
-		Array.Copy(input, 0, output, 0, output.Length);
-		return output;
-	}
+    public override int GetPadCount(ReadOnlySpan<byte> input)
+    {
+        if (input == null)
+            throw new ArgumentNullException(nameof(input));
 
-	public override int GetPadCount(byte[] input)
-	{
-		if (input == null)
-			throw new ArgumentNullException(nameof(input));
+        if (input.Length < 1)
+            throw new ArgumentException("Empty array: " + nameof(input));
 
-		if (input.Length < 1)
-			throw new ArgumentException("Empty array: " + nameof(input));
+        if (input.Length % blockSize != 0)
+            throw new ArgumentException("Bad padding");
 
-		if (input.Length % blocksize != 0)
-			throw new ArgumentException("Bad padding");
+        var count = input[input.Length - 1] & 0xff;
+        var isBadPadding = false;
+        var lower_bound = input.Length - count;
+        for (var i = input.Length - 1; i > lower_bound; --i)
+        {
+            if (input[i] != count)
+                isBadPadding = true;
+        }
 
-		var count = input[input.Length - 1] & 0xff;
-		var isBadPadding = false;
-		var lower_bound = input.Length - count;
-		for (var i = input.Length - 1; i > lower_bound; --i)
-		{
-			if (input[i] != count)
-				isBadPadding = true;
-		}
+        if (isBadPadding)
+            throw new InvalidOperationException("Bad Padding"); // FIXME: Padding oracle attack
 
-		if (isBadPadding)
-			throw new InvalidOperationException("Bad Padding"); // FIXME: Padding oracle attack
-
-		return count;
-	}
+        return count;
+    }
 }
