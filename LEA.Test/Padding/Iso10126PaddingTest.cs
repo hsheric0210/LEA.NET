@@ -131,6 +131,6 @@ public class Iso10126PaddingTest
 
         // Act
         // Assert
-        Assert.Throws<InvalidOperationException>(() => _ = impl.Unpad(badPadded));
+        Assert.Throws<ArgumentException>(() => _ = impl.Unpad(badPadded));
     }
 }

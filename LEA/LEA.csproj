@@ -1,9 +1,29 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageId>LEA.NET</PackageId>
+		<Company />
+		<Title>LEA.NET - .NET implementation of LEA</Title>
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\LEA.NET.snk</AssemblyOriginatorKeyFile>
+		<Version>1.0.0</Version>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<Authors>hsheric0210, KISA </Authors>
+		<Product>$(PackageId)</Product>
+		<Description>LEA.NET is pure .NET language implementation of LEA.</Description>
+		<PackageProjectUrl>https://github.com/hsheric0210/LEA.NET</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/hsheric0210/LEA.NET</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>crypto;cryptography;encryption;security</PackageTags>
+		<PackageReleaseNotes></PackageReleaseNotes>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 </Project>
