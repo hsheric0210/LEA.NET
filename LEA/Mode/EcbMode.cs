@@ -1,8 +1,8 @@
 namespace LEA.Mode;
 
-public class ECBMode : BlockCipherModeBlock
+public class EcbMode : BlockCipherModeBlock
 {
-    public ECBMode(BlockCipher cipher) : base(cipher)
+    public EcbMode(BlockCipher cipher) : base(cipher)
     {
     }
 

@@ -11,7 +11,7 @@ public static class Lea
     /// <summary>
     /// Electronic CodeBook mode
     /// </summary>
-    public sealed class Ecb : ECBMode
+    public sealed class Ecb : EcbMode
     {
         public Ecb() : base(GetEngine())
         {
@@ -31,7 +31,7 @@ public static class Lea
     /// <summary>
     /// Counter mode
     /// </summary>
-    public sealed class Ctr : CTRMode
+    public sealed class Ctr : CtrMode
     {
         public Ctr() : base(GetEngine())
         {
@@ -41,7 +41,7 @@ public static class Lea
     /// <summary>
     /// Cipher FeedBack mode
     /// </summary>
-    public sealed class Cfb : CFBMode
+    public sealed class Cfb : CfbMode
     {
         public Cfb() : base(GetEngine())
         {
@@ -71,7 +71,7 @@ public static class Lea
     /// <summary>
     /// Galois Counter Mode
     /// </summary>
-    public sealed class Gcm : GCMMode
+    public sealed class Gcm : GcmMode
     {
         public Gcm() : base(GetEngine())
         {

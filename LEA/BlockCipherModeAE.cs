@@ -17,32 +17,32 @@ public abstract class BlockCipherModeAE
         buffer = new byte[blockSize];
     }
 
-    public abstract void Init(OperatingMode mode, ReadOnlySpan<byte> mk, ReadOnlySpan<byte> nonce, int taglen);
+    public abstract void Init(OperatingMode mode, ReadOnlySpan<byte> key, ReadOnlySpan<byte> nonce, int tagLength);
 
-    public abstract void UpdateAAD(ReadOnlySpan<byte> aad);
+    public abstract void UpdateAAD(ReadOnlySpan<byte> input);
 
-    public abstract ReadOnlySpan<byte> Update(ReadOnlySpan<byte> msg);
+    public abstract ReadOnlySpan<byte> Update(ReadOnlySpan<byte> message);
 
     public abstract ReadOnlySpan<byte> DoFinal();
 
-    public abstract int GetOutputSize(int len);
+    public abstract int GetOutputSize(int length);
 
-    public virtual ReadOnlySpan<byte> DoFinal(ReadOnlySpan<byte> msg)
+    public virtual ReadOnlySpan<byte> DoFinal(ReadOnlySpan<byte> message)
     {
         if (mode == OperatingMode.Encrypt)
         {
-            ReadOnlySpan<byte> part1 = Update(msg);
+            ReadOnlySpan<byte> part1 = Update(message);
             ReadOnlySpan<byte> part2 = DoFinal();
             var len1 = part1.Length;
             var len2 = part2.Length;
             Span<byte> output = new byte[len1 + len2];
-            part1[..len1].CopyTo(output);
-            part2[..len2].CopyTo(output);
+            part1.CopyTo(output);
+            part2.CopyTo(output[len1..]);
             return output;
         }
         else
         {
-            Update(msg);
+            Update(message);
             return DoFinal();
         }
     }

@@ -3,12 +3,12 @@ using static LEA.Utils.Xor;
 namespace LEA.Mode;
 
 // DONE: block vs buffer
-public class CFBMode : BlockCipherModeStream
+public class CfbMode : BlockCipherModeStream
 {
     private byte[] iv;
     private byte[] block;
     private byte[] feedback;
-    public CFBMode(BlockCipher cipher) : base(cipher)
+    public CfbMode(BlockCipher cipher) : base(cipher)
     {
     }
 

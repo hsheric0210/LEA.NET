@@ -4,10 +4,9 @@ using static LEA.Utils.Shifting;
 
 namespace LEA.Mode;
 
-public class GCMMode : BlockCipherModeAE
+public class GcmMode : BlockCipherModeAE
 {
     private static readonly int MAX_TAGLEN = 16;
-    //@formatter:off
     private static readonly byte[][] REDUCTION = new[]
  {
         new[] { (byte)0x00, (byte)0x00 },
@@ -267,7 +266,7 @@ public class GCMMode : BlockCipherModeAE
         new[] { (byte)0xbf, (byte)0x7c },
         new[] { (byte)0xbe, (byte)0xbe }
  };
-    //@formatter:on
+
     private byte[] nonce;
     private byte[] block;
     private byte[] aadBlock;
@@ -284,7 +283,7 @@ public class GCMMode : BlockCipherModeAE
     private int aadlen;
     private int msglen;
     private MemoryStream decryptionStream;
-    public GCMMode(BlockCipher cipher) : base(cipher)
+    public GcmMode(BlockCipher cipher) : base(cipher)
     {
         block = new byte[blockSize];
         nonce = new byte[blockSize];
@@ -390,34 +389,39 @@ public class GCMMode : BlockCipherModeAE
     public override void UpdateAAD(ReadOnlySpan<byte> input)
     {
         if (input.Length == 0)
-            return;
-
-        var length = input.Length;
-        var gap = aadBlock.Length - aadOffset;
-        var inOffset = 0;
-        if (length > gap)
         {
-            input.Slice(inOffset, gap).CopyTo(aadBlock.AsSpan()[aadOffset..]);
+            return;
+        }
+
+        int len = input.Length;
+        int gap = aadBlock.Length - aadOffset;
+        int inOff = 0;
+        if (len > gap)
+        {
+            input.Slice(inOff, gap).CopyTo(aadBlock.AsSpan()[aadOffset..]);
+            //System.Arraycopy(input, inOff, aadBlock, aadOffset, gap);
             GHash(macBlock, aadBlock, blockSize);
             aadOffset = 0;
-            length -= gap;
-            inOffset += gap;
+            len -= gap;
+            inOff += gap;
             aadlen += gap;
-            while (length >= blockSize)
+            while (len >= blockSize)
             {
-                input.Slice(inOffset, blockSize).CopyTo(aadBlock);
+                input.Slice(inOff, blockSize).CopyTo(aadBlock);
+                //System.Arraycopy(input, inOff, aadBlock, 0, blockSize);
                 GHash(macBlock, aadBlock, blockSize);
-                inOffset += blockSize;
-                length -= blockSize;
+                inOff += blockSize;
+                len -= blockSize;
                 aadlen += blockSize;
             }
         }
 
-        if (length > 0)
+        if (len > 0)
         {
-            input.Slice(inOffset, length).CopyTo(aadBlock.AsSpan()[aadOffset..]);
-            aadOffset += length;
-            aadlen += length;
+            input.Slice(inOff, len).CopyTo(aadBlock.AsSpan()[aadOffset..]);
+            //System.Arraycopy(input, inOff, aadBlock, aadOffset, len);
+            aadOffset += len;
+            aadlen += len;
         }
     }
 
@@ -528,7 +532,7 @@ public class GCMMode : BlockCipherModeAE
 
         if (length > 0)
         {
-            input.Slice(inOffset, length).CopyTo(inBuffer.AsSpan()[blockOffset..]);
+            input.Slice(inOffset, length).CopyTo(inBuffer);
             msglen += length;
             blockOffset += length;
         }
