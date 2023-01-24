@@ -225,7 +225,7 @@ public class CtrModeTest
     };
 
     [Fact]
-    public void LEA256_CTR_Encryption()
+    public void LEA256_CTR_Encryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Ctr();
@@ -245,7 +245,7 @@ public class CtrModeTest
     }
 
     [Fact]
-    public void LEA256_CTR_Decryption()
+    public void LEA256_CTR_Decryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Ctr();
@@ -265,7 +265,7 @@ public class CtrModeTest
     }
 
     [Fact]
-    public void LEA192_CTR_Encryption()
+    public void LEA192_CTR_Encryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Ctr();
@@ -285,7 +285,7 @@ public class CtrModeTest
     }
 
     [Fact]
-    public void LEA192_CTR_Decryption()
+    public void LEA192_CTR_Decryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Ctr();
@@ -306,7 +306,7 @@ public class CtrModeTest
 
 
     [Fact]
-    public void LEA128_CTR_Encryption()
+    public void LEA128_CTR_Encryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Ctr();
@@ -326,7 +326,7 @@ public class CtrModeTest
     }
 
     [Fact]
-    public void LEA128_CTR_Decryption()
+    public void LEA128_CTR_Decryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Ctr();

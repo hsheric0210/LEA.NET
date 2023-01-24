@@ -5,9 +5,9 @@ namespace LEA;
 /// </summary>
 public abstract class PaddingBase
 {
-    protected int BlockSize { get; }
+    protected int BlockSizeBytes { get; }
 
-    protected PaddingBase(int blockSize) => BlockSize = blockSize;
+    protected PaddingBase(int blockSizeBytes) => BlockSizeBytes = blockSizeBytes;
 
     /// <summary>
     /// 패딩 추가

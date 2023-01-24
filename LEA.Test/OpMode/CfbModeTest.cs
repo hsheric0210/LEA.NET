@@ -225,7 +225,7 @@ public class CfbModeTest
     };
 
     [Fact]
-    public void LEA256_CFB_Encryption()
+    public void LEA256_CFB_Encryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Cfb();
@@ -245,7 +245,7 @@ public class CfbModeTest
     }
 
     [Fact]
-    public void LEA256_CFB_Decryption()
+    public void LEA256_CFB_Decryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Cfb();
@@ -265,7 +265,7 @@ public class CfbModeTest
     }
 
     [Fact]
-    public void LEA192_CFB_Encryption()
+    public void LEA192_CFB_Encryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Cfb();
@@ -285,7 +285,7 @@ public class CfbModeTest
     }
 
     [Fact]
-    public void LEA192_CFB_Decryption()
+    public void LEA192_CFB_Decryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Cfb();
@@ -306,7 +306,7 @@ public class CfbModeTest
 
 
     [Fact]
-    public void LEA128_CFB_Encryption()
+    public void LEA128_CFB_Encryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Cfb();
@@ -326,7 +326,7 @@ public class CfbModeTest
     }
 
     [Fact]
-    public void LEA128_CFB_Decryption()
+    public void LEA128_CFB_Decryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Cfb();

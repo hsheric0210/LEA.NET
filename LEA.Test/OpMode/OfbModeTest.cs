@@ -225,7 +225,7 @@ public class OfbModeTest
     };
 
     [Fact]
-    public void LEA256_OFB_Encryption()
+    public void LEA256_OFB_Encryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Ofb();
@@ -245,7 +245,7 @@ public class OfbModeTest
     }
 
     [Fact]
-    public void LEA256_OFB_Decryption()
+    public void LEA256_OFB_Decryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Ofb();
@@ -265,7 +265,7 @@ public class OfbModeTest
     }
 
     [Fact]
-    public void LEA192_OFB_Encryption()
+    public void LEA192_OFB_Encryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Ofb();
@@ -285,7 +285,7 @@ public class OfbModeTest
     }
 
     [Fact]
-    public void LEA192_OFB_Decryption()
+    public void LEA192_OFB_Decryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Ofb();
@@ -305,7 +305,7 @@ public class OfbModeTest
     }
 
     [Fact]
-    public void LEA128_OFB_Encryption()
+    public void LEA128_OFB_Encryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Ofb();
@@ -325,7 +325,7 @@ public class OfbModeTest
     }
 
     [Fact]
-    public void LEA128_OFB_Decryption()
+    public void LEA128_OFB_Decryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Ofb();

@@ -19,15 +19,15 @@ public class CfbMode : BlockCipherModeStream
         Mode = mode;
         Engine.Init(Mode.Encrypt, key);
         this.iv = iv.ToArray();
-        block = new byte[BlockSize];
-        feedback = new byte[BlockSize];
+        block = new byte[BlockSizeBytes];
+        feedback = new byte[BlockSizeBytes];
         Reset();
     }
 
     public override void Reset()
     {
         base.Reset();
-        Buffer.BlockCopy(iv, 0, feedback, 0, BlockSize);
+        Buffer.BlockCopy(iv, 0, feedback, 0, BlockSizeBytes);
     }
 
     protected override int ProcessBlock(ReadOnlySpan<byte> inBlock, int inOffset, Span<byte> outBlock, int outOffset, int outLength)
@@ -35,10 +35,10 @@ public class CfbMode : BlockCipherModeStream
         var length = Engine.ProcessBlock(feedback, 0, block, 0);
         XOR(outBlock, outOffset, inBlock, inOffset, block, 0, length);
         if (Mode == Mode.Encrypt)
-            outBlock.Slice(outOffset, BlockSize).CopyTo(feedback);
+            outBlock.Slice(outOffset, BlockSizeBytes).CopyTo(feedback);
         else
         {
-            inBlock.Slice(inOffset, BlockSize).CopyTo(feedback);
+            inBlock.Slice(inOffset, BlockSizeBytes).CopyTo(feedback);
         }
 
         return length;

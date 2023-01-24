@@ -195,7 +195,7 @@ public class EcbModeTest
     };
 
     [Fact]
-    public void LEA256_ECB_Encryption()
+    public void LEA256_ECB_Encryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Ecb();
@@ -215,7 +215,7 @@ public class EcbModeTest
     }
 
     [Fact]
-    public void LEA256_ECB_Decryption()
+    public void LEA256_ECB_Decryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Ecb();
@@ -235,7 +235,7 @@ public class EcbModeTest
     }
 
     [Fact]
-    public void LEA192_ECB_Encryption()
+    public void LEA192_ECB_Encryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Ecb();
@@ -255,7 +255,7 @@ public class EcbModeTest
     }
 
     [Fact]
-    public void LEA192_ECB_Decryption()
+    public void LEA192_ECB_Decryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Ecb();
@@ -276,7 +276,7 @@ public class EcbModeTest
 
 
     [Fact]
-    public void LEA128_ECB_Encryption()
+    public void LEA128_ECB_Encryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Ecb();
@@ -296,7 +296,7 @@ public class EcbModeTest
     }
 
     [Fact]
-    public void LEA128_ECB_Decryption()
+    public void LEA128_ECB_Decryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Ecb();

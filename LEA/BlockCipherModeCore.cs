@@ -8,15 +8,15 @@ public abstract class BlockCipherModeCore : BlockCipherMode
     protected byte[] BlockBuffer { get; }
     protected int BlockBufferOffset { get; set; }
 
-    protected int BlockSize { get; }
+    protected int BlockSizeBytes { get; }
     protected int BlockMask { get; }
 
     protected BlockCipherModeCore(BlockCipher cipher)
     {
         Engine = cipher;
-        BlockSize = Engine.GetBlockSize();
-        BlockMask = GetBlockmask(BlockSize);
-        BlockBuffer = new byte[BlockSize];
+        BlockSizeBytes = Engine.BlockSizeBytes;
+        BlockMask = GetBlockmask(BlockSizeBytes);
+        BlockBuffer = new byte[BlockSizeBytes];
     }
 
     public override ReadOnlySpan<byte> DoFinal(ReadOnlySpan<byte> message)
@@ -32,7 +32,7 @@ public abstract class BlockCipherModeCore : BlockCipherMode
     }
 
     protected abstract int ProcessBlock(ReadOnlySpan<byte> inBlock, int inOffset, Span<byte> outBlock, int outOffset, int outLength);
-    protected virtual int ProcessBlock(ReadOnlySpan<byte> inBlock, int inOffset, Span<byte> outBlock, int outOffset) => ProcessBlock(inBlock, inOffset, outBlock, outOffset, BlockSize);
+    protected virtual int ProcessBlock(ReadOnlySpan<byte> inBlock, int inOffset, Span<byte> outBlock, int outOffset) => ProcessBlock(inBlock, inOffset, outBlock, outOffset, BlockSizeBytes);
 
     protected static int GetBlockmask(int blockSize)
     {

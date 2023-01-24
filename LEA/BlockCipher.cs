@@ -5,6 +5,8 @@ namespace LEA;
 /// </summary>
 public abstract class BlockCipher
 {
+    public abstract int BlockSizeBytes { get; }
+
     /// <summary>
     /// Initialization method
     /// </summary>
@@ -22,12 +24,6 @@ public abstract class BlockCipher
     /// </summary>
     /// <returns>The name of algorithm</returns>
     public abstract string GetAlgorithmName();
-
-    /// <summary>
-    /// Returns the size of single block
-    /// </summary>
-    /// <returns>The size of single block</returns>
-    public abstract int GetBlockSize();
 
     /// <summary>
     /// Perform encryption for single block

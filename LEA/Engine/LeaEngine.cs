@@ -4,7 +4,7 @@ namespace LEA.Engine;
 
 public class LeaEngine : BlockCipher
 {
-    private const int BlockSize = 16;
+    public const int LeaBlockSizeBytes = 16; // LEA is using 128-bit block
     private static readonly uint[] Delta = new uint[]
     {
         0xc3efe9db,
@@ -17,13 +17,15 @@ public class LeaEngine : BlockCipher
         0xe5c40957
     };
 
+    public override int BlockSizeBytes => LeaBlockSizeBytes;
+
     private Mode mode;
     private int rounds;
 
+    private readonly uint[] block;
     protected uint[,] roundKeys;
-    private uint[] block;
 
-    public LeaEngine() => block = new uint[BlockSize / 4];
+    public LeaEngine() => block = new uint[BlockSizeBytes / 4];
 
     public override void Init(Mode mode, ReadOnlySpan<byte> key)
     {
@@ -35,14 +37,12 @@ public class LeaEngine : BlockCipher
 
     public override string GetAlgorithmName() => "LEA";
 
-    public override int GetBlockSize() => BlockSize;
-
     public override int ProcessBlock(ReadOnlySpan<byte> inBlock, int inOffset, Span<byte> outBlock, int outOffset)
     {
-        if (inBlock.Length - inOffset < BlockSize)
+        if (inBlock.Length - inOffset < BlockSizeBytes)
             throw new InvalidOperationException("too short input data " + inBlock.Length + " " + inOffset);
 
-        if (outBlock.Length - outOffset < BlockSize)
+        if (outBlock.Length - outOffset < BlockSizeBytes)
             throw new InvalidOperationException("too short output buffer " + outBlock.Length + " / " + outOffset);
 
         return mode == Mode.Encrypt
@@ -73,7 +73,7 @@ public class LeaEngine : BlockCipher
         }
 
         Unpack(block, 0, outBlock, outOffset, 4);
-        return BlockSize;
+        return BlockSizeBytes;
     }
 
     private int DecryptBlock(ReadOnlySpan<byte> inBlock, int inOffset, Span<byte> outBlock, int outOffset)
@@ -99,7 +99,7 @@ public class LeaEngine : BlockCipher
         }
 
         Unpack(block, 0, outBlock, outOffset, 4);
-        return BlockSize;
+        return BlockSizeBytes;
     }
 
     private void GenerateRoundKeys(ReadOnlySpan<byte> key)

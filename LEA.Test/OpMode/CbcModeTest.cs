@@ -225,7 +225,7 @@ public class CbcModeTest
     };
 
     [Fact]
-    public void LEA256_CBC_Encryption()
+    public void LEA256_CBC_Encryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Cbc();
@@ -245,7 +245,7 @@ public class CbcModeTest
     }
 
     [Fact]
-    public void LEA256_CBC_Decryption()
+    public void LEA256_CBC_Decryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Cbc();
@@ -265,7 +265,7 @@ public class CbcModeTest
     }
 
     [Fact]
-    public void LEA192_CBC_Encryption()
+    public void LEA192_CBC_Encryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Cbc();
@@ -285,7 +285,7 @@ public class CbcModeTest
     }
 
     [Fact]
-    public void LEA192_CBC_Decryption()
+    public void LEA192_CBC_Decryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Cbc();
@@ -306,7 +306,7 @@ public class CbcModeTest
 
 
     [Fact]
-    public void LEA128_CBC_Encryption()
+    public void LEA128_CBC_Encryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Cbc();
@@ -326,7 +326,7 @@ public class CbcModeTest
     }
 
     [Fact]
-    public void LEA128_CBC_Decryption()
+    public void LEA128_CBC_Decryption_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.Cbc();

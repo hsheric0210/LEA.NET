@@ -2,7 +2,7 @@ namespace LEA.Utils;
 
 public static class EndianConversion
 {
-    public static int BigEndianToInt(byte[] bytes, int offset)
+    public static int BigEndianToInt(ReadOnlySpan<byte> bytes, int offset)
     {
         var n = bytes[offset++] << 24;
         n |= (bytes[offset++] & 0xff) << 16;
@@ -11,7 +11,7 @@ public static class EndianConversion
         return n;
     }
 
-    public static void BigEndianToInt(byte[] bytes, int offset, int[] numbers)
+    public static void BigEndianToInt(ReadOnlySpan<byte> bytes, int offset, int[] numbers)
     {
         for (var i = 0; i < numbers.Length; ++i)
         {
@@ -20,14 +20,14 @@ public static class EndianConversion
         }
     }
 
-    public static byte[] IntToBigEndian(int n)
+    public static ReadOnlySpan<byte> IntToBigEndian(int n)
     {
         var bytes = new byte[4];
         IntToBigEndian(n, bytes, 0);
         return bytes;
     }
 
-    public static void IntToBigEndian(int n, byte[] bytes, int offset)
+    public static void IntToBigEndian(int n, Span<byte> bytes, int offset)
     {
         bytes[offset++] = (byte)(n >> 24);
         bytes[offset++] = (byte)(n >> 16);
@@ -35,14 +35,14 @@ public static class EndianConversion
         bytes[offset] = (byte)n;
     }
 
-    public static byte[] IntToBigEndian(int[] numbers)
+    public static ReadOnlySpan<byte> IntToBigEndian(int[] numbers)
     {
         var bytes = new byte[4 * numbers.Length];
         IntToBigEndian(numbers, bytes, 0);
         return bytes;
     }
 
-    public static void IntToBigEndian(int[] numbers, byte[] bytes, int offset)
+    public static void IntToBigEndian(int[] numbers, Span<byte> bytes, int offset)
     {
         for (var i = 0; i < numbers.Length; ++i)
         {
@@ -51,14 +51,14 @@ public static class EndianConversion
         }
     }
 
-    public static long BigEndianToLong(byte[] bytes, int offset)
+    public static long BigEndianToLong(ReadOnlySpan<byte> bytes, int offset)
     {
         var high = BigEndianToInt(bytes, offset);
         var low = BigEndianToInt(bytes, offset + 4);
         return (high & 4294967295L) << 32 | low & 4294967295L;
     }
 
-    public static void BigEndianToLong(byte[] bytes, int offset, long[] numbers)
+    public static void BigEndianToLong(ReadOnlySpan<byte> bytes, int offset, long[] numbers)
     {
         for (var i = 0; i < numbers.Length; ++i)
         {
@@ -67,27 +67,27 @@ public static class EndianConversion
         }
     }
 
-    public static byte[] LongToBigEndian(long n)
+    public static ReadOnlySpan<byte> LongToBigEndian(long n)
     {
         var bytes = new byte[8];
         LongToBigEndian(n, bytes, 0);
         return bytes;
     }
 
-    public static void LongToBigEndian(long n, byte[] bytes, int offset)
+    public static void LongToBigEndian(long n, Span<byte> bytes, int offset)
     {
         IntToBigEndian((int)(n >> 32), bytes, offset);
         IntToBigEndian((int)(n & 4294967295L), bytes, offset + 4);
     }
 
-    public static byte[] LongToBigEndian(long[] numbers)
+    public static ReadOnlySpan<byte> LongToBigEndian(long[] numbers)
     {
         var bytes = new byte[8 * numbers.Length];
         LongToBigEndian(numbers, bytes, 0);
         return bytes;
     }
 
-    public static void LongToBigEndian(long[] numbers, byte[] bytes, int offset)
+    public static void LongToBigEndian(long[] numbers, Span<byte> bytes, int offset)
     {
         for (var i = 0; i < numbers.Length; ++i)
         {
@@ -96,7 +96,7 @@ public static class EndianConversion
         }
     }
 
-    public static int LittleEndianToInt(byte[] bytes, int offset)
+    public static int LittleEndianToInt(ReadOnlySpan<byte> bytes, int offset)
     {
         var n = bytes[offset++] & 0xff;
         n |= (bytes[offset++] & 0xff) << 8;
@@ -105,7 +105,7 @@ public static class EndianConversion
         return n;
     }
 
-    public static void LittleEndianToInt(byte[] bytes, int offset, int[] numbers)
+    public static void LittleEndianToInt(ReadOnlySpan<byte> bytes, int offset, int[] numbers)
     {
         for (var i = 0; i < numbers.Length; ++i)
         {
@@ -114,7 +114,7 @@ public static class EndianConversion
         }
     }
 
-    public static void LittleEndianToInt(byte[] bytes, int bOff, int[] numbers, int numberOffset, int count)
+    public static void LittleEndianToInt(ReadOnlySpan<byte> bytes, int bOff, int[] numbers, int numberOffset, int count)
     {
         for (var i = 0; i < count; ++i)
         {
@@ -123,14 +123,14 @@ public static class EndianConversion
         }
     }
 
-    public static byte[] IntToLittleEndian(int n)
+    public static ReadOnlySpan<byte> IntToLittleEndian(int n)
     {
         var bytes = new byte[4];
         IntToLittleEndian(n, bytes, 0);
         return bytes;
     }
 
-    public static void IntToLittleEndian(int n, byte[] bytes, int offset)
+    public static void IntToLittleEndian(int n, Span<byte> bytes, int offset)
     {
         bytes[offset++] = (byte)n;
         bytes[offset++] = (byte)(n >> 8);
@@ -138,14 +138,14 @@ public static class EndianConversion
         bytes[offset] = (byte)(n >> 24);
     }
 
-    public static byte[] IntToLittleEndian(int[] numbers)
+    public static ReadOnlySpan<byte> IntToLittleEndian(int[] numbers)
     {
         var bytes = new byte[4 * numbers.Length];
         IntToLittleEndian(numbers, bytes, 0);
         return bytes;
     }
 
-    public static void IntToLittleEndian(int[] numbers, byte[] bytes, int offset)
+    public static void IntToLittleEndian(int[] numbers, Span<byte> bytes, int offset)
     {
         for (var i = 0; i < numbers.Length; ++i)
         {
@@ -154,14 +154,14 @@ public static class EndianConversion
         }
     }
 
-    public static long LittleEndianToLong(byte[] bytes, int offset)
+    public static long LittleEndianToLong(ReadOnlySpan<byte> bytes, int offset)
     {
         var lo = LittleEndianToInt(bytes, offset);
         var hi = LittleEndianToInt(bytes, offset + 4);
         return (hi & 4294967295L) << 32 | lo & 4294967295L;
     }
 
-    public static void LittleEndianToLong(byte[] bytes, int offset, long[] numbers)
+    public static void LittleEndianToLong(ReadOnlySpan<byte> bytes, int offset, long[] numbers)
     {
         for (var i = 0; i < numbers.Length; ++i)
         {
@@ -170,27 +170,27 @@ public static class EndianConversion
         }
     }
 
-    public static byte[] LongToLittleEndian(long n)
+    public static ReadOnlySpan<byte> LongToLittleEndian(long n)
     {
         var bytes = new byte[8];
         LongToLittleEndian(n, bytes, 0);
         return bytes;
     }
 
-    public static void LongToLittleEndian(long n, byte[] bytes, int offset)
+    public static void LongToLittleEndian(long n, Span<byte> bytes, int offset)
     {
         IntToLittleEndian((int)(n & 0xFFFFFFFFL), bytes, offset);
         IntToLittleEndian((int)(n >> 32), bytes, offset + 4);
     }
 
-    public static byte[] LongToLittleEndian(long[] numbers)
+    public static ReadOnlySpan<byte> LongToLittleEndian(long[] numbers)
     {
         var bytes = new byte[8 * numbers.Length];
         LongToLittleEndian(numbers, bytes, 0);
         return bytes;
     }
 
-    public static void LongToLittleEndian(long[] numbers, byte[] bytes, int offset)
+    public static void LongToLittleEndian(long[] numbers, Span<byte> bytes, int offset)
     {
         for (var i = 0; i < numbers.Length; ++i)
         {

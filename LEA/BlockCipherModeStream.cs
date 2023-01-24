@@ -43,8 +43,8 @@ public abstract class BlockCipherModeStream : BlockCipherModeCore
             while (length >= BlockBuffer.Length)
             {
                 outOffset += ProcessBlock(message, inOffset, output, outOffset);
-                length -= BlockSize;
-                inOffset += BlockSize;
+                length -= BlockSizeBytes;
+                inOffset += BlockSizeBytes;
             }
         }
 

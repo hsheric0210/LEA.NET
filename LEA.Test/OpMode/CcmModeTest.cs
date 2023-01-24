@@ -285,7 +285,7 @@ public class CcmModeTest
     };
 
     [Fact]
-    public void LEA256_CCM_Encryption()
+    public void LEA256_CCM_Encryption_AllTestVectorsPassing()
     {
         for (var i = 0; i < Lea256CcmTestVectors.Length; i++)
         {
@@ -307,7 +307,7 @@ public class CcmModeTest
     }
 
     [Fact]
-    public void LEA256_CCM_Decryption()
+    public void LEA256_CCM_Decryption_AllTestVectorsPassing()
     {
         for (var i = 0; i < Lea256CcmTestVectors.Length; i++)
         {
@@ -329,7 +329,7 @@ public class CcmModeTest
     }
 
     [Fact]
-    public void LEA192_CCM_Encryption()
+    public void LEA192_CCM_Encryption_AllTestVectorsPassing()
     {
         for (var i = 0; i < Lea192CcmTestVectors.Length; i++)
         {
@@ -351,7 +351,7 @@ public class CcmModeTest
     }
 
     [Fact]
-    public void LEA192_CCM_Decryption()
+    public void LEA192_CCM_Decryption_AllTestVectorsPassing()
     {
         for (var i = 0; i < Lea192CcmTestVectors.Length; i++)
         {
@@ -373,7 +373,7 @@ public class CcmModeTest
     }
 
     [Fact]
-    public void LEA128_CCM_Encryption()
+    public void LEA128_CCM_Encryption_AllTestVectorsPassing()
     {
         for (var i = 0; i < Lea128CcmTestVectors.Length; i++)
         {
@@ -395,7 +395,7 @@ public class CcmModeTest
     }
 
     [Fact]
-    public void LEA128_CCM_Decryption()
+    public void LEA128_CCM_Decryption_AllTestVectorsPassing()
     {
         for (var i = 0; i < Lea128CcmTestVectors.Length; i++)
         {

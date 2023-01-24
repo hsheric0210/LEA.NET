@@ -1,8 +1,10 @@
+using System.Security.Cryptography;
+
 namespace LEA.Padding;
 
-public class Pkcs5Padding : PaddingBase
+public class Iso10126Padding : PaddingBase
 {
-    public Pkcs5Padding(int blockSizeBytes) : base(blockSizeBytes)
+    public Iso10126Padding(int blockSizeBytes) : base(blockSizeBytes)
     {
     }
 
@@ -23,7 +25,11 @@ public class Pkcs5Padding : PaddingBase
             throw new ArgumentException("Index out of bounds: " + nameof(unpadded));
 
         var code = (byte)(unpadded.Length - offset);
-        unpadded[offset..].Fill(code);
+        if (unpadded.Length > offset)
+        {
+            RandomNumberGenerator.Fill(unpadded[offset..^1]);
+            unpadded[^1] = code;
+        }
     }
 
     public override ReadOnlySpan<byte> Unpad(ReadOnlySpan<byte> padded)
@@ -34,6 +40,8 @@ public class Pkcs5Padding : PaddingBase
             throw new ArgumentException("Bad padding"); // FIXME: Padding oracle attack
 
         var paddingCount = padded.Length - GetPadCount(padded);
+        if (paddingCount < 0)
+            throw new ArgumentException("Bad padding");
         return padded[..paddingCount].ToArray();
     }
 
@@ -44,19 +52,6 @@ public class Pkcs5Padding : PaddingBase
 
         if (padded.Length % BlockSizeBytes != 0)
             throw new ArgumentException("Bad padding");
-
-        var count = padded[padded.Length - 1] & 0xff;
-        var isBadPadding = false;
-        var lower_bound = padded.Length - count;
-        for (var i = padded.Length - 1; i > lower_bound; --i)
-        {
-            if (padded[i] != count)
-                isBadPadding = true;
-        }
-
-        if (isBadPadding)
-            throw new InvalidOperationException("Bad Padding"); // FIXME: Padding oracle attack
-
-        return count;
+        return padded[padded.Length - 1] & 0xff;
     }
 }

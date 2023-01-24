@@ -12,7 +12,7 @@ public abstract class BlockCipherModeAE
     protected BlockCipherModeAE(BlockCipher cipher)
     {
         engine = cipher;
-        blockSize = engine.GetBlockSize();
+        blockSize = engine.BlockSizeBytes;
         buffer = new byte[blockSize];
     }
 

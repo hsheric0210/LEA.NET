@@ -16,10 +16,10 @@ public class EcbMode : BlockCipherModeBlock
 
     protected override int ProcessBlock(ReadOnlySpan<byte> inBlock, int inOffset, Span<byte> outBlock, int outOffset, int outLength)
     {
-        if (outLength != BlockSize)
-            throw new ArgumentException("outlen should be " + BlockSize + " in " + GetAlgorithmName());
+        if (outLength != BlockSizeBytes)
+            throw new ArgumentException("outlen should be " + BlockSizeBytes + " in " + GetAlgorithmName());
 
-        if (inOffset + BlockSize > inBlock.Length)
+        if (inOffset + BlockSizeBytes > inBlock.Length)
             throw new InvalidOperationException("input data too short");
 
         return Engine.ProcessBlock(inBlock, inOffset, outBlock, outOffset);

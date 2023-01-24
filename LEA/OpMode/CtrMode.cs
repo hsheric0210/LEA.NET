@@ -19,8 +19,8 @@ public class CtrMode : BlockCipherModeStream
         Mode = mode;
         Engine.Init(Mode.Encrypt, key);
         this.iv = iv.ToArray();
-        ctr = new byte[BlockSize];
-        block = new byte[BlockSize];
+        ctr = new byte[BlockSizeBytes];
+        block = new byte[BlockSizeBytes];
         Reset();
     }
 

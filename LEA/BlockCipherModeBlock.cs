@@ -8,9 +8,9 @@ public abstract class BlockCipherModeBlock : BlockCipherModeCore
     {
     }
 
-    public override int GetOutputSize(int length) => Mode == Mode.Encrypt && Padding != null ? (length + BlockBufferOffset & BlockMask) + BlockSize : length;
+    public override int GetOutputSize(int length) => Mode == Mode.Encrypt && Padding != null ? (length + BlockBufferOffset & BlockMask) + BlockSizeBytes : length;
 
-    public override int GetUpdateOutputSize(int length) => length + BlockBufferOffset - (Mode == Mode.Decrypt && Padding != null ? BlockSize : 0) & BlockMask;
+    public override int GetUpdateOutputSize(int length) => length + BlockBufferOffset - (Mode == Mode.Decrypt && Padding != null ? BlockSizeBytes : 0) & BlockMask;
 
     public override void Init(Mode mode, ReadOnlySpan<byte> key) => throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
 
@@ -44,8 +44,8 @@ public abstract class BlockCipherModeBlock : BlockCipherModeCore
             while (length >= BlockBuffer.Length)
             {
                 outOffset += ProcessBlock(message, inOffset, output, outOffset);
-                length -= BlockSize;
-                inOffset += BlockSize;
+                length -= BlockSizeBytes;
+                inOffset += BlockSizeBytes;
             }
         }
 
@@ -65,11 +65,11 @@ public abstract class BlockCipherModeBlock : BlockCipherModeCore
 
         if (BlockBufferOffset == 0)
             return null;
-        else if (BlockBufferOffset != BlockSize)
+        else if (BlockBufferOffset != BlockSizeBytes)
             throw new InvalidOperationException("Bad padding");
 
-        Span<byte> output = new byte[BlockSize];
-        ProcessBlock(BlockBuffer, 0, output, 0, BlockSize);
+        Span<byte> output = new byte[BlockSizeBytes];
+        ProcessBlock(BlockBuffer, 0, output, 0, BlockSizeBytes);
         return output;
     }
 
@@ -95,8 +95,8 @@ public abstract class BlockCipherModeBlock : BlockCipherModeCore
             while (length > BlockBuffer.Length)
             {
                 outOffset += ProcessBlock(message, inOffset, output, outOffset);
-                length -= BlockSize;
-                inOffset += BlockSize;
+                length -= BlockSizeBytes;
+                inOffset += BlockSizeBytes;
             }
         }
 
@@ -125,7 +125,7 @@ public abstract class BlockCipherModeBlock : BlockCipherModeCore
         }
         else
         {
-            var block = new byte[BlockSize];
+            var block = new byte[BlockSizeBytes];
             ProcessBlock(BlockBuffer, 0, block, 0);
             return padding.Unpad(block);
         }

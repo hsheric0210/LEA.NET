@@ -18,14 +18,14 @@ public class OfbMode : BlockCipherModeStream
         Mode = mode;
         Engine.Init(Mode.Encrypt, key);
         this.iv = iv.ToArray();
-        block = new byte[BlockSize];
+        block = new byte[BlockSizeBytes];
         Reset();
     }
 
     public override void Reset()
     {
         base.Reset();
-        Buffer.BlockCopy(iv, 0, block, 0, BlockSize);
+        Buffer.BlockCopy(iv, 0, block, 0, BlockSizeBytes);
     }
 
     protected override int ProcessBlock(ReadOnlySpan<byte> inBlock, int inOffset, Span<byte> outBlock, int outOffset, int outLength)

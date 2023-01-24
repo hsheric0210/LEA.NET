@@ -11,7 +11,7 @@ public class CMac : MacBase
 
     private readonly BlockCipher engine;
 
-    private int blockSize;
+    private int blockSizeBytes;
     private int blockIndex;
     private byte[] block;
     private byte[] mac;
@@ -24,13 +24,13 @@ public class CMac : MacBase
     {
         engine.Init(Mode.Encrypt, key);
         blockIndex = 0;
-        blockSize = engine.GetBlockSize();
-        block = new byte[blockSize];
-        mac = new byte[blockSize];
-        k1 = new byte[blockSize];
-        k2 = new byte[blockSize];
+        blockSizeBytes = engine.BlockSizeBytes;
+        block = new byte[blockSizeBytes];
+        mac = new byte[blockSizeBytes];
+        k1 = new byte[blockSizeBytes];
+        k2 = new byte[blockSizeBytes];
         SelectRB();
-        var zero = new byte[blockSize];
+        var zero = new byte[blockSizeBytes];
         engine.ProcessBlock(zero, 0, zero, 0);
         Cmac_subkey(k1, zero);
         Cmac_subkey(k2, k1);
@@ -51,20 +51,20 @@ public class CMac : MacBase
 
         var length = message.Length;
         var messageOffset = 0;
-        var gap = blockSize - blockIndex;
+        var gap = blockSizeBytes - blockIndex;
         if (length > gap)
         {
             message.Slice(messageOffset, gap).CopyTo(block.AsSpan()[blockIndex..]);
             blockIndex = 0;
             length -= gap;
             messageOffset += gap;
-            while (length > blockSize)
+            while (length > blockSizeBytes)
             {
                 XOR(block, mac);
                 engine.ProcessBlock(block, 0, mac, 0);
-                message.Slice(messageOffset, blockSize).CopyTo(block);
-                length -= blockSize;
-                messageOffset += blockSize;
+                message.Slice(messageOffset, blockSizeBytes).CopyTo(block);
+                length -= blockSizeBytes;
+                messageOffset += blockSizeBytes;
             }
 
             if (length > 0)
@@ -89,13 +89,13 @@ public class CMac : MacBase
 
     public override ReadOnlySpan<byte> DoFinal()
     {
-        if (blockIndex < blockSize)
+        if (blockIndex < blockSizeBytes)
         {
             block[blockIndex] = 0x80;
-            block.AsSpan()[(blockIndex + 1)..blockSize].Fill(0x00);
+            block.AsSpan()[(blockIndex + 1)..blockSizeBytes].Fill(0x00);
         }
 
-        XOR(block, blockIndex == blockSize ? k1 : k2);
+        XOR(block, blockIndex == blockSizeBytes ? k1 : k2);
         XOR(block, mac);
         engine.ProcessBlock(block, 0, mac, 0);
 
@@ -104,7 +104,7 @@ public class CMac : MacBase
 
     private void SelectRB()
     {
-        switch (blockSize)
+        switch (blockSizeBytes)
         {
             case 8:
                 RB = R64;
@@ -120,13 +120,13 @@ public class CMac : MacBase
 
     private void Cmac_subkey(Span<byte> new_key, ReadOnlySpan<byte> old_key)
     {
-        old_key[..blockSize].CopyTo(new_key);
+        old_key[..blockSizeBytes].CopyTo(new_key);
         ShiftLeft(new_key, 1);
         if ((old_key[0] & 0x80) != 0)
         {
             for (var i = 0; i < RB.Length; ++i)
             {
-                new_key[blockSize - RB.Length + i] ^= RB[i];
+                new_key[blockSizeBytes - RB.Length + i] ^= RB[i];
             }
         }
     }

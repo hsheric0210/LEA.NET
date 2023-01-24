@@ -1,6 +1,6 @@
 using LEA.Symmetric;
 
-namespace LEA.Test.OpMode;
+namespace LEA.Test.Mac;
 
 public class CMacModeTest
 {
@@ -195,7 +195,7 @@ public class CMacModeTest
     };
 
     [Fact]
-    public void LEA256_CMAC()
+    public void LEA256_CMAC_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.CMac();
@@ -214,7 +214,7 @@ public class CMacModeTest
     }
 
     [Fact]
-    public void LEA192_CMAC()
+    public void LEA192_CMAC_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.CMac();
@@ -234,7 +234,7 @@ public class CMacModeTest
     }
 
     [Fact]
-    public void LEA128_CMAC()
+    public void LEA128_CMAC_AllTestVectorsPassing()
     {
         // Arrange
         var cipher = new Lea.CMac();
