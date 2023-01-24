@@ -4,21 +4,32 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<PackageId>LEA.NET</PackageId>
+		<AssemblyName>LEA.NET</AssemblyName>
+		<PackageId>$(AssemblyName)</PackageId>
 		<Company />
 		<Title>LEA.NET - .NET implementation of LEA</Title>
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\LEA.NET.snk</AssemblyOriginatorKeyFile>
 		<Version>1.0.0</Version>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<Authors>hsheric0210, KISA </Authors>
-		<Product>$(PackageId)</Product>
+		<Authors>hsheric0210, KISA, LEA.NET Contributors</Authors>
+		<Product>$(AssemblyName)</Product>
 		<Description>LEA.NET is pure .NET language implementation of LEA.</Description>
 		<PackageProjectUrl>https://github.com/hsheric0210/LEA.NET</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/hsheric0210/LEA.NET</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>crypto;cryptography;encryption;security</PackageTags>
-		<PackageReleaseNotes></PackageReleaseNotes>
+		<PackageTags>crypto;cryptography;encryption;security;lea</PackageTags>
+		<PackageReleaseNotes>Initial version, all test vectors passing</PackageReleaseNotes>
+		<RootNamespace>LEA</RootNamespace>
+		<AssemblyVersion>1.0.0</AssemblyVersion>
+		<FileVersion>$(AssemblyVersion)</FileVersion>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<WarningLevel>9999</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<WarningLevel>9999</WarningLevel>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Include="..\README.md">
