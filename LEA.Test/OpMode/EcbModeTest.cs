@@ -1,7 +1,6 @@
 using LEA.Symmetric;
-using LEA.Test.Mode;
 
-namespace LEA.Test.Mode;
+namespace LEA.Test.OpMode;
 
 public class EcbModeTest
 {
@@ -206,7 +205,7 @@ public class EcbModeTest
             TestVector testvector = Lea256EcbTestVectors[i];
 
             // Act
-            cipher.Init(OperatingMode.Encrypt, testvector.Key);
+            cipher.Init(Mode.Encrypt, testvector.Key);
             ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
             cipher.Reset();
 
@@ -226,7 +225,7 @@ public class EcbModeTest
             TestVector testvector = Lea256EcbTestVectors[i];
 
             // Act
-            cipher.Init(OperatingMode.Decrypt, testvector.Key);
+            cipher.Init(Mode.Decrypt, testvector.Key);
             ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.CipherText);
             cipher.Reset();
 
@@ -246,7 +245,7 @@ public class EcbModeTest
             TestVector testvector = Lea192EcbTestVectors[i];
 
             // Act
-            cipher.Init(OperatingMode.Encrypt, testvector.Key);
+            cipher.Init(Mode.Encrypt, testvector.Key);
             ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
             cipher.Reset();
 
@@ -266,7 +265,7 @@ public class EcbModeTest
             TestVector testvector = Lea192EcbTestVectors[i];
 
             // Act
-            cipher.Init(OperatingMode.Decrypt, testvector.Key);
+            cipher.Init(Mode.Decrypt, testvector.Key);
             ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.CipherText);
             cipher.Reset();
 
@@ -287,7 +286,7 @@ public class EcbModeTest
             TestVector testvector = Lea128EcbTestVectors[i];
 
             // Act
-            cipher.Init(OperatingMode.Encrypt, testvector.Key);
+            cipher.Init(Mode.Encrypt, testvector.Key);
             ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
             cipher.Reset();
 
@@ -307,7 +306,7 @@ public class EcbModeTest
             TestVector testvector = Lea128EcbTestVectors[i];
 
             // Act
-            cipher.Init(OperatingMode.Decrypt, testvector.Key);
+            cipher.Init(Mode.Decrypt, testvector.Key);
             ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.CipherText);
             cipher.Reset();
 

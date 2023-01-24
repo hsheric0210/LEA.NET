@@ -1,6 +1,6 @@
 using LEA.Symmetric;
 
-namespace LEA.Test.Mode;
+namespace LEA.Test.OpMode;
 
 public class CMacModeTest
 {

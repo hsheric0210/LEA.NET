@@ -1,7 +1,6 @@
 using LEA.Symmetric;
-using LEA.Test.Mode;
 
-namespace LEA.Test.Mode;
+namespace LEA.Test.OpMode;
 
 public class CcmModeTest
 {
@@ -295,8 +294,8 @@ public class CcmModeTest
             var cipher = new Lea.Ccm();
 
             // Act
-            cipher.Init(OperatingMode.Encrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
-            cipher.UpdateAAD(testvector.AAD);
+            cipher.Init(Mode.Encrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
+            cipher.UpdateAssociatedData(testvector.AAD);
             ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
             ReadOnlySpan<byte> tag = actual.Slice(actual.Length - 16, 16);
             ReadOnlySpan<byte> cipherText = actual[..^16];
@@ -317,8 +316,8 @@ public class CcmModeTest
             var cipher = new Lea.Ccm();
 
             // Act
-            cipher.Init(OperatingMode.Decrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
-            cipher.UpdateAAD(testvector.AAD);
+            cipher.Init(Mode.Decrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
+            cipher.UpdateAssociatedData(testvector.AAD);
             var aggregated = new byte[testvector.CipherText.Length + testvector.Tag.Length];
             testvector.CipherText.CopyTo(aggregated, 0);
             testvector.Tag.CopyTo(aggregated, testvector.CipherText.Length);
@@ -339,8 +338,8 @@ public class CcmModeTest
             var cipher = new Lea.Ccm();
 
             // Act
-            cipher.Init(OperatingMode.Encrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
-            cipher.UpdateAAD(testvector.AAD);
+            cipher.Init(Mode.Encrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
+            cipher.UpdateAssociatedData(testvector.AAD);
             ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
             ReadOnlySpan<byte> tag = actual.Slice(actual.Length - 16, 16);
             ReadOnlySpan<byte> cipherText = actual[..^16];
@@ -361,8 +360,8 @@ public class CcmModeTest
             var cipher = new Lea.Ccm();
 
             // Act
-            cipher.Init(OperatingMode.Decrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
-            cipher.UpdateAAD(testvector.AAD);
+            cipher.Init(Mode.Decrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
+            cipher.UpdateAssociatedData(testvector.AAD);
             var aggregated = new byte[testvector.CipherText.Length + testvector.Tag.Length];
             testvector.CipherText.CopyTo(aggregated, 0);
             testvector.Tag.CopyTo(aggregated, testvector.CipherText.Length);
@@ -383,8 +382,8 @@ public class CcmModeTest
             var cipher = new Lea.Ccm();
 
             // Act
-            cipher.Init(OperatingMode.Encrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
-            cipher.UpdateAAD(testvector.AAD);
+            cipher.Init(Mode.Encrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
+            cipher.UpdateAssociatedData(testvector.AAD);
             ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
             ReadOnlySpan<byte> tag = actual.Slice(actual.Length - 16, 16);
             ReadOnlySpan<byte> cipherText = actual[..^16];
@@ -405,8 +404,8 @@ public class CcmModeTest
             var cipher = new Lea.Ccm();
 
             // Act
-            cipher.Init(OperatingMode.Decrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
-            cipher.UpdateAAD(testvector.AAD);
+            cipher.Init(Mode.Decrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
+            cipher.UpdateAssociatedData(testvector.AAD);
             var aggregated = new byte[testvector.CipherText.Length + testvector.Tag.Length];
             testvector.CipherText.CopyTo(aggregated, 0);
             testvector.Tag.CopyTo(aggregated, testvector.CipherText.Length);

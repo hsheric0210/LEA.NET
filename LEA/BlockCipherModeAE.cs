@@ -2,24 +2,23 @@ namespace LEA;
 
 public abstract class BlockCipherModeAE
 {
-    protected OperatingMode mode;
+    protected Mode mode;
     protected BlockCipher engine;
     protected byte[] buffer;
-    protected byte[] nonce;
     protected int bufferOffset;
     protected int blockSize;
-    protected int tagLength;
+    protected abstract int TagLength { get; set; }
 
-    public BlockCipherModeAE(BlockCipher cipher)
+    protected BlockCipherModeAE(BlockCipher cipher)
     {
         engine = cipher;
         blockSize = engine.GetBlockSize();
         buffer = new byte[blockSize];
     }
 
-    public abstract void Init(OperatingMode mode, ReadOnlySpan<byte> key, ReadOnlySpan<byte> nonce, int tagLength);
+    public abstract void Init(Mode mode, ReadOnlySpan<byte> key, ReadOnlySpan<byte> nonce, int tagLength);
 
-    public abstract void UpdateAAD(ReadOnlySpan<byte> input);
+    public abstract void UpdateAssociatedData(ReadOnlySpan<byte> aad);
 
     public abstract ReadOnlySpan<byte> Update(ReadOnlySpan<byte> message);
 
@@ -29,7 +28,7 @@ public abstract class BlockCipherModeAE
 
     public virtual ReadOnlySpan<byte> DoFinal(ReadOnlySpan<byte> message)
     {
-        if (mode == OperatingMode.Encrypt)
+        if (mode == Mode.Encrypt)
         {
             ReadOnlySpan<byte> part1 = Update(message);
             ReadOnlySpan<byte> part2 = DoFinal();

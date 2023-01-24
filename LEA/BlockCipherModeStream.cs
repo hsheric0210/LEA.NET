@@ -1,58 +1,57 @@
 namespace LEA;
 
-public abstract class BlockCipherModeStream : BlockCipherModeImpl
+public abstract class BlockCipherModeStream : BlockCipherModeCore
 {
-    public BlockCipherModeStream(BlockCipher cipher) : base(cipher)
+    public override PaddingBase? Padding
+    {
+        protected get => null;
+        set => _ = value; // Stream cipher mode doesn't require padding
+    }
+
+    protected BlockCipherModeStream(BlockCipher cipher) : base(cipher)
     {
     }
 
-    public override int GetOutputSize(int length) => length + bufferOffset;
+    public override int GetOutputSize(int length) => length + BlockBufferOffset;
 
-    public override int GetUpdateOutputSize(int length) => length + bufferOffset & blockMask;
+    public override int GetUpdateOutputSize(int length) => length + BlockBufferOffset & BlockMask;
 
-    public override void Init(OperatingMode mode, ReadOnlySpan<byte> key) => throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
+    public override void Init(Mode mode, ReadOnlySpan<byte> key) => throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
 
-    public override void Init(OperatingMode mode, ReadOnlySpan<byte> key, ReadOnlySpan<byte> iv) => throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
+    public override void Init(Mode mode, ReadOnlySpan<byte> key, ReadOnlySpan<byte> iv) => throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
 
     public override void Reset()
     {
-        bufferOffset = 0;
-        Array.Fill(buffer, (byte)0);
+        BlockBufferOffset = 0;
+        Array.Fill(BlockBuffer, (byte)0);
     }
 
-    public override void SetPadding(PaddingBase padding)
+    public override ReadOnlySpan<byte> Update(ReadOnlySpan<byte> message)
     {
-    }
-
-    public override ReadOnlySpan<byte> Update(ReadOnlySpan<byte> bytes)
-    {
-        var length = bytes.Length;
-        var gap = buffer.Length - bufferOffset;
+        var length = message.Length;
+        var gap = BlockBuffer.Length - BlockBufferOffset;
         var inOffset = 0;
         var outOffset = 0;
         var output = new byte[GetUpdateOutputSize(length)];
         if (length >= gap)
         {
-            bytes.Slice(inOffset, gap).CopyTo(buffer.AsSpan()[bufferOffset..]);
-            //Array.Copy(bytes, inOffset, buffer, bufferOffset, gap);
-            outOffset += ProcessBlock(buffer, 0, output, outOffset);
-            bufferOffset = 0;
+            message.Slice(inOffset, gap).CopyTo(BlockBuffer.AsSpan()[BlockBufferOffset..]);
+            outOffset += ProcessBlock(BlockBuffer, 0, output, outOffset);
+            BlockBufferOffset = 0;
             length -= gap;
             inOffset += gap;
-            while (length >= buffer.Length)
+            while (length >= BlockBuffer.Length)
             {
-                outOffset += ProcessBlock(bytes, inOffset, output, outOffset);
-                length -= blockSize;
-                inOffset += blockSize;
+                outOffset += ProcessBlock(message, inOffset, output, outOffset);
+                length -= BlockSize;
+                inOffset += BlockSize;
             }
         }
 
         if (length > 0)
         {
-            bytes.Slice(inOffset, length).CopyTo(buffer.AsSpan()[bufferOffset..]);
-            //Array.Copy(bytes, inOffset, buffer, bufferOffset, length);
-            bufferOffset += length;
-            //len = 0;
+            message.Slice(inOffset, length).CopyTo(BlockBuffer.AsSpan()[BlockBufferOffset..]);
+            BlockBufferOffset += length;
         }
 
         return output;
@@ -60,11 +59,11 @@ public abstract class BlockCipherModeStream : BlockCipherModeImpl
 
     public override ReadOnlySpan<byte> DoFinal()
     {
-        if (bufferOffset == 0)
+        if (BlockBufferOffset == 0)
             return Array.Empty<byte>();
 
-        var output = new byte[bufferOffset];
-        ProcessBlock(buffer, 0, output, 0, bufferOffset);
+        var output = new byte[BlockBufferOffset];
+        ProcessBlock(BlockBuffer, 0, output, 0, BlockBufferOffset);
         return output;
     }
 }

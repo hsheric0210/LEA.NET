@@ -1,6 +1,6 @@
 using LEA.Symmetric;
 
-namespace LEA.Test.Mode;
+namespace LEA.Test.OpMode;
 
 public class CfbModeTest
 {
@@ -235,7 +235,7 @@ public class CfbModeTest
             TestVector testvector = Lea256CfbTestVectors[i];
 
             // Act
-            cipher.Init(OperatingMode.Encrypt, testvector.Key, testvector.IV);
+            cipher.Init(Mode.Encrypt, testvector.Key, testvector.IV);
             ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
             cipher.Reset();
 
@@ -255,7 +255,7 @@ public class CfbModeTest
             TestVector testvector = Lea256CfbTestVectors[i];
 
             // Act
-            cipher.Init(OperatingMode.Decrypt, testvector.Key, testvector.IV);
+            cipher.Init(Mode.Decrypt, testvector.Key, testvector.IV);
             ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.CipherText);
             cipher.Reset();
 
@@ -275,7 +275,7 @@ public class CfbModeTest
             TestVector testvector = Lea192CfbTestVectors[i];
 
             // Act
-            cipher.Init(OperatingMode.Encrypt, testvector.Key, testvector.IV);
+            cipher.Init(Mode.Encrypt, testvector.Key, testvector.IV);
             ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
             cipher.Reset();
 
@@ -295,7 +295,7 @@ public class CfbModeTest
             TestVector testvector = Lea192CfbTestVectors[i];
 
             // Act
-            cipher.Init(OperatingMode.Decrypt, testvector.Key, testvector.IV);
+            cipher.Init(Mode.Decrypt, testvector.Key, testvector.IV);
             ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.CipherText);
             cipher.Reset();
 
@@ -316,7 +316,7 @@ public class CfbModeTest
             TestVector testvector = Lea128CfbTestVectors[i];
 
             // Act
-            cipher.Init(OperatingMode.Encrypt, testvector.Key, testvector.IV);
+            cipher.Init(Mode.Encrypt, testvector.Key, testvector.IV);
             ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
             cipher.Reset();
 
@@ -336,7 +336,7 @@ public class CfbModeTest
             TestVector testvector = Lea128CfbTestVectors[i];
 
             // Act
-            cipher.Init(OperatingMode.Decrypt, testvector.Key, testvector.IV);
+            cipher.Init(Mode.Decrypt, testvector.Key, testvector.IV);
             ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.CipherText);
             cipher.Reset();
 

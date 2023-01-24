@@ -20,17 +20,17 @@ public abstract class MacBase
     /// <summary>
     /// 메시지 추가
     /// </summary>
-    /// <param name="msg">
+    /// <param name="message">
     ///            추가할 메시지</param>
-    public abstract void Update(ReadOnlySpan<byte> msg);
+    public abstract void Update(ReadOnlySpan<byte> message);
 
     /// <summary>
     /// 마지막 메시지를 포함하여 MAC 계산
     /// </summary>
-    /// <param name="msg">
+    /// <param name="message">
     ///            마지막 메시지</param>
     /// <returns>MAC 값</returns>
-    public abstract ReadOnlySpan<byte> DoFinal(ReadOnlySpan<byte> msg);
+    public abstract ReadOnlySpan<byte> DoFinal(ReadOnlySpan<byte> message);
 
     /// <summary>
     /// 현재까지 추가된 메시지에 대한 MAC 계산

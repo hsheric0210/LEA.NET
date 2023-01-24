@@ -17,17 +17,18 @@ public class LeaEngine : BlockCipher
         0xe5c40957
     };
 
-    private OperatingMode mode;
+    private Mode mode;
     private int rounds;
+
     protected uint[,] roundKeys;
     private uint[] block;
 
     public LeaEngine() => block = new uint[BlockSize / 4];
 
-    public override void Init(OperatingMode mode, ReadOnlySpan<byte> mk)
+    public override void Init(Mode mode, ReadOnlySpan<byte> key)
     {
         this.mode = mode;
-        GenerateRoundKeys(mk);
+        GenerateRoundKeys(key);
     }
 
     public override void Reset() => Array.Fill(block, 0u);
@@ -36,28 +37,22 @@ public class LeaEngine : BlockCipher
 
     public override int GetBlockSize() => BlockSize;
 
-    public override int ProcessBlock(ReadOnlySpan<byte> input, int inOffset, Span<byte> output, int outOffset)
+    public override int ProcessBlock(ReadOnlySpan<byte> inBlock, int inOffset, Span<byte> outBlock, int outOffset)
     {
-        if (input == null)
-            throw new ArgumentNullException(nameof(input));
+        if (inBlock.Length - inOffset < BlockSize)
+            throw new InvalidOperationException("too short input data " + inBlock.Length + " " + inOffset);
 
-        if (output == null)
-            throw new ArgumentNullException(nameof(output));
+        if (outBlock.Length - outOffset < BlockSize)
+            throw new InvalidOperationException("too short output buffer " + outBlock.Length + " / " + outOffset);
 
-        if (input.Length - inOffset < BlockSize)
-            throw new InvalidOperationException("too short input data " + input.Length + " " + inOffset);
-
-        if (output.Length - outOffset < BlockSize)
-            throw new InvalidOperationException("too short output buffer " + output.Length + " / " + outOffset);
-
-        return mode == OperatingMode.Encrypt
-            ? EncryptBlock(input, inOffset, output, outOffset)
-            : DecryptBlock(input, inOffset, output, outOffset);
+        return mode == Mode.Encrypt
+            ? EncryptBlock(inBlock, inOffset, outBlock, outOffset)
+            : DecryptBlock(inBlock, inOffset, outBlock, outOffset);
     }
 
-    private int EncryptBlock(ReadOnlySpan<byte> input, int inOffset, Span<byte> output, int outOffset)
+    private int EncryptBlock(ReadOnlySpan<byte> inBlock, int inOffset, Span<byte> outBlock, int outOffset)
     {
-        Pack(input, inOffset, block, 0, 16);
+        Pack(inBlock, inOffset, block, 0, 16);
         for (var i = 0; i < rounds; ++i)
         {
             block[3] = ROR((block[2] ^ roundKeys[i, 4]) + (block[3] ^ roundKeys[i, 5]), 3);
@@ -77,13 +72,13 @@ public class LeaEngine : BlockCipher
             block[0] = ROL((block[3] ^ roundKeys[i, 0]) + (block[0] ^ roundKeys[i, 1]), 9);
         }
 
-        Unpack(block, 0, output, outOffset, 4);
+        Unpack(block, 0, outBlock, outOffset, 4);
         return BlockSize;
     }
 
-    private int DecryptBlock(ReadOnlySpan<byte> input, int inOffset, Span<byte> output, int outOffset)
+    private int DecryptBlock(ReadOnlySpan<byte> inBlock, int inOffset, Span<byte> outBlock, int outOffset)
     {
-        Pack(input, inOffset, block, 0, 16);
+        Pack(inBlock, inOffset, block, 0, 16);
         for (var i = rounds - 1; i >= 0; --i)
         {
             block[0] = ROR(block[0], 9) - (block[3] ^ roundKeys[i, 0]) ^ roundKeys[i, 1];
@@ -103,7 +98,7 @@ public class LeaEngine : BlockCipher
             block[3] = ROL(block[3], 3) - (block[2] ^ roundKeys[i, 4]) ^ roundKeys[i, 5];
         }
 
-        Unpack(block, 0, output, outOffset, 4);
+        Unpack(block, 0, outBlock, outOffset, 4);
         return BlockSize;
     }
 
@@ -117,14 +112,10 @@ public class LeaEngine : BlockCipher
         roundKeys = new uint[rounds, 6];
         Pack(key, 0, T, 0, 16);
         if (key.Length > 16)
-        {
             Pack(key, 16, T, 4, 8);
-        }
 
         if (key.Length > 24)
-        {
             Pack(key, 24, T, 6, 8);
-        }
 
         if (key.Length == 16)
         {

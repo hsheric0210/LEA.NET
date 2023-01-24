@@ -2,12 +2,12 @@ using static LEA.Utils.Xor;
 using static LEA.Utils.EndianConversion;
 using static LEA.Utils.Shifting;
 
-namespace LEA.Mode;
+namespace LEA.OpMode;
 
 public class GcmMode : BlockCipherModeAE
 {
-    private static readonly int MAX_TAGLEN = 16;
-    private static readonly byte[][] REDUCTION = new[]
+    private const int MaxTagLength = 16;
+    private static readonly byte[][] Reduction = new[]
  {
         new[] { (byte)0x00, (byte)0x00 },
         new[] { (byte)0x01, (byte)0xc2 },
@@ -267,22 +267,38 @@ public class GcmMode : BlockCipherModeAE
         new[] { (byte)0xbe, (byte)0xbe }
  };
 
-    private byte[] nonce;
-    private byte[] block;
-    private byte[] aadBlock;
-    private byte[] hashBlock;
-    private byte[] mulBlock;
-
-    private byte[] initialCtr;
+    private readonly byte[] block;
+    private readonly byte[] nonce;
+    private readonly byte[] hashBlock;
+    private readonly byte[] aadBlock;
+    private readonly byte[] mulBlock;
+    private byte[] macBlock;
+    private byte[] initialCounter;
     private byte[] tag;
     private byte[,] hTable;
-    private byte[] macBlock;
     private byte[] inBuffer;
+
     private int blockOffset;
     private int aadOffset;
     private int aadlen;
     private int msglen;
+
     private MemoryStream decryptionStream;
+
+    private int tagLength;
+    protected override int TagLength
+    {
+        get => tagLength;
+        set
+        {
+            if (value is < 0 or > MaxTagLength)
+                throw new ArgumentException("length of tag should be 0~16 bytes");
+
+            tagLength = value;
+            tag = new byte[value];
+        }
+    }
+
     public GcmMode(BlockCipher cipher) : base(cipher)
     {
         block = new byte[blockSize];
@@ -291,15 +307,15 @@ public class GcmMode : BlockCipherModeAE
         macBlock = new byte[blockSize];
         aadBlock = new byte[blockSize];
         mulBlock = new byte[blockSize];
-        tagLength = blockSize;
+        TagLength = blockSize;
         msglen = 0;
     }
 
-    public override void Init(OperatingMode mode, ReadOnlySpan<byte> mk, ReadOnlySpan<byte> nonce, int tagLength)
+    public override void Init(Mode mode, ReadOnlySpan<byte> key, ReadOnlySpan<byte> nonce, int tagLength)
     {
         this.mode = mode;
-        engine.Init(OperatingMode.Encrypt, mk);
-        if (mode == OperatingMode.Encrypt)
+        engine.Init(Mode.Encrypt, key);
+        if (mode == Mode.Encrypt)
             inBuffer = new byte[blockSize];
         else
             inBuffer = new byte[blockSize + tagLength];
@@ -308,7 +324,7 @@ public class GcmMode : BlockCipherModeAE
         engine.ProcessBlock(block, 0, block, 0);
         Init_8bit_table();
         SetNonce(nonce);
-        SetTaglen(tagLength);
+        TagLength = tagLength;
         decryptionStream = new MemoryStream();
     }
 
@@ -325,11 +341,7 @@ public class GcmMode : BlockCipherModeAE
         Array.Fill(aadBlock, (byte)0x00);
         Array.Fill(mulBlock, (byte)0x00);
         Array.Fill(inBuffer, (byte)0x00);
-        if (decryptionStream != null)
-        {
-            // https://stackoverflow.com/questions/2462391/reset-or-clear-net-memorystream
-            decryptionStream.SetLength(0);
-        }
+        decryptionStream?.SetLength(0); // https://stackoverflow.com/questions/2462391/reset-or-clear-net-memorystream
     }
 
     private void SetNonce(ReadOnlySpan<byte> nonce)
@@ -340,7 +352,6 @@ public class GcmMode : BlockCipherModeAE
         if (nonce.Length == 12)
         {
             nonce.CopyTo(this.nonce);
-            //Array.Copy(nonce, 0, this.nonce, 0, nonce.Length);
             this.nonce[blockSize - 1] = 1;
         }
         else
@@ -351,55 +362,43 @@ public class GcmMode : BlockCipherModeAE
             GHash(this.nonce, X, blockSize);
         }
 
-        initialCtr = this.nonce.AsSpan().ToArray();
+        initialCounter = this.nonce.AsSpan().ToArray();
     }
 
-    private void SetTaglen(int taglen)
+    public override int GetOutputSize(int length)
     {
-        if (taglen < 0 || taglen > MAX_TAGLEN)
-            throw new ArgumentException("length of tag should be 0~16 bytes");
+        var outSize = length + blockOffset;
+        if (mode == Mode.Encrypt)
+            return outSize + TagLength;
 
-        tagLength = taglen;
-        tag = new byte[taglen];
-    }
-
-    public override int GetOutputSize(int len)
-    {
-        var outSize = len + blockOffset;
-        if (mode == OperatingMode.Encrypt)
-            return outSize + tagLength;
-
-        return outSize < tagLength ? 0 : outSize - tagLength;
+        return outSize < TagLength ? 0 : outSize - TagLength;
     }
 
     public virtual int GetUpdateOutputSize(int len)
     {
         var outSize = len + blockOffset;
-        if (mode == OperatingMode.Decrypt)
+        if (mode == Mode.Decrypt)
         {
-            if (outSize < tagLength)
+            if (outSize < TagLength)
                 return 0;
 
-            outSize -= tagLength;
+            outSize -= TagLength;
         }
 
         return unchecked((int)(outSize & 0xfffffff0));
     }
 
-    public override void UpdateAAD(ReadOnlySpan<byte> input)
+    public override void UpdateAssociatedData(ReadOnlySpan<byte> aad)
     {
-        if (input.Length == 0)
-        {
+        if (aad.Length == 0)
             return;
-        }
 
-        int len = input.Length;
-        int gap = aadBlock.Length - aadOffset;
-        int inOff = 0;
+        var len = aad.Length;
+        var gap = aadBlock.Length - aadOffset;
+        var inOff = 0;
         if (len > gap)
         {
-            input.Slice(inOff, gap).CopyTo(aadBlock.AsSpan()[aadOffset..]);
-            //System.Arraycopy(input, inOff, aadBlock, aadOffset, gap);
+            aad.Slice(inOff, gap).CopyTo(aadBlock.AsSpan()[aadOffset..]);
             GHash(macBlock, aadBlock, blockSize);
             aadOffset = 0;
             len -= gap;
@@ -407,8 +406,7 @@ public class GcmMode : BlockCipherModeAE
             aadlen += gap;
             while (len >= blockSize)
             {
-                input.Slice(inOff, blockSize).CopyTo(aadBlock);
-                //System.Arraycopy(input, inOff, aadBlock, 0, blockSize);
+                aad.Slice(inOff, blockSize).CopyTo(aadBlock);
                 GHash(macBlock, aadBlock, blockSize);
                 inOff += blockSize;
                 len -= blockSize;
@@ -418,14 +416,13 @@ public class GcmMode : BlockCipherModeAE
 
         if (len > 0)
         {
-            input.Slice(inOff, len).CopyTo(aadBlock.AsSpan()[aadOffset..]);
-            //System.Arraycopy(input, inOff, aadBlock, aadOffset, len);
+            aad.Slice(inOff, len).CopyTo(aadBlock.AsSpan()[aadOffset..]);
             aadOffset += len;
             aadlen += len;
         }
     }
 
-    public override ReadOnlySpan<byte> Update(ReadOnlySpan<byte> msg)
+    public override ReadOnlySpan<byte> Update(ReadOnlySpan<byte> message)
     {
         if (aadOffset != 0)
         {
@@ -433,62 +430,58 @@ public class GcmMode : BlockCipherModeAE
             aadOffset = 0;
         }
 
-        if (mode == OperatingMode.Encrypt)
-        {
-            return UpdateEncrypt(msg);
-        }
+        if (mode == Mode.Encrypt)
+            return UpdateEncrypt(message);
         else
-        {
-            UpdateDecrypt(msg);
-        }
+            UpdateDecrypt(message);
 
         return null;
     }
 
     public override ReadOnlySpan<byte> DoFinal()
     {
-        byte[] output = new byte[GetOutputSize(0)];
+        var output = new byte[GetOutputSize(0)];
         var outOffset = 0;
         var extra = blockOffset;
         if (extra != 0)
         {
-            if (mode == OperatingMode.Encrypt)
+            if (mode == Mode.Encrypt)
             {
                 EncryptBlock(output, outOffset, extra);
                 outOffset += extra;
             }
             else
             {
-                if (extra < tagLength)
+                if (extra < TagLength)
                     throw new ArgumentException("data too short");
 
-                extra -= tagLength;
+                extra -= TagLength;
                 if (extra > 0)
                 {
                     DecryptBlock(output, outOffset, extra);
                     decryptionStream.Write(output, outOffset, extra);
                 }
 
-                Array.Copy(inBuffer, extra, tag, 0, tagLength);
+                Buffer.BlockCopy(inBuffer, extra, tag, 0, TagLength);
             }
         }
 
-        if (mode == OperatingMode.Decrypt)
-            msglen -= tagLength;
+        if (mode == Mode.Decrypt)
+            msglen -= TagLength;
 
         Array.Fill(block, (byte)0x00);
         IntToBigEndian(aadlen *= 8, block, 4);
         IntToBigEndian(msglen *= 8, block, 12);
         GHash(macBlock, block, blockSize);
-        engine.ProcessBlock(initialCtr, 0, block, 0);
+        engine.ProcessBlock(initialCounter, 0, block, 0);
         XOR(macBlock, block);
-        if (mode == OperatingMode.Encrypt)
+        if (mode == Mode.Encrypt)
         {
-            Array.Copy(macBlock, 0, output, outOffset, tagLength);
+            Buffer.BlockCopy(macBlock, 0, output, outOffset, TagLength);
         }
         else
         {
-            macBlock = macBlock[..tagLength].ToArray();
+            macBlock = macBlock[..TagLength].ToArray();
             if (!macBlock.SequenceEqual(tag))
             {
                 decryptionStream.SetLength(0);
@@ -546,24 +539,22 @@ public class GcmMode : BlockCipherModeAE
         var gap = inBuffer.Length - blockOffset;
         var inOffset = 0;
         var outOffset = 0;
-        byte[] output = new byte[GetUpdateOutputSize(length)];
+        var output = new byte[GetUpdateOutputSize(length)];
         if (length >= gap)
         {
             input.Slice(inOffset, gap).CopyTo(inBuffer.AsSpan()[blockOffset..]);
-            //Array.Copy(input, inOff, inBuffer, blockOff, gap);
             DecryptBlock(output, outOffset, blockSize);
-            Array.Copy(inBuffer, blockSize, inBuffer, 0, tagLength);
+            Buffer.BlockCopy(inBuffer, blockSize, inBuffer, 0, TagLength);
             length -= gap;
             inOffset += gap;
             outOffset += blockSize;
             msglen += gap;
-            blockOffset = tagLength;
+            blockOffset = TagLength;
             while (length >= blockSize)
             {
                 input.Slice(inOffset, blockSize).CopyTo(inBuffer.AsSpan()[blockOffset..]);
-                //Array.Copy(input, inOff, inBuffer, blockOff, blockSize);
                 DecryptBlock(output, outOffset, blockSize);
-                Array.Copy(inBuffer, blockSize, inBuffer, 0, tagLength);
+                Buffer.BlockCopy(inBuffer, blockSize, inBuffer, 0, TagLength);
                 length -= blockSize;
                 inOffset += blockSize;
                 outOffset += blockSize;
@@ -574,7 +565,6 @@ public class GcmMode : BlockCipherModeAE
         if (length > 0)
         {
             input.Slice(inOffset, length).CopyTo(inBuffer.AsSpan()[blockOffset..]);
-            //Array.Copy(input, inOff, inBuffer, blockOff, len);
             msglen += length;
             blockOffset += length;
         }
@@ -582,23 +572,23 @@ public class GcmMode : BlockCipherModeAE
         decryptionStream.Write(output);
     }
 
-    private int EncryptBlock(byte[] output, int offset, int length)
+    private int EncryptBlock(Span<byte> outBlock, int offset, int length)
     {
-        Increase_counter(nonce);
+        IncreaseCounter(nonce);
         engine.ProcessBlock(nonce, 0, block, 0);
         XOR(block, inBuffer);
-        Array.Copy(block, 0, output, offset, length);
+        block[..length].CopyTo(outBlock[offset..]);
         GHash(macBlock, block, length);
         return length;
     }
 
-    private int DecryptBlock(byte[] output, int outOffset, int length)
+    private int DecryptBlock(Span<byte> outBlock, int outOffset, int length)
     {
-        Array.Copy(inBuffer, 0, block, 0, length);
+        Buffer.BlockCopy(inBuffer, 0, block, 0, length);
         GHash(macBlock, block, length);
-        Increase_counter(nonce);
+        IncreaseCounter(nonce);
         engine.ProcessBlock(nonce, 0, block, 0);
-        XOR(output, outOffset, block, 0, inBuffer, 0, length);
+        XOR(outBlock, outOffset, block, 0, inBuffer, 0, length);
         return length;
     }
 
@@ -615,9 +605,7 @@ public class GcmMode : BlockCipherModeAE
         {
             ShiftRight(temp, 1);
             if ((hTable[j << 1, 15] & 1) != 0)
-            {
                 temp[0] ^= 0xe1;
-            }
 
             Buffer.BlockCopy(temp, 0, hTable/*[j]*/, /*0*/tableSize * j, tableSize);
         }
@@ -637,20 +625,18 @@ public class GcmMode : BlockCipherModeAE
         }
     }
 
-    private void Increase_counter(Span<byte> ctr)
+    private void IncreaseCounter(Span<byte> ctr)
     {
         for (var i = 15; i >= 12; --i)
         {
             if (++ctr[i] != 0)
-            {
                 return;
-            }
         }
     }
 
     private void GHash(byte[] r, ReadOnlySpan<byte> data, int data_len)
     {
-        Array.Copy(r, 0, hashBlock, 0, blockSize);
+        Buffer.BlockCopy(r, 0, hashBlock, 0, blockSize);
         var pos = 0;
         var len = data_len;
         for (; len >= blockSize; pos += blockSize, len -= blockSize)
@@ -665,30 +651,27 @@ public class GcmMode : BlockCipherModeAE
             Gfmul(hashBlock, hashBlock);
         }
 
-        Array.Copy(hashBlock, 0, r, 0, blockSize);
+        Buffer.BlockCopy(hashBlock, 0, r, 0, blockSize);
     }
 
     private void Gfmul(Span<byte> r, ReadOnlySpan<byte> x)
     {
         Array.Fill(mulBlock, (byte)0x00);
-        var rowIdx = 0;
+
+        int rowIdx;
         for (rowIdx = 15; rowIdx > 0; --rowIdx)
         {
-            var colIdx = 0;
+            int colIdx;
             for (colIdx = 0; colIdx < 16; ++colIdx)
-            {
                 mulBlock[colIdx] ^= hTable[x[rowIdx] & 0xff, colIdx];
-            }
 
             var mask = mulBlock[15] & 0xff;
             for (colIdx = 15; colIdx > 0; --colIdx)
-            {
                 mulBlock[colIdx] = mulBlock[colIdx - 1];
-            }
 
             mulBlock[0] = 0;
-            mulBlock[0] ^= REDUCTION[mask][0];
-            mulBlock[1] ^= REDUCTION[mask][1];
+            mulBlock[0] ^= Reduction[mask][0];
+            mulBlock[1] ^= Reduction[mask][1];
         }
 
         rowIdx = x[0] & 0xff;

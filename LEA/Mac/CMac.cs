@@ -22,7 +22,7 @@ public class CMac : MacBase
 
     public override void Init(ReadOnlySpan<byte> key)
     {
-        engine.Init(OperatingMode.Encrypt, key);
+        engine.Init(Mode.Encrypt, key);
         blockIndex = 0;
         blockSize = engine.GetBlockSize();
         block = new byte[blockSize];
@@ -44,17 +44,17 @@ public class CMac : MacBase
         blockIndex = 0;
     }
 
-    public override void Update(ReadOnlySpan<byte> msg)
+    public override void Update(ReadOnlySpan<byte> message)
     {
-        if (msg.Length == 0)
+        if (message.Length == 0)
             return;
 
-        var length = msg.Length;
+        var length = message.Length;
         var messageOffset = 0;
         var gap = blockSize - blockIndex;
         if (length > gap)
         {
-            msg.Slice(messageOffset, gap).CopyTo(block.AsSpan()[blockIndex..]);
+            message.Slice(messageOffset, gap).CopyTo(block.AsSpan()[blockIndex..]);
             blockIndex = 0;
             length -= gap;
             messageOffset += gap;
@@ -62,7 +62,7 @@ public class CMac : MacBase
             {
                 XOR(block, mac);
                 engine.ProcessBlock(block, 0, mac, 0);
-                msg.Slice(messageOffset, blockSize).CopyTo(block);
+                message.Slice(messageOffset, blockSize).CopyTo(block);
                 length -= blockSize;
                 messageOffset += blockSize;
             }
@@ -76,14 +76,14 @@ public class CMac : MacBase
 
         if (length > 0)
         {
-            msg.Slice(messageOffset, length).CopyTo(block.AsSpan()[blockIndex..]);
+            message.Slice(messageOffset, length).CopyTo(block.AsSpan()[blockIndex..]);
             blockIndex += length;
         }
     }
 
-    public override ReadOnlySpan<byte> DoFinal(ReadOnlySpan<byte> msg)
+    public override ReadOnlySpan<byte> DoFinal(ReadOnlySpan<byte> message)
     {
-        Update(msg);
+        Update(message);
         return DoFinal();
     }
 

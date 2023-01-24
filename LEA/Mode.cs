@@ -1,5 +1,5 @@
 ﻿namespace LEA;
-public enum OperatingMode
+public enum Mode
 {
     /// <summary>
     /// Encryption mode

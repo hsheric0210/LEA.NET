@@ -1,6 +1,6 @@
 using LEA.Engine;
 using LEA.Mac;
-using LEA.Mode;
+using LEA.OpMode;
 
 namespace LEA.Symmetric;
 

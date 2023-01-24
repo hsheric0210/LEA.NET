@@ -1,4 +1,4 @@
-﻿namespace LEA.Test.Mode;
+﻿namespace LEA.Test.OpMode;
 public struct TestVector
 {
     public byte[] Key;
