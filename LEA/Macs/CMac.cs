@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static LEA.BlockCipher;
+using static LEA.util.Ops;
 
 namespace LEA.mac
 {
@@ -41,22 +43,22 @@ namespace LEA.mac
 		public override void Reset()
 		{
 			engine.Reset();
-			Arrays.Fill(block, (byte)0);
-			Arrays.Fill(mac, (byte)0);
+			Array.Fill(block, (byte)0);
+			Array.Fill(mac, (byte)0);
 			blkIdx = 0;
 		}
 
 		public override void Update(byte[] msg)
 		{
-			if (msg == null || msg.length == 0)
+			if (msg == null || msg.Length == 0)
 				return;
 
-			int len = msg.length;
+			int len = msg.Length;
 			var msgOff = 0;
 			var gap = blocksize - blkIdx;
 			if (len > gap)
 			{
-				System.Arraycopy(msg, msgOff, block, blkIdx, gap);
+				Buffer.BlockCopy(msg, msgOff, block, blkIdx, gap);
 				blkIdx = 0;
 				len -= gap;
 				msgOff += gap;
@@ -64,7 +66,7 @@ namespace LEA.mac
 				{
 					XOR(block, mac);
 					engine.ProcessBlock(block, 0, mac, 0);
-					System.Arraycopy(msg, msgOff, block, 0, blocksize);
+					Buffer.BlockCopy(msg, msgOff, block, 0, blocksize);
 					len -= blocksize;
 					msgOff += blocksize;
 				}
@@ -78,7 +80,7 @@ namespace LEA.mac
 
 			if (len > 0)
 			{
-				System.Arraycopy(msg, msgOff, block, blkIdx, len);
+				Buffer.BlockCopy(msg, msgOff, block, blkIdx, len);
 				blkIdx += len;
 			}
 		}
@@ -94,7 +96,7 @@ namespace LEA.mac
 			if (blkIdx < blocksize)
 			{
 				block[blkIdx] = 0x80;
-				Arrays.Fill(block, blkIdx + 1, blocksize, (byte)0x00);
+				Array.Fill(block, blkIdx + 1, blocksize, (byte)0x00);
 			}
 
 			XOR(block, blkIdx == blocksize ? k1 : k2);
@@ -121,13 +123,13 @@ namespace LEA.mac
 
 		private void Cmac_subkey(byte[] new_key, byte[] old_key)
 		{
-			System.Arraycopy(old_key, 0, new_key, 0, blocksize);
+			Buffer.BlockCopy(old_key, 0, new_key, 0, blocksize);
 			ShiftLeft(new_key, 1);
 			if ((old_key[0] & 0x80) != 0)
 			{
-				for (var i = 0; i < RB.length; ++i)
+				for (var i = 0; i < RB.Length; ++i)
 				{
-					new_key[blocksize - RB.length + i] ^= RB[i];
+					new_key[blocksize - RB.Length + i] ^= RB[i];
 				}
 			}
 		}

@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using LEA.engine;
+using LEA.mode;
+using LEA.mac;
 
 namespace LEA.symm
 {
@@ -9,7 +13,7 @@ namespace LEA.symm
 	{
 		private LEA()
 		{
-			throw new AssertionError();
+			Debug.Assert(true);
 		}
 
 		public static BlockCipher GetEngine()

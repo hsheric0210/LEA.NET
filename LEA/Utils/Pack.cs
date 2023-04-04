@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -9,7 +10,7 @@ namespace LEA.util
 	{
 		private Pack()
 		{
-			throw new AssertionError("Can't create an instance of class Pack");
+			Debug.Assert(true, "Can't create an instance of class Pack");
 		}
 
 		public static int BigEndianToInt(byte[] bs, int off)
@@ -23,7 +24,7 @@ namespace LEA.util
 
 		public static void BigEndianToInt(byte[] bs, int off, int[] ns)
 		{
-			for (var i = 0; i < ns.length; ++i)
+			for (var i = 0; i < ns.Length; ++i)
 			{
 				ns[i] = BigEndianToInt(bs, off);
 				off += 4;
@@ -47,14 +48,14 @@ namespace LEA.util
 
 		public static byte[] IntToBigEndian(int[] ns)
 		{
-			var bs = new byte[4 * ns.length];
+			var bs = new byte[4 * ns.Length];
 			IntToBigEndian(ns, bs, 0);
 			return bs;
 		}
 
 		public static void IntToBigEndian(int[] ns, byte[] bs, int off)
 		{
-			for (var i = 0; i < ns.length; ++i)
+			for (var i = 0; i < ns.Length; ++i)
 			{
 				IntToBigEndian(ns[i], bs, off);
 				off += 4;
@@ -70,7 +71,7 @@ namespace LEA.util
 
 		public static void BigEndianToLong(byte[] bs, int off, long[] ns)
 		{
-			for (var i = 0; i < ns.length; ++i)
+			for (var i = 0; i < ns.Length; ++i)
 			{
 				ns[i] = BigEndianToLong(bs, off);
 				off += 8;
@@ -92,14 +93,14 @@ namespace LEA.util
 
 		public static byte[] LongToBigEndian(long[] ns)
 		{
-			var bs = new byte[8 * ns.length];
+			var bs = new byte[8 * ns.Length];
 			LongToBigEndian(ns, bs, 0);
 			return bs;
 		}
 
 		public static void LongToBigEndian(long[] ns, byte[] bs, int off)
 		{
-			for (var i = 0; i < ns.length; ++i)
+			for (var i = 0; i < ns.Length; ++i)
 			{
 				LongToBigEndian(ns[i], bs, off);
 				off += 8;
@@ -117,7 +118,7 @@ namespace LEA.util
 
 		public static void LittleEndianToInt(byte[] bs, int off, int[] ns)
 		{
-			for (var i = 0; i < ns.length; ++i)
+			for (var i = 0; i < ns.Length; ++i)
 			{
 				ns[i] = LittleEndianToInt(bs, off);
 				off += 4;
@@ -150,14 +151,14 @@ namespace LEA.util
 
 		public static byte[] IntToLittleEndian(int[] ns)
 		{
-			var bs = new byte[4 * ns.length];
+			var bs = new byte[4 * ns.Length];
 			IntToLittleEndian(ns, bs, 0);
 			return bs;
 		}
 
 		public static void IntToLittleEndian(int[] ns, byte[] bs, int off)
 		{
-			for (var i = 0; i < ns.length; ++i)
+			for (var i = 0; i < ns.Length; ++i)
 			{
 				IntToLittleEndian(ns[i], bs, off);
 				off += 4;
@@ -173,7 +174,7 @@ namespace LEA.util
 
 		public static void LittleEndianToLong(byte[] bs, int off, long[] ns)
 		{
-			for (var i = 0; i < ns.length; ++i)
+			for (var i = 0; i < ns.Length; ++i)
 			{
 				ns[i] = LittleEndianToLong(bs, off);
 				off += 8;
@@ -195,14 +196,14 @@ namespace LEA.util
 
 		public static byte[] LongToLittleEndian(long[] ns)
 		{
-			var bs = new byte[8 * ns.length];
+			var bs = new byte[8 * ns.Length];
 			LongToLittleEndian(ns, bs, 0);
 			return bs;
 		}
 
 		public static void LongToLittleEndian(long[] ns, byte[] bs, int off)
 		{
-			for (var i = 0; i < ns.length; ++i)
+			for (var i = 0; i < ns.Length; ++i)
 			{
 				LongToLittleEndian(ns[i], bs, off);
 				off += 8;

@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using static LEA.BlockCipher;
+using static LEA.util.Ops;
+using static LEA.util.Hex;
 
 namespace LEA.mode
 {
@@ -11,8 +15,8 @@ namespace LEA.mode
 		private byte[] mac;
 		private byte[] tag;
 		private byte[] block;
-		private ByteArrayOutputStream aadBytes;
-		private ByteArrayOutputStream inputBytes;
+		private MemoryStream aadBytes;
+		private MemoryStream inputBytes;
 		private int msglen;
 		private int taglen;
 		private int noncelen;
@@ -27,23 +31,23 @@ namespace LEA.mode
 		{
 			this.mode = mode;
 			engine.Init(Mode.ENCRYPT, mk);
-			aadBytes = new ByteArrayOutputStream();
-			inputBytes = new ByteArrayOutputStream();
+			aadBytes = new MemoryStream();
+			inputBytes = new MemoryStream();
 			SetTaglen(taglen);
 			SetNonce(nonce);
 		}
 
 		public override void UpdateAAD(byte[] aad)
 		{
-			if (aad == null || aad.length == 0)
+			if (aad == null || aad.Length == 0)
 				return;
 
-			aadBytes.Write(aad, 0, aad.length);
+			aadBytes.Write(aad, 0, aad.Length);
 		}
 
 		public override byte[] Update(byte[] msg)
 		{
-			inputBytes.Write(msg, 0, msg.length);
+			inputBytes.Write(msg, 0, msg.Length);
 			return null;
 		}
 
@@ -51,16 +55,16 @@ namespace LEA.mode
 		{
 			Close(aadBytes);
 			Close(inputBytes);
-			if (aadBytes.Count > 0)
+			if (aadBytes.Length > 0)
 				block[0] |= 0x40;
 
-			msglen = inputBytes.ToByteArray().length;
+			msglen = (int)inputBytes.Length;
 			if (mode == Mode.DECRYPT)
 				msglen -= taglen;
 
 			ToBytes(msglen, block, noncelen + 1, 15 - noncelen);
 			engine.ProcessBlock(block, 0, mac, 0);
-			byte[] out;
+			byte[] @out;
 			ProcessAAD();
 			if (mode == Mode.ENCRYPT)
 			{
@@ -78,14 +82,14 @@ namespace LEA.mode
 			if (mode == Mode.ENCRYPT)
 			{
 				XOR(mac, block);
-				System.Arraycopy(mac, 0, tag, 0, taglen);
-				System.Arraycopy(mac, 0, @out, @out.length - taglen, taglen);
+				Buffer.BlockCopy(mac, 0, tag, 0, taglen);
+				Buffer.BlockCopy(mac, 0, @out, @out.Length - taglen, taglen);
 			}
 			else
 			{
-				mac = Arrays.CopyOf(mac, taglen);
-				if (Arrays.Equals(tag, mac) == false)
-					Arrays.Fill(@out, (byte)0);
+				mac = Array.CopyOf(mac, taglen); // FIXME
+				if (!Array.Equals(tag, mac)) // FIXME
+					Array.Fill(@out, (byte)0);
 			}
 
 			return @out;
@@ -103,22 +107,22 @@ namespace LEA.mode
 		private void SetNonce(byte[] nonce)
 		{
 			if (nonce == null)
-				throw new NullPointerException("nonce is null");
+				throw new ArgumentNullException("nonce is null");
 
-			noncelen = nonce.length;
+			noncelen = nonce.Length;
 			if (noncelen < 7 || noncelen > 13)
 				throw new ArgumentException("length of nonce should be 7 ~ 13 bytes");
 
 
 			// init counter
 			ctr[0] = (byte)(14 - noncelen);
-			System.Arraycopy(nonce, 0, ctr, 1, noncelen);
+			Buffer.BlockCopy(nonce, 0, ctr, 1, noncelen);
 
 			// init b0
 			var tagfield = (taglen - 2) / 2;
 			block[0] = (byte)(tagfield << 3 & 0xff);
 			block[0] |= (byte)(14 - noncelen & 0xff);
-			System.Arraycopy(nonce, 0, block, 1, noncelen);
+			Buffer.BlockCopy(nonce, 0, block, 1, noncelen);
 		}
 
 		private void SetTaglen(int taglen)
@@ -132,12 +136,12 @@ namespace LEA.mode
 
 		private void ResetCounter()
 		{
-			Arrays.Fill(ctr, noncelen + 1, ctr.length, (byte)0);
+			Array.Fill(ctr, noncelen + 1, ctr.Length, (byte)0); // FIXME
 		}
 
 		private void IncreaseCounter()
 		{
-			int i = ctr.length - 1;
+			int i = ctr.Length - 1;
 			while (++ctr[i] == 0)
 			{
 				--i;
@@ -148,31 +152,31 @@ namespace LEA.mode
 
 		private void ProcessAAD()
 		{
-			byte[] aad = aadBytes.ToByteArray();
-			Arrays.Fill(block, (byte)0);
+			byte[] aad = aadBytes.ToArray();
+			Array.Fill(block, (byte)0);
 			var alen = 0;
-			if (aad.length < 0xff00)
+			if (aad.Length < 0xff00)
 			{
 				alen = 2;
-				ToBytes(aad.length, block, 0, 2);
+				ToBytes(aad.Length, block, 0, 2);
 			}
 			else
 			{
 				alen = 6;
 				block[0] = 0xff;
 				block[1] = 0xfe;
-				ToBytes(aad.length, block, 2, 4);
+				ToBytes(aad.Length, block, 2, 4);
 			}
 
-			if (aad.length == 0)
+			if (aad.Length == 0)
 				return;
 
 			var i = 0;
-			int remained = aad.length;
-			int processed = remained > blocksize - alen ? blocksize - alen : aad.length;
+			int remained = aad.Length;
+			int processed = remained > blocksize - alen ? blocksize - alen : aad.Length;
 			i += processed;
 			remained -= processed;
-			System.Arraycopy(aad, 0, block, alen, processed);
+			Buffer.BlockCopy(aad, 0, block, alen, processed);
 			XOR(mac, block);
 			engine.ProcessBlock(mac, 0, mac, 0);
 			while (remained > 0)
@@ -191,7 +195,7 @@ namespace LEA.mode
 			var remained = 0;
 			var processed = 0;
 			var outIdx = offset;
-			byte[] in = inputBytes.ToByteArray();
+			byte[] @in = inputBytes.GetBuffer();
 			remained = msglen;
 			while (remained > 0)
 			{
@@ -213,8 +217,8 @@ namespace LEA.mode
 			var remained = 0;
 			var processed = 0;
 			var outIdx = offset;
-			byte[] in = inputBytes.ToByteArray();
-			System.Arraycopy(@in, msglen, tag, 0, taglen);
+			byte[] @in = inputBytes.GetBuffer();
+			Buffer.BlockCopy(@in, msglen, tag, 0, taglen);
 			engine.ProcessBlock(ctr, 0, block, 0);
 			XOR(tag, 0, block, 0, taglen);
 			remained = msglen;
@@ -232,7 +236,7 @@ namespace LEA.mode
 			}
 		}
 
-		private static void Close(Closeable obj)
+		private static void Close(Stream obj)
 		{
 			if (obj == null)
 				return;
@@ -243,7 +247,7 @@ namespace LEA.mode
 			}
 			catch (Exception e)
 			{
-				e.PrintStackTrace();
+				Console.WriteLine(e); // FIXME
 			}
 		}
 	}

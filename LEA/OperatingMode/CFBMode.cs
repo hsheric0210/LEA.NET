@@ -2,21 +2,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static LEA.BlockCipher;
+using static LEA.util.Ops;
 
 namespace LEA.mode
 {
-	public class CTRMode : BlockCipherModeStream
+	// DONE: block vs buffer
+	public class CFBMode : BlockCipherModeStream
 	{
 		private byte[] iv;
-		private byte[] ctr;
 		private byte[] block;
-		public CTRMode(BlockCipher cipher) : base(cipher)
+		private byte[] feedback;
+		public CFBMode(BlockCipher cipher) : base(cipher)
 		{
 		}
 
 		public override string GetAlgorithmName()
 		{
-			return engine.GetAlgorithmName() + "/CTR";
+			return engine.GetAlgorithmName() + "/CFB";
 		}
 
 		public override void Init(Mode mode, byte[] mk, byte[] iv)
@@ -24,32 +27,29 @@ namespace LEA.mode
 			this.mode = mode;
 			engine.Init(Mode.ENCRYPT, mk);
 			this.iv = iv.Clone();
-			ctr = new byte[blocksize];
 			block = new byte[blocksize];
+			feedback = new byte[blocksize];
 			Reset();
 		}
 
 		public override void Reset()
 		{
 			base.Reset();
-			System.Arraycopy(iv, 0, ctr, 0, ctr.length);
+			Buffer.BlockCopy(iv, 0, feedback, 0, blocksize);
 		}
 
 		protected override int ProcessBlock(byte[] @in, int inOff, byte[] @out, int outOff, int outlen)
 		{
-			var length = engine.ProcessBlock(ctr, 0, block, 0);
-			AddCounter();
+			var length = engine.ProcessBlock(feedback, 0, block, 0);
 			XOR(@out, outOff, @in, inOff, block, 0, outlen);
-			return length;
-		}
-
-		private void AddCounter()
-		{
-			for (int i = ctr.length - 1; i >= 0; --i)
+			if (mode == Mode.ENCRYPT)
+				Buffer.BlockCopy(@out, outOff, feedback, 0, blocksize);
+			else
 			{
-				if (++ctr[i] != 0)
-					break;
+				Buffer.BlockCopy(@in, inOff, feedback, 0, blocksize);
 			}
+
+			return length;
 		}
 	}
 }

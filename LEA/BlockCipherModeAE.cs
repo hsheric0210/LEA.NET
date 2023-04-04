@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static LEA.BlockCipher;
 
 namespace LEA
 {
@@ -28,18 +29,18 @@ namespace LEA
 		public abstract int GetOutputSize(int len);
 		public virtual byte[] DoFinal(byte[] msg)
 		{
-			byte[] out = null;
+			byte[] @out = null;
 			if (mode == Mode.ENCRYPT)
 			{
 				var part1 = Update(msg);
 				var part2 = DoFinal();
-				int len1 = part1 == null ? 0 : part1.length;
-				int len2 = part2 == null ? 0 : part2.length;
+				int len1 = part1 == null ? 0 : part1.Length;
+				int len2 = part2 == null ? 0 : part2.Length;
 				@out = new byte[len1 + len2];
 				if (part1 != null)
-					System.Arraycopy(part1, 0, @out, 0, len1);
+					Buffer.BlockCopy(part1, 0, @out, 0, len1);
 				if (part2 != null)
-					System.Arraycopy(part2, 0, @out, len1, len2);
+					Buffer.BlockCopy(part2, 0, @out, len1, len2);
 			}
 			else
 			{

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static LEA.BlockCipher;
+using static LEA.util.Ops;
 
 namespace LEA.mode
 {
@@ -31,7 +33,7 @@ namespace LEA.mode
 		public override void Reset()
 		{
 			base.Reset();
-			System.Arraycopy(iv, 0, block, 0, blocksize);
+			Buffer.BlockCopy(iv, 0, block, 0, blocksize);
 		}
 
 		protected override int ProcessBlock(byte[] @in, int inOff, byte[] @out, int outOff, int outlen)

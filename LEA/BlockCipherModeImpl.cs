@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static LEA.BlockCipher;
 
 namespace LEA
 {
@@ -25,14 +26,14 @@ namespace LEA
 		{
 			var part1 = Update(msg);
 			var part2 = DoFinal();
-			int len1 = part1 == null ? 0 : part1.length;
-			int len2 = part2 == null ? 0 : part2.length;
-			byte[] out = new byte[len1 + len2];
+			int len1 = part1 == null ? 0 : part1.Length;
+			int len2 = part2 == null ? 0 : part2.Length;
+			byte[] @out = new byte[len1 + len2];
 			if (len1 > 0)
-				System.Arraycopy(part1, 0, @out, 0, len1);
+				Buffer.BlockCopy(part1, 0, @out, 0, len1);
 
 			if (len2 > 0)
-				System.Arraycopy(part2, 0, @out, len1, len2);
+				Buffer.BlockCopy(part2, 0, @out, len1, len2);
 
 			return @out;
 		}
@@ -49,13 +50,13 @@ namespace LEA
 			switch (blocksize)
 			{
 				case 8:
-					mask = 0xfffffff7;
+					mask = unchecked((int)0xfffffff7);
 					break;
 				case 16:
-					mask = 0xfffffff0;
+					mask = unchecked((int)0xfffffff0);
 					break;
 				case 32:
-					mask = 0xffffffe0;
+					mask = unchecked((int)0xffffffe0);
 					break;
 			}
 
@@ -67,8 +68,8 @@ namespace LEA
 			if (array == null)
 				return null;
 
-			var clone = new byte[array.length];
-			System.Arraycopy(array, 0, clone, 0, clone.length);
+			var clone = new byte[array.Length];
+			Buffer.BlockCopy(array, 0, clone, 0, clone.Length);
 			return clone;
 		}
 	}

@@ -1,18 +1,21 @@
+using LEA.util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static LEA.util.Ops;
 
 namespace LEA.engine
 {
 	public class LeaEngine : BlockCipher
 	{
 		private static readonly int BLOCKSIZE = 16;
-		private static readonly int[] delta = new[] { 0xc3efe9db, 0x44626b02, 0x79e27c8a, 0x78df30ec, 0x715ea49e, 0xc785da0a, 0xe04ef22a, 0xe5c40957 };
+		private static readonly int[] delta = unchecked(new uint[] { 0xc3efe9db, 0x44626b02, 0x79e27c8a, 0x78df30ec, 0x715ea49e, 0xc785da0a, 0xe04ef22a, 0xe5c40957 }.Select(d => (int)d).ToArray());
 		private Mode mode;
 		private int rounds;
 		protected int[][] roundKeys;
 		private int[] block;
+
 		public LeaEngine()
 		{
 			block = new int[BLOCKSIZE / 4];
@@ -26,7 +29,7 @@ namespace LEA.engine
 
 		public override void Reset()
 		{
-			Arrays.Fill(block, 0);
+			Array.Fill(block, 0);
 		}
 
 		public override string GetAlgorithmName()
@@ -42,13 +45,13 @@ namespace LEA.engine
 		public override int ProcessBlock(byte[] @in, int inOff, byte[] @out, int outOff)
 		{
 			if (@in == null || @out == null)
-				throw new NullPointerException("in and out should not be null");
+				throw new ArgumentNullException("in and out should not be null");
 
-			if (@in.length - inOff < BLOCKSIZE)
-				throw new InvalidOperationException("too short input data " + @in.length + " " + inOff);
+			if (@in.Length - inOff < BLOCKSIZE)
+				throw new InvalidOperationException("too short input data " + @in.Length + " " + inOff);
 
-			if (@out.length - outOff < BLOCKSIZE)
-				throw new InvalidOperationException("too short output buffer " + @out.length + " / " + outOff);
+			if (@out.Length - outOff < BLOCKSIZE)
+				throw new InvalidOperationException("too short output buffer " + @out.Length + " / " + outOff);
 
 			if (mode == Mode.ENCRYPT)
 				return EncryptBlock(@in, inOff, @out, outOff);
@@ -110,20 +113,22 @@ namespace LEA.engine
 
 		private void GenerateRoundKeys(byte[] mk)
 		{
-			if (mk == null || mk.length != 16 && mk.length != 24 && mk.length != 32)
+			if (mk == null || mk.Length != 16 && mk.Length != 24 && mk.Length != 32)
 				throw new ArgumentException("Illegal key");
 
 			var T = new int[8];
-			rounds = (mk.length >> 1) + 16;
-			roundKeys = new int[rounds, 6];
+			rounds = (mk.Length >> 1) + 16;
+			roundKeys = new int[rounds][]; // FIXME: Convert this to multidimensional array (https://stackoverflow.com/questions/72980478/how-to-initialize-a-multidimensional-array)
+			for (int i = 0; i < rounds; i++)
+				roundKeys[i] = new int[6];
 			Pack(mk, 0, T, 0, 16);
-			if (mk.length > 16)
+			if (mk.Length > 16)
 				Pack(mk, 16, T, 4, 8);
 
-			if (mk.length > 24)
+			if (mk.Length > 24)
 				Pack(mk, 24, T, 6, 8);
 
-			if (mk.length == 16)
+			if (mk.Length == 16)
 			{
 				for (var i = 0; i < 24; ++i)
 				{
@@ -134,7 +139,7 @@ namespace LEA.engine
 					roundKeys[i][4] = T[3] = ROL(T[3] + ROL(temp, 3), 11);
 				}
 			}
-			else if (mk.length == 24)
+			else if (mk.Length == 24)
 			{
 				for (var i = 0; i < 28; ++i)
 				{

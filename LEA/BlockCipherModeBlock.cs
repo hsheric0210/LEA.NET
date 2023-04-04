@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static LEA.BlockCipher;
 
 namespace LEA
 {
@@ -44,7 +45,7 @@ namespace LEA
 		public override void Reset()
 		{
 			bufferOffset = 0;
-			Arrays.Fill(buffer, (byte)0);
+			Array.Fill(buffer, (byte)0);
 		}
 
 		public override void SetPadding(Padding padding)
@@ -60,19 +61,19 @@ namespace LEA
 			if (msg == null)
 				return null;
 
-			int len = msg.length;
-			int gap = buffer.length - bufferOffset;
+			int len = msg.Length;
+			int gap = buffer.Length - bufferOffset;
 			var inOff = 0;
 			var outOff = 0;
-			byte[] out = new byte[GetUpdateOutputSize(len)];
+			byte[] @out = new byte[GetUpdateOutputSize(len)];
 			if (len >= gap)
 			{
-				System.Arraycopy(msg, inOff, buffer, bufferOffset, gap);
+				Buffer.BlockCopy(msg, inOff, buffer, bufferOffset, gap);
 				outOff += ProcessBlock(buffer, 0, @out, outOff);
 				bufferOffset = 0;
 				len -= gap;
 				inOff += gap;
-				while (len >= buffer.length)
+				while (len >= buffer.Length)
 				{
 					outOff += ProcessBlock(msg, inOff, @out, outOff);
 					len -= blocksize;
@@ -82,7 +83,7 @@ namespace LEA
 
 			if (len > 0)
 			{
-				System.Arraycopy(msg, inOff, buffer, bufferOffset, len);
+				Buffer.BlockCopy(msg, inOff, buffer, bufferOffset, len);
 				bufferOffset += len;
 				len = 0;
 			}
@@ -102,7 +103,7 @@ namespace LEA
 				throw new InvalidOperationException("Bad padding");
 			}
 
-			byte[] out = new byte[blocksize];
+			byte[] @out = new byte[blocksize];
 			ProcessBlock(buffer, 0, @out, 0, blocksize);
 			return @out;
 		}
@@ -117,19 +118,19 @@ namespace LEA
 			if (msg == null)
 				return null;
 
-			int len = msg.length;
-			int gap = buffer.length - bufferOffset;
+			int len = msg.Length;
+			int gap = buffer.Length - bufferOffset;
 			var inOff = 0;
 			var outOff = 0;
-			byte[] out = new byte[GetUpdateOutputSize(len)];
+			byte[] @out = new byte[GetUpdateOutputSize(len)];
 			if (len > gap)
 			{
-				System.Arraycopy(msg, inOff, buffer, bufferOffset, gap);
+				Buffer.BlockCopy(msg, inOff, buffer, bufferOffset, gap);
 				outOff += ProcessBlock(buffer, 0, @out, outOff);
 				bufferOffset = 0;
 				len -= gap;
 				inOff += gap;
-				while (len > buffer.length)
+				while (len > buffer.Length)
 				{
 					outOff += ProcessBlock(msg, inOff, @out, outOff);
 					len -= blocksize;
@@ -139,7 +140,7 @@ namespace LEA
 
 			if (len > 0)
 			{
-				System.Arraycopy(msg, inOff, buffer, bufferOffset, len);
+				Buffer.BlockCopy(msg, inOff, buffer, bufferOffset, len);
 				bufferOffset += len;
 				len = 0;
 			}
@@ -153,7 +154,7 @@ namespace LEA
 		/// <returns></returns>
 		private byte[] DoFinalWithPadding()
 		{
-			byte[] out = null;
+			byte[] @out = null;
 			if (mode == Mode.ENCRYPT)
 			{
 				padding.Pad(buffer, bufferOffset);

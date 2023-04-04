@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static LEA.BlockCipher;
 
 namespace LEA.mode
 {
@@ -27,7 +28,7 @@ namespace LEA.mode
 			if (outlen != blocksize)
 				throw new ArgumentException("outlen should be " + blocksize + " in " + GetAlgorithmName());
 
-			if (inOff + blocksize > @in.length)
+			if (inOff + blocksize > @in.Length)
 				throw new InvalidOperationException("input data too short");
 
 			return engine.ProcessBlock(@in, inOff, @out, outOff);

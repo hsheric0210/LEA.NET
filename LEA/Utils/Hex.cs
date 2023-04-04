@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -9,7 +10,7 @@ namespace LEA.util
 	{
 		private Hex()
 		{
-			throw new AssertionError("Can't create an instance of class Hex");
+			Debug.Assert(true, "Can't create an instance of class Hex");
 		}
 
 		public static byte[] DecodeHexString(string hexString)
@@ -17,11 +18,11 @@ namespace LEA.util
 			if (hexString == null)
 				return null;
 
-			var buf = new byte[hexString.Length() / 2];
-			for (var i = 0; i < buf.length; ++i)
+			var buf = new byte[hexString.Length / 2];
+			for (var i = 0; i < buf.Length; ++i)
 			{
-				buf[i] = (byte)(16 * DecodeHexChar(hexString.CharAt(i * 2)));
-				buf[i] += DecodeHexChar(hexString.CharAt(i * 2 + 1));
+				buf[i] = (byte)(16 * DecodeHexChar(hexString[i * 2]));
+				buf[i] += DecodeHexChar(hexString[i * 2 + 1]);
 			}
 
 			return buf;
@@ -60,34 +61,6 @@ namespace LEA.util
 		}
 
 		/// <summary>
-		/// print the content of a byte buffer to the system output as a hex string
-		/// </summary>
-		/// <param name="title"></param>
-		/// <param name="buf"></param>
-		public static void PrintHex(string title, byte[] buf)
-		{
-			if (buf == null)
-				throw new NullPointerException("input array shoud not be null");
-
-			System.@out.Print(title + "(" + buf.length + ") ");
-			System.@out.Println(ToHexString(buf));
-		}
-
-		/// <summary>
-		/// print the content of an int buffer to the system output as a hex string
-		/// </summary>
-		/// <param name="title"></param>
-		/// <param name="buf"></param>
-		public static void PrintHex(string title, int[] buf)
-		{
-			if (buf == null)
-				throw new NullPointerException("input array shoud not be null");
-
-			System.@out.Print(title + "(" + buf.length + ") ");
-			System.@out.Println(ToHexString(buf));
-		}
-
-		/// <summary>
 		/// convert byte buffer to hex string
 		/// </summary>
 		/// <param name="buf"></param>
@@ -97,7 +70,7 @@ namespace LEA.util
 			if (buf == null)
 				return null;
 
-			return ToHexString(buf, 0, buf.length, 0);
+			return ToHexString(buf, 0, buf.Length, 0);
 		}
 
 		public static string ToHexString(byte[] buf, int indent)
@@ -105,7 +78,7 @@ namespace LEA.util
 			if (buf == null)
 				throw null;
 
-			return ToHexString(buf, 0, buf.length, indent);
+			return ToHexString(buf, 0, buf.Length, indent);
 		}
 
 		public static string ToHexString(byte[] buf, int offset, int len, int indent)
@@ -113,7 +86,7 @@ namespace LEA.util
 			if (buf == null)
 				return null;
 
-			if (buf.length < offset + len)
+			if (buf.Length < offset + len)
 				throw new ArgumentException("buffer length is not enough");
 
 			var sb = new StringBuilder();
@@ -152,7 +125,7 @@ namespace LEA.util
 		public static string ToBitString(byte[] @in)
 		{
 			if (@in == null)
-				throw new NullPointerException("input array shoud not be null");
+				throw new ArgumentNullException("input array shoud not be null");
 
 			var sb = new StringBuilder();
 			foreach (var i in @in)
@@ -177,7 +150,7 @@ namespace LEA.util
 		public static string ToBitString(int[] @in)
 		{
 			if (@in == null)
-				throw new NullPointerException("input array shoud not be null");
+				throw new ArgumentNullException("input array shoud not be null");
 
 			var sb = new StringBuilder();
 			foreach (var i in @in)

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static LEA.BlockCipher;
+using static LEA.util.Ops;
 
 namespace LEA.mode
 {
@@ -30,7 +32,7 @@ namespace LEA.mode
 		public override void Reset()
 		{
 			base.Reset();
-			System.Arraycopy(iv, 0, feedback, 0, blocksize);
+			Buffer.BlockCopy(iv, 0, feedback, 0, blocksize);
 		}
 
 		protected override int ProcessBlock(byte[] @in, int inOff, byte[] @out, int outOff, int outlen)
@@ -46,23 +48,23 @@ namespace LEA.mode
 
 		private int EncryptBlock(byte[] @in, int inOff, byte[] @out, int outOff)
 		{
-			if (inOff + blocksize > @in.length)
+			if (inOff + blocksize > @in.Length)
 				throw new InvalidOperationException("input data too short");
 
 			XOR(feedback, 0, @in, inOff, blocksize);
 			engine.ProcessBlock(feedback, 0, @out, outOff);
-			System.Arraycopy(@out, outOff, feedback, 0, blocksize);
+			Buffer.BlockCopy(@out, outOff, feedback, 0, blocksize);
 			return blocksize;
 		}
 
 		private int DecryptBlock(byte[] @in, int inOff, byte[] @out, int outOff)
 		{
-			if (inOff + blocksize > @in.length)
+			if (inOff + blocksize > @in.Length)
 				throw new InvalidOperationException("input data too short");
 
 			engine.ProcessBlock(@in, inOff, @out, outOff);
 			XOR(@out, outOff, feedback, 0, blocksize);
-			System.Arraycopy(@in, inOff, feedback, 0, blocksize);
+			Buffer.BlockCopy(@in, inOff, feedback, 0, blocksize);
 			return blocksize;
 		}
 	}
