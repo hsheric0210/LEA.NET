@@ -11,58 +11,58 @@ namespace LEA.Symmetric
 
 		public static BlockCipher GetEngine() => new LeaEngine();
 
-		public sealed class ECB : ECBMode
+		public sealed class Ecb : EcbMode
 		{
-			public ECB() : base(GetEngine())
+			public Ecb() : base(GetEngine())
 			{
 			}
 		}
 
-		public sealed class CBC : CBCMode
+		public sealed class Cbc : CbcMode
 		{
-			public CBC() : base(GetEngine())
+			public Cbc() : base(GetEngine())
 			{
 			}
 		}
 
-		public sealed class CTR : CTRMode
+		public sealed class Ctr : CtrMode
 		{
-			public CTR() : base(GetEngine())
+			public Ctr() : base(GetEngine())
 			{
 			}
 		}
 
-		public sealed class CFB : CFBMode
+		public sealed class Cfb : CfbMode
 		{
-			public CFB() : base(GetEngine())
+			public Cfb() : base(GetEngine())
 			{
 			}
 		}
 
-		public sealed class OFB : OFBMode
+		public sealed class Ofb : OfbMode
 		{
-			public OFB() : base(GetEngine())
+			public Ofb() : base(GetEngine())
 			{
 			}
 		}
 
-		public sealed class CCM : CCMMode
+		public sealed class Ccm : CcmMode
 		{
-			public CCM() : base(GetEngine())
+			public Ccm() : base(GetEngine())
 			{
 			}
 		}
 
-		public sealed class GCM : GCMMode
+		public sealed class Gcm : GcmMode
 		{
-			public GCM() : base(GetEngine())
+			public Gcm() : base(GetEngine())
 			{
 			}
 		}
 
-		public sealed class CMAC : CMac
+		public sealed class CMac : Macs.CMac
 		{
-			public CMAC() : base(GetEngine())
+			public CMac() : base(GetEngine())
 			{
 			}
 		}

@@ -5,11 +5,11 @@ using static LEA.Utils.Ops;
 namespace LEA.OperatingMode
 {
 	// DONE: block vs buffer
-	public class OFBMode : BlockCipherModeStream
+	public class OfbMode : BlockCipherModeStream
 	{
 		private byte[] iv;
 		private byte[] block;
-		public OFBMode(BlockCipher cipher) : base(cipher)
+		public OfbMode(BlockCipher cipher) : base(cipher)
 		{
 		}
 

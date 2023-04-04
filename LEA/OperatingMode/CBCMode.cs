@@ -4,11 +4,11 @@ using static LEA.Utils.Ops;
 
 namespace LEA.OperatingMode
 {
-	public class CBCMode : BlockCipherModeBlock
+	public class CbcMode : BlockCipherModeBlock
 	{
 		private byte[] iv;
 		private byte[] feedback;
-		public CBCMode(BlockCipher cipher) : base(cipher)
+		public CbcMode(BlockCipher cipher) : base(cipher)
 		{
 		}
 

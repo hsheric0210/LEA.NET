@@ -3,7 +3,7 @@ using static LEA.BlockCipher;
 
 namespace LEA
 {
-	public abstract class BlockCipherModeImpl : BlockCipherMode
+	public abstract class BlockCipherModeCore : BlockCipherMode
 	{
 		protected Mode mode;
 		protected BlockCipher engine;
@@ -11,7 +11,7 @@ namespace LEA
 		protected int bufferOffset;
 		protected int blocksize;
 		protected int blockmask;
-		public BlockCipherModeImpl(BlockCipher cipher)
+		protected BlockCipherModeCore(BlockCipher cipher)
 		{
 			engine = cipher;
 			blocksize = engine.GetBlockSize();
@@ -23,8 +23,8 @@ namespace LEA
 		{
 			var part1 = Update(msg);
 			var part2 = DoFinal();
-			var len1 = part1 == null ? 0 : part1.Length;
-			var len2 = part2 == null ? 0 : part2.Length;
+			var len1 = (part1?.Length) ?? 0;
+			var len2 = (part2?.Length) ?? 0;
 			var @out = new byte[len1 + len2];
 			if (len1 > 0)
 				Buffer.BlockCopy(part1, 0, @out, 0, len1);

@@ -2,9 +2,9 @@ using System;
 
 namespace LEA.Paddings
 {
-	public class PKCS5Padding : Padding
+	public class Pkcs5Padding : Padding
 	{
-		public PKCS5Padding(int blocksize) : base(blocksize)
+		public Pkcs5Padding(int blocksize) : base(blocksize)
 		{
 		}
 

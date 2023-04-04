@@ -3,9 +3,9 @@ using static LEA.BlockCipher;
 
 namespace LEA
 {
-	public abstract class BlockCipherModeStream : BlockCipherModeImpl
+	public abstract class BlockCipherModeStream : BlockCipherModeCore
 	{
-		public BlockCipherModeStream(BlockCipher cipher) : base(cipher)
+		protected BlockCipherModeStream(BlockCipher cipher) : base(cipher)
 		{
 		}
 
@@ -56,7 +56,6 @@ namespace LEA
 			{
 				Buffer.BlockCopy(msg, inOff, buffer, bufferOffset, len);
 				bufferOffset += len;
-				len = 0;
 			}
 
 			return @out;

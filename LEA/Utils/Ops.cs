@@ -3,10 +3,8 @@ using System.Diagnostics;
 
 namespace LEA.Utils
 {
-	public class Ops
+	public static class Ops
 	{
-		private Ops() => Debug.Assert(true, "Can't create an instance of class Ops");
-
 		/// <summary>
 		/// lhs ^= rhs
 		/// </summary>
@@ -176,6 +174,20 @@ namespace LEA.Utils
 			}
 		}
 
+		public static void XOR(long[] lhs, int lhsOff, long[] rhs, int rhsOff, int len)
+		{
+			if (lhs == null || rhs == null)
+				throw new ArgumentNullException("any of input arrarys should not be null");
+
+			if (lhs.Length < lhsOff + len || rhs.Length < rhsOff + len)
+				throw new IndexOutOfRangeException();
+
+			for (var i = 0; i < len; ++i)
+			{
+				lhs[lhsOff + i] ^= rhs[rhsOff + i];
+			}
+		}
+
 		public static void ShiftLeft(byte[] bytes, int shift)
 		{
 			if (bytes == null)
@@ -293,20 +305,6 @@ namespace LEA.Utils
 				@out[++outIdx] = (byte)(@in[inIdx] >> 8);
 				@out[++outIdx] = (byte)(@in[inIdx] >> 16);
 				@out[++outIdx] = (byte)(@in[inIdx] >> 24);
-			}
-		}
-
-		public static void XOR(long[] lhs, int lhsOff, long[] rhs, int rhsOff, int len)
-		{
-			if (lhs == null || rhs == null)
-				throw new ArgumentNullException("any of input arrarys should not be null");
-
-			if (lhs.Length < lhsOff + len || rhs.Length < rhsOff + len)
-				throw new IndexOutOfRangeException();
-
-			for (var i = 0; i < len; ++i)
-			{
-				lhs[lhsOff + i] ^= rhs[rhsOff + i];
 			}
 		}
 	}

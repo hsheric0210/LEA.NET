@@ -2,10 +2,8 @@ using System.Diagnostics;
 
 namespace LEA.Utils
 {
-	public abstract class Pack
+	public static class Pack
 	{
-		private Pack() => Debug.Assert(true, "Can't create an instance of class Pack");
-
 		public static int BigEndianToInt(byte[] bs, int off)
 		{
 			var n = bs[off] << 24;

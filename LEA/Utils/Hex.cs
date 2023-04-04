@@ -4,10 +4,8 @@ using System.Text;
 
 namespace LEA.Utils
 {
-	public class Hex
+	public static class Hex
 	{
-		private Hex() => Debug.Assert(true, "Can't create an instance of class Hex");
-
 		public static byte[] DecodeHexString(string hexString)
 		{
 			if (hexString == null)
@@ -110,7 +108,7 @@ namespace LEA.Utils
 			var sb = new StringBuilder();
 			foreach (var ch in buf)
 			{
-				sb.Append(string.Format("%08x", ch));
+				sb.AppendFormat("%08x", ch);
 				sb.Append("  ");
 			}
 

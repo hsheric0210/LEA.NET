@@ -4,12 +4,12 @@ using static LEA.Utils.Ops;
 
 namespace LEA.OperatingMode
 {
-	public class CTRMode : BlockCipherModeStream
+	public class CtrMode : BlockCipherModeStream
 	{
 		private byte[] iv;
 		private byte[] ctr;
 		private byte[] block;
-		public CTRMode(BlockCipher cipher) : base(cipher)
+		public CtrMode(BlockCipher cipher) : base(cipher)
 		{
 		}
 

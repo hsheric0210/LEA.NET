@@ -7,7 +7,7 @@ using static LEA.Utils.Pack;
 
 namespace LEA.OperatingMode
 {
-	public class GCMMode : BlockCipherModeAE
+	public class GcmMode : BlockCipherModeAE
 	{
 		private static readonly int MAX_TAGLEN = 16;
 		#region Reduction
@@ -15,21 +15,20 @@ namespace LEA.OperatingMode
 		#endregion
 
 		private byte[] initialCtr;
-		private byte[] nonce;
 		private byte[] tag;
 		private byte[][] hTable;
-		private byte[] block;
+		private readonly byte[] block;
 		private byte[] macBlock;
-		private byte[] aadBlock;
-		private byte[] hashBlock;
-		private byte[] mulBlock;
+		private readonly byte[] aadBlock;
+		private readonly byte[] hashBlock;
+		private readonly byte[] mulBlock;
 		private byte[] inBuffer;
 		private int blockOff;
 		private int aadOff;
 		private int aadlen;
 		private int msglen;
 		private MemoryStream baos;
-		public GCMMode(BlockCipher cipher) : base(cipher)
+		public GcmMode(BlockCipher cipher) : base(cipher)
 		{
 			block = new byte[blocksize];
 			nonce = new byte[blocksize];
@@ -73,8 +72,7 @@ namespace LEA.OperatingMode
 			aadBlock.FillBy((byte)0);
 			mulBlock.FillBy((byte)0);
 			inBuffer.FillBy((byte)0);
-			if (baos != null)
-				baos.SetLength(0);
+			baos?.SetLength(0);
 		}
 
 		private void SetNonce(byte[] nonce)
@@ -206,14 +204,7 @@ namespace LEA.OperatingMode
 					if (extra > 0)
 					{
 						DecryptBlock(@out, outOff, extra);
-						try
-						{
-							baos.Write(@out, outOff, extra);
-						}
-						catch (Exception e)
-						{
-							Console.WriteLine(e); // FIXME
-						}
+						baos.Write(@out, outOff, extra);
 					}
 
 					Buffer.BlockCopy(inBuffer, extra, tag, 0, taglen);
@@ -234,7 +225,7 @@ namespace LEA.OperatingMode
 			else
 			{
 				macBlock = macBlock.CopyOf(taglen);
-				if (!macBlock.SequenceEqual(tag) && @out != null) // fixme: side-channel timing attack
+				if (!macBlock.SequenceEqual(tag))
 				{
 					baos.SetLength(0);
 					@out = null;
@@ -321,14 +312,7 @@ namespace LEA.OperatingMode
 				blockOff += len;
 			}
 
-			try
-			{
-				baos.Write(@out, 0, @out.Length);
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine(e);//fixme
-			}
+			baos.Write(@out, 0, @out.Length);
 		}
 
 		private int EncryptBlock(byte[] @out, int offset, int len)
@@ -353,9 +337,10 @@ namespace LEA.OperatingMode
 
 		private void Init_8bit_table()
 		{
-			hTable = new byte[256][]; // fixme: convert this to multi-dim array
+			hTable = new byte[256][];
 			for (var i = 0; i < 256; i++)
 				hTable[i] = new byte[16];
+
 			var temp = new byte[blocksize];
 			Buffer.BlockCopy(block, 0, hTable[0x80], 0, block.Length);
 			Buffer.BlockCopy(block, 0, temp, 0, block.Length);
@@ -409,10 +394,10 @@ namespace LEA.OperatingMode
 		private void Gfmul(byte[] r, byte[] x)
 		{
 			mulBlock.FillBy((byte)0);
-			var rowIdx = 0;
+			int rowIdx;
 			for (rowIdx = 15; rowIdx > 0; --rowIdx)
 			{
-				var colIdx = 0;
+				int colIdx;
 				for (colIdx = 0; colIdx < 16; ++colIdx)
 				{
 					mulBlock[colIdx] ^= hTable[x[rowIdx] & 0xff][colIdx];

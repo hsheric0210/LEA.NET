@@ -3,16 +3,15 @@ using static LEA.BlockCipher;
 
 namespace LEA
 {
-	public abstract class BlockCipherModeBlock : BlockCipherModeImpl
+	public abstract class BlockCipherModeBlock : BlockCipherModeCore
 	{
 		protected Padding padding;
-		public BlockCipherModeBlock(BlockCipher cipher) : base(cipher)
+		protected BlockCipherModeBlock(BlockCipher cipher) : base(cipher)
 		{
 		}
 
 		public override int GetOutputSize(int len)
 		{
-
 			// TODO
 			var size = (len + bufferOffset & blockmask) + blocksize;
 			if (mode == Mode.ENCRYPT)
@@ -73,7 +72,6 @@ namespace LEA
 			{
 				Buffer.BlockCopy(msg, inOff, buffer, bufferOffset, len);
 				bufferOffset += len;
-				len = 0;
 			}
 
 			return @out;
@@ -130,7 +128,6 @@ namespace LEA
 			{
 				Buffer.BlockCopy(msg, inOff, buffer, bufferOffset, len);
 				bufferOffset += len;
-				len = 0;
 			}
 
 			return @out;
@@ -142,7 +139,7 @@ namespace LEA
 		/// <returns></returns>
 		private byte[] DoFinalWithPadding()
 		{
-			byte[] @out = null;
+			byte[] @out;
 			if (mode == Mode.ENCRYPT)
 			{
 				padding.Pad(buffer, bufferOffset);

@@ -7,7 +7,7 @@ using static LEA.Utils.Hex;
 
 namespace LEA.OperatingMode
 {
-	public class CCMMode : BlockCipherModeAE
+	public class CcmMode : BlockCipherModeAE
 	{
 		private byte[] ctr;
 		private byte[] mac;
@@ -16,9 +16,8 @@ namespace LEA.OperatingMode
 		private MemoryStream aadBytes;
 		private MemoryStream inputBytes;
 		private int msglen;
-		private int taglen;
 		private int noncelen;
-		public CCMMode(BlockCipher cipher) : base(cipher)
+		public CcmMode(BlockCipher cipher) : base(cipher)
 		{
 			ctr = new byte[blocksize];
 			mac = new byte[blocksize];
@@ -109,7 +108,6 @@ namespace LEA.OperatingMode
 			if (noncelen < 7 || noncelen > 13)
 				throw new ArgumentException("length of nonce should be 7 ~ 13 bytes");
 
-
 			// init counter
 			ctr[0] = (byte)(14 - noncelen);
 			Buffer.BlockCopy(nonce, 0, ctr, 1, noncelen);
@@ -147,7 +145,7 @@ namespace LEA.OperatingMode
 		{
 			var aad = aadBytes.ToArray();
 			block.FillBy((byte)0);
-			var alen = 0;
+			int alen;
 			if (aad.Length < 0xff00)
 			{
 				alen = 2;
@@ -185,14 +183,12 @@ namespace LEA.OperatingMode
 		private void EncryptData(byte[] @out, int offset)
 		{
 			var inIdx = 0;
-			var remained = 0;
-			var processed = 0;
 			var outIdx = offset;
 			var @in = inputBytes.GetBuffer();
-			remained = msglen;
+			var remained = msglen;
 			while (remained > 0)
 			{
-				processed = remained >= blocksize ? blocksize : remained;
+				var processed = remained >= blocksize ? blocksize : remained;
 				XOR(mac, 0, mac, 0, @in, inIdx, processed);
 				engine.ProcessBlock(mac, 0, mac, 0);
 				IncreaseCounter();
@@ -207,17 +203,15 @@ namespace LEA.OperatingMode
 		private void DecryptData(byte[] @out, int offset)
 		{
 			var i = 0;
-			var remained = 0;
-			var processed = 0;
 			var outIdx = offset;
 			var @in = inputBytes.GetBuffer();
 			Buffer.BlockCopy(@in, msglen, tag, 0, taglen);
 			engine.ProcessBlock(ctr, 0, block, 0);
 			XOR(tag, 0, block, 0, taglen);
-			remained = msglen;
+			var remained = msglen;
 			while (remained > 0)
 			{
-				processed = remained >= blocksize ? blocksize : remained;
+				var processed = remained >= blocksize ? blocksize : remained;
 				IncreaseCounter();
 				engine.ProcessBlock(ctr, 0, block, 0);
 				XOR(@out, outIdx, block, 0, @in, i, processed);

@@ -12,7 +12,7 @@ namespace LEA
 		protected int bufOff;
 		protected int blocksize;
 		protected int taglen;
-		public BlockCipherModeAE(BlockCipher cipher)
+		protected BlockCipherModeAE(BlockCipher cipher)
 		{
 			engine = cipher;
 			blocksize = engine.GetBlockSize();
@@ -26,13 +26,13 @@ namespace LEA
 		public abstract int GetOutputSize(int len);
 		public virtual byte[] DoFinal(byte[] msg)
 		{
-			byte[] @out = null;
+			byte[] @out;
 			if (mode == Mode.ENCRYPT)
 			{
 				var part1 = Update(msg);
 				var part2 = DoFinal();
-				var len1 = part1 == null ? 0 : part1.Length;
-				var len2 = part2 == null ? 0 : part2.Length;
+				var len1 = (part1?.Length) ?? 0;
+				var len2 = (part2?.Length) ?? 0;
 				@out = new byte[len1 + len2];
 				if (part1 != null)
 					Buffer.BlockCopy(part1, 0, @out, 0, len1);

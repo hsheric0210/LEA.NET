@@ -6,15 +6,15 @@ namespace LEA.Macs
 {
 	public class CMac : Mac
 	{
-		private static readonly byte[] R256 = new[] { (byte)0x04, (byte)0x25 };
-		private static readonly byte[] R128 = new[] { (byte)0x87 };
-		private static readonly byte[] R64 = new[] { (byte)0x1b };
-		private BlockCipher engine;
+		private static readonly byte[] r256 = new[] { (byte)0x04, (byte)0x25 };
+		private static readonly byte[] r128 = new[] { (byte)0x87 };
+		private static readonly byte[] r64 = new[] { (byte)0x1b };
+		private readonly BlockCipher engine;
 		private int blocksize;
 		private int blkIdx;
 		private byte[] block;
 		private byte[] mac;
-		private byte[] RB;
+		private byte[] rb;
 		private byte[] k1, k2;
 		public CMac(BlockCipher cipher) => engine = cipher;
 
@@ -104,13 +104,13 @@ namespace LEA.Macs
 			switch (blocksize)
 			{
 				case 8:
-					RB = R64;
+					rb = r64;
 					break;
 				case 16:
-					RB = R128;
+					rb = r128;
 					break;
 				case 32:
-					RB = R256;
+					rb = r256;
 					break;
 			}
 		}
@@ -121,9 +121,9 @@ namespace LEA.Macs
 			ShiftLeft(new_key, 1);
 			if ((old_key[0] & 0x80) != 0)
 			{
-				for (var i = 0; i < RB.Length; ++i)
+				for (var i = 0; i < rb.Length; ++i)
 				{
-					new_key[blocksize - RB.Length + i] ^= RB[i];
+					new_key[blocksize - rb.Length + i] ^= rb[i];
 				}
 			}
 		}

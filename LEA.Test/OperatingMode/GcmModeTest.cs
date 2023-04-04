@@ -4,7 +4,7 @@ namespace LEA.Test.OpMode
 {
 	public class GcmModeTest
 	{
-		private readonly TestVectorAE[] Lea256GcmTestVectors =
+		private readonly TestVectorAE[] lea256GcmTestVectors =
 		{
 		new TestVectorAE
 		{
@@ -97,7 +97,7 @@ namespace LEA.Test.OpMode
 			Tag = new byte[] { 0x41, 0xFE, 0xD2, 0x2B, 0x59, 0x3A, 0x9, 0x7A, 0xF8, 0xE8, 0xAB, 0xB1, 0xF4, 0x61, 0xC0, 0xAB },
 		}
 	};
-		private readonly TestVectorAE[] Lea192GcmTestVectors =
+		private readonly TestVectorAE[] lea192GcmTestVectors =
 		{
 		new TestVectorAE
 		{
@@ -190,7 +190,7 @@ namespace LEA.Test.OpMode
 			Tag = new byte[] { 0x39, 0xB7, 0xDA, 0xF0, 0x2B, 0xBA, 0x69, 0xE1, 0xD0, 0x12, 0xB1, 0x39, 0x29, 0xE, 0x6B, 0x14 },
 		}
 	};
-		private readonly TestVectorAE[] Lea128GcmTestVectors =
+		private readonly TestVectorAE[] lea128GcmTestVectors =
 		{
 		new TestVectorAE
 		{
@@ -283,11 +283,11 @@ namespace LEA.Test.OpMode
 		[Fact]
 		public void LEA256_GCM_Encryption_AllTestVectorsPassing()
 		{
-			for (var i = 0; i < Lea256GcmTestVectors.Length; i++)
+			for (var i = 0; i < lea256GcmTestVectors.Length; i++)
 			{
 				// Arrange
-				var testvector = Lea256GcmTestVectors[i];
-				var cipher = new Symmetric.LEA.GCM();
+				var testvector = lea256GcmTestVectors[i];
+				var cipher = new Symmetric.LEA.Gcm();
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
@@ -305,11 +305,11 @@ namespace LEA.Test.OpMode
 		[Fact]
 		public void LEA256_GCM_Decryption_AllTestVectorsPassing()
 		{
-			for (var i = 0; i < Lea256GcmTestVectors.Length; i++)
+			for (var i = 0; i < lea256GcmTestVectors.Length; i++)
 			{
 				// Arrange
-				var testvector = Lea256GcmTestVectors[i];
-				var cipher = new Symmetric.LEA.GCM();
+				var testvector = lea256GcmTestVectors[i];
+				var cipher = new Symmetric.LEA.Gcm();
 
 				// Act
 				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
@@ -327,11 +327,11 @@ namespace LEA.Test.OpMode
 		[Fact]
 		public void LEA192_GCM_Encryption_AllTestVectorsPassing()
 		{
-			for (var i = 0; i < Lea192GcmTestVectors.Length; i++)
+			for (var i = 0; i < lea192GcmTestVectors.Length; i++)
 			{
 				// Arrange
-				var testvector = Lea192GcmTestVectors[i];
-				var cipher = new Symmetric.LEA.GCM();
+				var testvector = lea192GcmTestVectors[i];
+				var cipher = new Symmetric.LEA.Gcm();
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
@@ -349,11 +349,11 @@ namespace LEA.Test.OpMode
 		[Fact]
 		public void LEA192_GCM_Decryption_AllTestVectorsPassing()
 		{
-			for (var i = 0; i < Lea192GcmTestVectors.Length; i++)
+			for (var i = 0; i < lea192GcmTestVectors.Length; i++)
 			{
 				// Arrange
-				var testvector = Lea192GcmTestVectors[i];
-				var cipher = new Symmetric.LEA.GCM();
+				var testvector = lea192GcmTestVectors[i];
+				var cipher = new Symmetric.LEA.Gcm();
 
 				// Act
 				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
@@ -371,11 +371,11 @@ namespace LEA.Test.OpMode
 		[Fact]
 		public void LEA128_GCM_Encryption_AllTestVectorsPassing()
 		{
-			for (var i = 0; i < Lea128GcmTestVectors.Length; i++)
+			for (var i = 0; i < lea128GcmTestVectors.Length; i++)
 			{
 				// Arrange
-				var testvector = Lea128GcmTestVectors[i];
-				var cipher = new Symmetric.LEA.GCM();
+				var testvector = lea128GcmTestVectors[i];
+				var cipher = new Symmetric.LEA.Gcm();
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
@@ -393,11 +393,11 @@ namespace LEA.Test.OpMode
 		[Fact]
 		public void LEA128_GCM_Decryption_AllTestVectorsPassing()
 		{
-			for (var i = 0; i < Lea128GcmTestVectors.Length; i++)
+			for (var i = 0; i < lea128GcmTestVectors.Length; i++)
 			{
 				// Arrange
-				var testvector = Lea128GcmTestVectors[i];
-				var cipher = new Symmetric.LEA.GCM();
+				var testvector = lea128GcmTestVectors[i];
+				var cipher = new Symmetric.LEA.Gcm();
 
 				// Act
 				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);

@@ -5,14 +5,14 @@ namespace LEA.engine
 {
 	public class LeaEngine : BlockCipher
 	{
-		private static readonly int BLOCKSIZE = 16;
+		private const int BlockSize = 16;
 		private static readonly uint[] delta = new uint[] { 0xc3efe9db, 0x44626b02, 0x79e27c8a, 0x78df30ec, 0x715ea49e, 0xc785da0a, 0xe04ef22a, 0xe5c40957 };
 		private Mode mode;
 		private int rounds;
 		protected uint[][] roundKeys;
-		private uint[] block;
+		private readonly uint[] block;
 
-		public LeaEngine() => block = new uint[BLOCKSIZE / 4];
+		public LeaEngine() => block = new uint[BlockSize / 4];
 
 		public override void Init(Mode mode, byte[] mk)
 		{
@@ -24,17 +24,17 @@ namespace LEA.engine
 
 		public override string GetAlgorithmName() => "LEA";
 
-		public override int GetBlockSize() => BLOCKSIZE;
+		public override int GetBlockSize() => BlockSize;
 
 		public override int ProcessBlock(byte[] @in, int inOff, byte[] @out, int outOff)
 		{
 			if (@in == null || @out == null)
 				throw new ArgumentNullException("in and out should not be null");
 
-			if (@in.Length - inOff < BLOCKSIZE)
+			if (@in.Length - inOff < BlockSize)
 				throw new InvalidOperationException("too short input data " + @in.Length + " " + inOff);
 
-			if (@out.Length - outOff < BLOCKSIZE)
+			if (@out.Length - outOff < BlockSize)
 				throw new InvalidOperationException("too short output buffer " + @out.Length + " / " + outOff);
 
 			if (mode == Mode.ENCRYPT)
@@ -66,7 +66,7 @@ namespace LEA.engine
 			}
 
 			Unpack(block, 0, @out, outOff, 4);
-			return BLOCKSIZE;
+			return BlockSize;
 		}
 
 		private int DecryptBlock(byte[] @in, int inOff, byte[] @out, int outOff)
@@ -92,7 +92,7 @@ namespace LEA.engine
 			}
 
 			Unpack(block, 0, @out, outOff, 4);
-			return BLOCKSIZE;
+			return BlockSize;
 		}
 
 		private void GenerateRoundKeys(byte[] mk)

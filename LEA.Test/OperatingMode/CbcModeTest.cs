@@ -4,7 +4,7 @@ namespace LEA.Test.OpMode
 {
 	public class CbcModeTest
 	{
-		private readonly TestVector[] Lea256CbcTestVectors =
+		private readonly TestVector[] lea256CbcTestVectors =
 		{
 		new TestVector
 		{
@@ -77,7 +77,7 @@ namespace LEA.Test.OpMode
 			CipherText = new byte[] { 0xB5, 0x35, 0x2D, 0x1B, 0x32, 0x1D, 0x11, 0x0, 0x7A, 0x50, 0xAA, 0x50, 0xB, 0x7D, 0x7D, 0xD4, 0x3C, 0x59, 0x89, 0xBF, 0x12, 0xE7, 0x20, 0x9D, 0x96, 0xE4, 0xE3, 0x4, 0xC7, 0x2A, 0x53, 0x44, 0xE4, 0x39, 0x1E, 0xD4, 0x25, 0x89, 0x2C, 0x6A, 0xD4, 0x5, 0xDA, 0x1D, 0xA, 0xCE, 0xCC, 0x67, 0x7B, 0x80, 0x76, 0xF3, 0x28, 0xC, 0xB7, 0x85, 0xB1, 0x18, 0x7, 0x7B, 0x78, 0xBE, 0x2D, 0xEC, 0xBE, 0xF6, 0x77, 0x22, 0x74, 0x22, 0xC1, 0x88, 0x0, 0xEF, 0x25, 0xAF, 0x3, 0xCD, 0x69, 0x3C, 0xC1, 0x31, 0x17, 0xAB, 0x92, 0x5C, 0xF7, 0xC3, 0x90, 0xB, 0xFA, 0xDF, 0xF7, 0xDF, 0xA, 0x6E, 0x1E, 0x82, 0x39, 0x16, 0x35, 0x3B, 0xA6, 0x2B, 0x96, 0x8D, 0x9D, 0xD3, 0xAA, 0x56, 0xAE, 0x7A, 0xBA, 0x4B, 0xCB, 0x46, 0x8E, 0xAF, 0x37, 0x4, 0xCC, 0x6, 0x21, 0x72, 0x52, 0xE, 0x94, 0x6F, 0x9B, 0x6C, 0xC, 0x18, 0x1, 0x97, 0x6D, 0x31, 0x85, 0xB6, 0xBD, 0xFD, 0x50, 0x4D, 0x99, 0x2B, 0x74, 0x23, 0x57, 0x80, 0x15, 0x3F, 0x69, 0xA5, 0xF3, 0x2C, 0xCF, 0xF1, 0x1E, 0xC7, 0xE0, 0x4 }
 		}
 	};
-		private readonly TestVector[] Lea192CbcTestVectors =
+		private readonly TestVector[] lea192CbcTestVectors =
 		{
 		new TestVector
 		{
@@ -150,7 +150,7 @@ namespace LEA.Test.OpMode
 			CipherText = new byte[] { 0x55, 0x6B, 0xDA, 0xDC, 0x75, 0x31, 0xEE, 0xE8, 0x88, 0xF6, 0xDE, 0x47, 0x8F, 0xB3, 0x74, 0xF, 0xA2, 0xBD, 0x15, 0x22, 0x8, 0x76, 0x74, 0xF2, 0xC6, 0xE1, 0x64, 0xDC, 0x6F, 0xB6, 0x8, 0x7C, 0x41, 0x6B, 0xCC, 0x7C, 0x25, 0x29, 0x54, 0x78, 0x25, 0x9D, 0x4E, 0xBB, 0xEC, 0xFD, 0x42, 0xD3, 0x2B, 0x97, 0x23, 0x9E, 0x45, 0x91, 0x2, 0x68, 0xA, 0x19, 0x79, 0x82, 0xAB, 0x3E, 0xD6, 0xD7, 0x32, 0xD2, 0xBC, 0x8A, 0x2E, 0x37, 0x35, 0x58, 0xB4, 0xC5, 0xE1, 0xC9, 0x12, 0x30, 0xB7, 0x76, 0xCB, 0x1F, 0x2, 0x60, 0x78, 0xBC, 0xA9, 0x10, 0x4C, 0xF2, 0x19, 0xBC, 0x96, 0x6, 0x5E, 0xEF, 0x44, 0xDA, 0x86, 0xA4, 0xA3, 0xAA, 0x99, 0xF2, 0xEC, 0xB9, 0xA6, 0x9, 0xD8, 0x5C, 0x6F, 0x4F, 0x19, 0x7, 0xB7, 0x1D, 0x49, 0xDF, 0x55, 0x2B, 0xD1, 0x43, 0x43, 0xB2, 0xC6, 0x79, 0x75, 0x19, 0x6A, 0x25, 0xD8, 0xA2, 0xAF, 0xDC, 0x96, 0xD3, 0x78, 0x9E, 0xEB, 0x38, 0x3F, 0x4D, 0x5C, 0xCE, 0x42, 0x2, 0x7A, 0xDB, 0xCD, 0xC3, 0x42, 0xA3, 0x41, 0xC0, 0x19, 0x45, 0xC0, 0xB3, 0x89, 0x95 }
 		}
 	};
-		private readonly TestVector[] Lea128CbcTestVectors =
+		private readonly TestVector[] lea128CbcTestVectors =
 		{
 		new TestVector
 		{
@@ -228,11 +228,11 @@ namespace LEA.Test.OpMode
 		public void LEA256_CBC_Encryption_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Symmetric.LEA.CBC();
+			var cipher = new Symmetric.LEA.Cbc();
 
-			for (var i = 0; i < Lea256CbcTestVectors.Length; i++)
+			for (var i = 0; i < lea256CbcTestVectors.Length; i++)
 			{
-				var testvector = Lea256CbcTestVectors[i];
+				var testvector = lea256CbcTestVectors[i];
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV);
@@ -240,8 +240,7 @@ namespace LEA.Test.OpMode
 				cipher.Reset();
 
 				// Assert
-				Assert.Equal(Convert.ToHexString(actual), Convert.ToHexString(testvector.CipherText));
-				//Assert.True(actual.SequenceEqual(testvector.CipherText), "LEA-256-CBC encryption test case #" + (i + 1));
+				Assert.True(actual.SequenceEqual(testvector.CipherText), "LEA-256-CBC encryption test case #" + (i + 1));
 			}
 		}
 
@@ -249,11 +248,11 @@ namespace LEA.Test.OpMode
 		public void LEA256_CBC_Decryption_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Symmetric.LEA.CBC();
+			var cipher = new Symmetric.LEA.Cbc();
 
-			for (var i = 0; i < Lea256CbcTestVectors.Length; i++)
+			for (var i = 0; i < lea256CbcTestVectors.Length; i++)
 			{
-				var testvector = Lea256CbcTestVectors[i];
+				var testvector = lea256CbcTestVectors[i];
 
 				// Act
 				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV);
@@ -261,8 +260,7 @@ namespace LEA.Test.OpMode
 				cipher.Reset();
 
 				// Assert
-				Assert.Equal(Convert.ToHexString(actual), Convert.ToHexString(testvector.PlainText));
-				//Assert.True(actual.SequenceEqual(testvector.PlainText), "LEA-256-CBC decryption test case #" + (i + 1));
+				Assert.True(actual.SequenceEqual(testvector.PlainText), "LEA-256-CBC decryption test case #" + (i + 1));
 			}
 		}
 
@@ -270,11 +268,11 @@ namespace LEA.Test.OpMode
 		public void LEA192_CBC_Encryption_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Symmetric.LEA.CBC();
+			var cipher = new Symmetric.LEA.Cbc();
 
-			for (var i = 0; i < Lea192CbcTestVectors.Length; i++)
+			for (var i = 0; i < lea192CbcTestVectors.Length; i++)
 			{
-				var testvector = Lea192CbcTestVectors[i];
+				var testvector = lea192CbcTestVectors[i];
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV);
@@ -290,11 +288,11 @@ namespace LEA.Test.OpMode
 		public void LEA192_CBC_Decryption_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Symmetric.LEA.CBC();
+			var cipher = new Symmetric.LEA.Cbc();
 
-			for (var i = 0; i < Lea192CbcTestVectors.Length; i++)
+			for (var i = 0; i < lea192CbcTestVectors.Length; i++)
 			{
-				var testvector = Lea192CbcTestVectors[i];
+				var testvector = lea192CbcTestVectors[i];
 
 				// Act
 				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV);
@@ -306,16 +304,15 @@ namespace LEA.Test.OpMode
 			}
 		}
 
-
 		[Fact]
 		public void LEA128_CBC_Encryption_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Symmetric.LEA.CBC();
+			var cipher = new Symmetric.LEA.Cbc();
 
-			for (var i = 0; i < Lea128CbcTestVectors.Length; i++)
+			for (var i = 0; i < lea128CbcTestVectors.Length; i++)
 			{
-				var testvector = Lea128CbcTestVectors[i];
+				var testvector = lea128CbcTestVectors[i];
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV);
@@ -331,11 +328,11 @@ namespace LEA.Test.OpMode
 		public void LEA128_CBC_Decryption_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Symmetric.LEA.CBC();
+			var cipher = new Symmetric.LEA.Cbc();
 
-			for (var i = 0; i < Lea128CbcTestVectors.Length; i++)
+			for (var i = 0; i < lea128CbcTestVectors.Length; i++)
 			{
-				var testvector = Lea128CbcTestVectors[i];
+				var testvector = lea128CbcTestVectors[i];
 
 				// Act
 				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV);
