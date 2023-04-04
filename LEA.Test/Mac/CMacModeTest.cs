@@ -209,7 +209,8 @@ namespace LEA.Test.Mac
 				cipher.Reset();
 
 				// Assert
-				Assert.True(actual.SequenceEqual(testvector.Mac), "LEA-256-CMAC test case #" + (i + 1));
+				//Assert.True(actual.SequenceEqual(testvector.Mac), "LEA-256-CMAC test case #" + (i + 1));
+				Assert.Equal(Convert.ToHexString(actual), Convert.ToHexString(testvector.Mac));
 			}
 		}
 
@@ -229,7 +230,8 @@ namespace LEA.Test.Mac
 				cipher.Reset();
 
 				// Assert
-				Assert.True(actual.SequenceEqual(testvector.Mac), "LEA-192-CMAC test case #" + (i + 1));
+				Assert.Equal(Convert.ToHexString(actual), Convert.ToHexString(testvector.Mac));
+				//Assert.True(actual.SequenceEqual(testvector.Mac), "LEA-192-CMAC test case #" + (i + 1));
 			}
 		}
 
@@ -249,7 +251,8 @@ namespace LEA.Test.Mac
 				cipher.Reset();
 
 				// Assert
-				Assert.True(actual.SequenceEqual(testvector.Mac), "LEA-128-CMAC test case #" + (i + 1));
+				Assert.Equal(Convert.ToHexString(actual), Convert.ToHexString(testvector.Mac));
+				//Assert.True(actual.SequenceEqual(testvector.Mac), "LEA-128-CMAC test case #" + (i + 1));
 			}
 		}
 	}

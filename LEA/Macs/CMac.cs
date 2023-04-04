@@ -96,7 +96,7 @@ namespace LEA.Macs
 			if (blkIdx < blocksize)
 			{
 				block[blkIdx] = 0x80;
-				block.FillRange(blkIdx + 1, blocksize, (byte)0x0);
+				block.FillBy(blkIdx + 1, blocksize, (byte)0);
 			}
 
 			XOR(block, blkIdx == blocksize ? k1 : k2);

@@ -53,8 +53,6 @@ namespace LEA.OperatingMode
 
 		public override byte[] DoFinal()
 		{
-			Close(aadBytes);
-			Close(inputBytes);
 			if (aadBytes.Length > 0)
 				block[0] |= 0x40;
 
@@ -136,7 +134,7 @@ namespace LEA.OperatingMode
 
 		private void ResetCounter()
 		{
-			ctr.FillRange(noncelen + 1, ctr.Length, (byte)0x0);
+			ctr.FillBy(noncelen + 1, ctr.Length, (byte)0);
 		}
 
 		private void IncreaseCounter()
@@ -233,21 +231,6 @@ namespace LEA.OperatingMode
 				i += processed;
 				outIdx += processed;
 				remained -= processed;
-			}
-		}
-
-		private static void Close(Stream obj)
-		{
-			if (obj == null)
-				return;
-
-			try
-			{
-				obj.Close();
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine(e); // FIXME
 			}
 		}
 	}

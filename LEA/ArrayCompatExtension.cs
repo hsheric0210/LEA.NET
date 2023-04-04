@@ -22,20 +22,24 @@ namespace LEA
 			return newArray;
 		}
 
-		public static void FillBy<T>(this T[] array, T value) => array.FillBy(array.Length, value);
-
-		public static void FillBy<T>(this T[] array, int length, T value) => array.FillBy(0, length, value);
-
-		public static void FillBy<T>(this T[] array, int offset, int length, T value)
+		public static void FillBy<T>(this T[] array, T value)
 		{
 #if NETSTANDARD2_1_OR_GREATER
-			Array.Fill(array, value, offset, length);
+			Array.Fill(array, value);
 #else
-			for (var i = offset; i < length; i++)
+			for (int i = 0, j = array.Length; i < j; i++)
 				array[i] = value;
 #endif
 		}
 
-		public static void FillRange<T>(this T[] array, int startIndexInclusive, int endIndexExclusive, T value) => array.FillBy(startIndexInclusive, endIndexExclusive - startIndexInclusive, value);
+		public static void FillBy<T>(this T[] array, int startIndexInclusive, int endIndexExclusive, T value)
+		{
+#if NETSTANDARD2_1_OR_GREATER
+			array.AsSpan()[startIndexInclusive..endIndexExclusive].Fill(value);
+#else
+			for (var i = startIndexInclusive; i < endIndexExclusive; i++)
+				array[i] = value;
+#endif
+		}
 	}
 }

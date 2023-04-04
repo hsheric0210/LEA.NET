@@ -241,7 +241,8 @@ namespace LEA.Test.OpMode
 				cipher.Reset();
 
 				// Assert
-				Assert.True(actual.SequenceEqual(testvector.CipherText), "LEA-256-CBC encryption test case #" + (i + 1));
+				Assert.Equal(Convert.ToHexString(actual), Convert.ToHexString(testvector.CipherText));
+				//Assert.True(actual.SequenceEqual(testvector.CipherText), "LEA-256-CBC encryption test case #" + (i + 1));
 			}
 		}
 
@@ -261,7 +262,8 @@ namespace LEA.Test.OpMode
 				cipher.Reset();
 
 				// Assert
-				Assert.True(actual.SequenceEqual(testvector.PlainText), "LEA-256-CBC decryption test case #" + (i + 1));
+				Assert.Equal(Convert.ToHexString(actual), Convert.ToHexString(testvector.PlainText));
+				//Assert.True(actual.SequenceEqual(testvector.PlainText), "LEA-256-CBC decryption test case #" + (i + 1));
 			}
 		}
 

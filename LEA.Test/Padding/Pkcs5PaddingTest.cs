@@ -43,7 +43,7 @@ namespace LEA.Test.Padding
 
 			// Act
 			// Assert
-			Assert.Throws<ArgumentException>(() => _ = impl.Pad(unpadded));
+			Assert.Throws<InvalidOperationException>(() => _ = impl.Pad(unpadded));
 		}
 
 		[Fact]

@@ -222,7 +222,7 @@ namespace LEA.Utils
 		/// <summary>
 		/// byte array to int array
 		/// </summary>
-		public static void Pack(byte[] @in, int[] @out)
+		public static void Pack(byte[] @in, uint[] @out)
 		{
 			if (@in == null || @out == null)
 				throw new ArgumentNullException();
@@ -233,14 +233,14 @@ namespace LEA.Utils
 			var outIdx = 0;
 			for (var inIdx = 0; inIdx < @in.Length; ++inIdx, ++outIdx)
 			{
-				@out[outIdx] = @in[inIdx] & 0xff;
-				@out[outIdx] |= (@in[++inIdx] & 0xff) << 8;
-				@out[outIdx] |= (@in[++inIdx] & 0xff) << 16;
-				@out[outIdx] |= (@in[++inIdx] & 0xff) << 24;
+				@out[outIdx] = @in[inIdx] & 0xffu;
+				@out[outIdx] |= (@in[++inIdx] & 0xffu) << 8;
+				@out[outIdx] |= (@in[++inIdx] & 0xffu) << 16;
+				@out[outIdx] |= (@in[++inIdx] & 0xffu) << 24;
 			}
 		}
 
-		public static void Pack(byte[] @in, int inOff, int[] @out, int outOff, int inlen)
+		public static void Pack(byte[] @in, int inOff, uint[] @out, int outOff, int inlen)
 		{
 			if (@in == null || @out == null)
 				throw new ArgumentNullException();
@@ -255,17 +255,17 @@ namespace LEA.Utils
 			var endInIdx = inOff + inlen;
 			for (var inIdx = inOff; inIdx < endInIdx; ++inIdx, ++outIdx)
 			{
-				@out[outIdx] = @in[inIdx] & 0xff;
-				@out[outIdx] |= (@in[++inIdx] & 0xff) << 8;
-				@out[outIdx] |= (@in[++inIdx] & 0xff) << 16;
-				@out[outIdx] |= (@in[++inIdx] & 0xff) << 24;
+				@out[outIdx] = @in[inIdx] & 0xffu;
+				@out[outIdx] |= (@in[++inIdx] & 0xffu) << 8;
+				@out[outIdx] |= (@in[++inIdx] & 0xffu) << 16;
+				@out[outIdx] |= (@in[++inIdx] & 0xffu) << 24;
 			}
 		}
 
 		/// <summary>
 		/// int array to byte array
 		/// </summary>
-		public static void Unpack(int[] @in, byte[] @out)
+		public static void Unpack(uint[] @in, byte[] @out)
 		{
 			if (@in == null || @out == null)
 				throw new ArgumentNullException();
@@ -283,7 +283,7 @@ namespace LEA.Utils
 			}
 		}
 
-		public static void Unpack(int[] @in, int inOff, byte[] @out, int outOff, int inlen)
+		public static void Unpack(uint[] @in, int inOff, byte[] @out, int outOff, int inlen)
 		{
 			if (@in == null || @out == null)
 				throw new ArgumentNullException();

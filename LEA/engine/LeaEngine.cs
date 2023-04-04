@@ -9,15 +9,15 @@ namespace LEA.engine
 	public class LeaEngine : BlockCipher
 	{
 		private static readonly int BLOCKSIZE = 16;
-		private static readonly int[] delta = unchecked(new uint[] { 0xc3efe9db, 0x44626b02, 0x79e27c8a, 0x78df30ec, 0x715ea49e, 0xc785da0a, 0xe04ef22a, 0xe5c40957 }.Select(d => (int)d).ToArray());
+		private static readonly uint[] delta = new uint[] { 0xc3efe9db, 0x44626b02, 0x79e27c8a, 0x78df30ec, 0x715ea49e, 0xc785da0a, 0xe04ef22a, 0xe5c40957 };
 		private Mode mode;
 		private int rounds;
-		protected int[][] roundKeys;
-		private int[] block;
+		protected uint[][] roundKeys;
+		private uint[] block;
 
 		public LeaEngine()
 		{
-			block = new int[BLOCKSIZE / 4];
+			block = new uint[BLOCKSIZE / 4];
 		}
 
 		public override void Init(Mode mode, byte[] mk)
@@ -28,7 +28,7 @@ namespace LEA.engine
 
 		public override void Reset()
 		{
-			block.FillBy((byte)0);
+			block.FillBy((uint)0);
 		}
 
 		public override string GetAlgorithmName()
@@ -115,11 +115,11 @@ namespace LEA.engine
 			if (mk == null || mk.Length != 16 && mk.Length != 24 && mk.Length != 32)
 				throw new ArgumentException("Illegal key");
 
-			var T = new int[8];
+			var T = new uint[8];
 			rounds = (mk.Length >> 1) + 16;
-			roundKeys = new int[rounds][]; // FIXME: Convert this to multidimensional array (https://stackoverflow.com/questions/72980478/how-to-initialize-a-multidimensional-array)
+			roundKeys = new uint[rounds][]; // FIXME: Convert this to multidimensional array (https://stackoverflow.com/questions/72980478/how-to-initialize-a-multidimensional-array)
 			for (int i = 0; i < rounds; i++)
-				roundKeys[i] = new int[6];
+				roundKeys[i] = new uint[6];
 			Pack(mk, 0, T, 0, 16);
 			if (mk.Length > 16)
 				Pack(mk, 16, T, 4, 8);
@@ -167,12 +167,12 @@ namespace LEA.engine
 		}
 
 		// utilities
-		private static int ROL(int state, int num)
+		private static uint ROL(uint state, int num)
 		{
 			return state << num | state >> 32 - num;
 		}
 
-		private static int ROR(int state, int num)
+		private static uint ROR(uint state, int num)
 		{
 			return state >> num | state << 32 - num;
 		}

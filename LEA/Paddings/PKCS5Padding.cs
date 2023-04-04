@@ -34,7 +34,7 @@ namespace LEA.Paddings
 				throw new ArgumentException();
 
 			var code = (byte)(@in.Length - inOff);
-			@in.FillRange(inOff, @in.Length, code);
+			@in.FillBy(inOff, @in.Length, code);
 		}
 
 		public override byte[] Unpad(byte[] @in)
