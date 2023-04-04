@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
+		<TargetFrameworks>net6.0;net7.0;netstandard2.0;netstandard2.1;net462;net472;net48</TargetFrameworks>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>annotations</Nullable>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<AssemblyName>LEA.NET</AssemblyName>
 		<PackageId>$(AssemblyName)</PackageId>
@@ -36,5 +36,56 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+		<PackageReference Include="System.Memory">
+			<Version>4.5.5</Version>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
+		<PackageReference Include="System.Memory">
+			<Version>4.5.5</Version>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net46'">
+		<PackageReference Include="System.Memory">
+			<Version>4.5.5</Version>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net461'">
+		<PackageReference Include="System.Memory">
+			<Version>4.5.5</Version>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net462'">
+		<PackageReference Include="System.Memory">
+			<Version>4.5.5</Version>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net47'">
+		<PackageReference Include="System.Memory">
+			<Version>4.5.5</Version>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net471'">
+		<PackageReference Include="System.Memory">
+			<Version>4.5.5</Version>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+		<PackageReference Include="System.Memory">
+			<Version>4.5.5</Version>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+		<PackageReference Include="System.Memory">
+			<Version>4.5.5</Version>
+		</PackageReference>
 	</ItemGroup>
 </Project>

@@ -1,13 +1,15 @@
-﻿namespace LEA;
-public enum Mode
+﻿namespace LEA
 {
-    /// <summary>
-    /// Encryption mode
-    /// </summary>
-    Encrypt,
+	public enum Mode
+	{
+		/// <summary>
+		/// Encryption mode
+		/// </summary>
+		Encrypt,
 
-    /// <summary>
-    /// Decryption mode
-    /// </summary>
-    Decrypt
+		/// <summary>
+		/// Decryption mode
+		/// </summary>
+		Decrypt
+	}
 }
