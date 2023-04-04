@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>net6.0;net7.0;netstandard2.0;netstandard2.1;net46;net461;net462;net47;net471;net472;net48;net481</TargetFrameworks>
+		<TargetFrameworks>net6.0;net7.0;netstandard1.3;netstandard2.0;netstandard2.1;net462;net472;net48;net481</TargetFrameworks>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -10,7 +10,7 @@
 		<Title>LEA.NET - .NET implementation of LEA</Title>
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\LEA.NET.snk</AssemblyOriginatorKeyFile>
-		<Version>1.0.0</Version>
+		<Version>1.0.1</Version>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<Authors>hsheric0210, KISA, LEA.NET Contributors</Authors>
 		<Product>$(AssemblyName)</Product>
@@ -21,7 +21,7 @@
 		<PackageTags>crypto;cryptography;encryption;security;lea</PackageTags>
 		<PackageReleaseNotes>Initial version, all test vectors passing</PackageReleaseNotes>
 		<RootNamespace>LEA</RootNamespace>
-		<AssemblyVersion>1.0.0</AssemblyVersion>
+		<AssemblyVersion>1.0.1</AssemblyVersion>
 		<FileVersion>$(AssemblyVersion)</FileVersion>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>

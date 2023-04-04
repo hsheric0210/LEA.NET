@@ -184,7 +184,7 @@ namespace LEA.OperatingMode
 		{
 			var inIdx = 0;
 			var outIdx = offset;
-			var inBytes = inputBytes.GetBuffer();
+			var inBytes = inputBytes.BufferData();
 			var remained = messageLength;
 			while (remained > 0)
 			{
@@ -204,7 +204,7 @@ namespace LEA.OperatingMode
 		{
 			var i = 0;
 			var outIdx = offset;
-			var inBytes = inputBytes.GetBuffer();
+			var inBytes = inputBytes.BufferData();
 			Buffer.BlockCopy(inBytes, messageLength, tag, 0, taglen);
 			engine.ProcessBlock(counter, 0, block, 0);
 			XOR(tag, 0, block, 0, taglen);
