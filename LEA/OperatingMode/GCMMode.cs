@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using static LEA.BlockCipher;
-using static LEA.util.Ops;
-using static LEA.util.Pack;
+using static LEA.Utils.Ops;
+using static LEA.Utils.Pack;
 
-namespace LEA.mode
+namespace LEA.OperatingMode
 {
 	public class GCMMode : BlockCipherModeAE
 	{
@@ -140,8 +140,8 @@ namespace LEA.mode
 			if (@in == null || @in.Length == 0)
 				return;
 
-			int len = @in.Length;
-			int gap = aadBlock.Length - aadOff;
+			var len = @in.Length;
+			var gap = aadBlock.Length - aadOff;
 			var inOff = 0;
 			if (len > gap)
 			{
@@ -189,7 +189,7 @@ namespace LEA.mode
 
 		public override byte[] DoFinal()
 		{
-			byte[] @out = new byte[GetOutputSize(0)];
+			var @out = new byte[GetOutputSize(0)];
 			var outOff = 0;
 			var extra = blockOff;
 			if (extra != 0)
@@ -252,11 +252,11 @@ namespace LEA.mode
 
 		private byte[] UpdateEncrypt(byte[] @in)
 		{
-			int len = @in.Length;
+			var len = @in.Length;
 			var gap = blocksize - blockOff;
 			var inOff = 0;
 			var outOff = 0;
-			byte[] @out = new byte[GetUpdateOutputSize(len)];
+			var @out = new byte[GetUpdateOutputSize(len)];
 			if (len >= gap)
 			{
 				Buffer.BlockCopy(@in, inOff, inBuffer, blockOff, gap);
@@ -289,11 +289,11 @@ namespace LEA.mode
 
 		private void UpdateDecrypt(byte[] @in)
 		{
-			int len = @in.Length;
-			int gap = inBuffer.Length - blockOff;
+			var len = @in.Length;
+			var gap = inBuffer.Length - blockOff;
 			var inOff = 0;
 			var outOff = 0;
-			byte[] @out = new byte[GetUpdateOutputSize(len)];
+			var @out = new byte[GetUpdateOutputSize(len)];
 			if (len >= gap)
 			{
 				Buffer.BlockCopy(@in, inOff, inBuffer, blockOff, gap);
@@ -356,7 +356,7 @@ namespace LEA.mode
 		private void Init_8bit_table()
 		{
 			hTable = new byte[256][]; // fixme: convert this to multi-dim array
-			for (int i = 0; i < 16; i++)
+			for (var i = 0; i < 16; i++)
 				hTable[i] = new byte[16];
 			var temp = new byte[blocksize];
 			Buffer.BlockCopy(block, 0, hTable[0x80], 0, block.Length);

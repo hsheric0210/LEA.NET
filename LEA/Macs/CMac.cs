@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using static LEA.BlockCipher;
-using static LEA.util.Ops;
+using static LEA.Utils.Ops;
 
-namespace LEA.mac
+namespace LEA.Macs
 {
 	public class CMac : Mac
 	{
@@ -53,7 +53,7 @@ namespace LEA.mac
 			if (msg == null || msg.Length == 0)
 				return;
 
-			int len = msg.Length;
+			var len = msg.Length;
 			var msgOff = 0;
 			var gap = blocksize - blkIdx;
 			if (len > gap)

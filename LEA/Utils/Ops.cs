@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace LEA.util
+namespace LEA.Utils
 {
 	public class Ops
 	{
@@ -209,7 +209,7 @@ namespace LEA.util
 				throw new ArgumentException("the allowed shift amount is 1~7");
 
 			int tmp = bytes[bytes.Length - 1];
-			for (int i = bytes.Length - 1; i > 0; --i)
+			for (var i = bytes.Length - 1; i > 0; --i)
 			{
 				tmp = bytes[i - 1] << 8 | bytes[i] & 0xff;
 				bytes[i] = (byte)(tmp >> shift);

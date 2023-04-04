@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using static LEA.BlockCipher;
-using static LEA.util.Ops;
-using static LEA.util.Hex;
+using static LEA.Utils.Ops;
+using static LEA.Utils.Hex;
 
-namespace LEA.mode
+namespace LEA.OperatingMode
 {
 	public class CCMMode : BlockCipherModeAE
 	{
@@ -141,7 +141,7 @@ namespace LEA.mode
 
 		private void IncreaseCounter()
 		{
-			int i = ctr.Length - 1;
+			var i = ctr.Length - 1;
 			while (++ctr[i] == 0)
 			{
 				--i;
@@ -152,7 +152,7 @@ namespace LEA.mode
 
 		private void ProcessAAD()
 		{
-			byte[] aad = aadBytes.ToArray();
+			var aad = aadBytes.ToArray();
 			block.FillBy((byte)0);
 			var alen = 0;
 			if (aad.Length < 0xff00)
@@ -172,8 +172,8 @@ namespace LEA.mode
 				return;
 
 			var i = 0;
-			int remained = aad.Length;
-			int processed = remained > blocksize - alen ? blocksize - alen : aad.Length;
+			var remained = aad.Length;
+			var processed = remained > blocksize - alen ? blocksize - alen : aad.Length;
 			i += processed;
 			remained -= processed;
 			Buffer.BlockCopy(aad, 0, block, alen, processed);
@@ -195,7 +195,7 @@ namespace LEA.mode
 			var remained = 0;
 			var processed = 0;
 			var outIdx = offset;
-			byte[] @in = inputBytes.GetBuffer();
+			var @in = inputBytes.GetBuffer();
 			remained = msglen;
 			while (remained > 0)
 			{
@@ -217,7 +217,7 @@ namespace LEA.mode
 			var remained = 0;
 			var processed = 0;
 			var outIdx = offset;
-			byte[] @in = inputBytes.GetBuffer();
+			var @in = inputBytes.GetBuffer();
 			Buffer.BlockCopy(@in, msglen, tag, 0, taglen);
 			engine.ProcessBlock(ctr, 0, block, 0);
 			XOR(tag, 0, block, 0, taglen);

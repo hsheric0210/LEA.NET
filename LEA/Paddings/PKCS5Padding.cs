@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace LEA.padding
+namespace LEA.Paddings
 {
 	public class PKCS5Padding : Padding
 	{
@@ -19,7 +19,7 @@ namespace LEA.padding
 			if (@in.Length < 0 || @in.Length > blocksize)
 				throw new InvalidOperationException("input should be shorter than blocksize");
 
-			byte[] @out = new byte[blocksize];
+			var @out = new byte[blocksize];
 			Buffer.BlockCopy(@in, 0, @out, 0, @in.Length);
 			Pad(@out, @in.Length);
 			return @out;
@@ -45,11 +45,11 @@ namespace LEA.padding
 			if (@in.Length % blocksize != 0)
 				throw new ArgumentException("Bad padding");
 
-			int cnt = @in.Length - GetPadCount(@in);
+			var cnt = @in.Length - GetPadCount(@in);
 			if (cnt == 0)
 				return null;
 
-			byte[] @out = new byte[cnt];
+			var @out = new byte[cnt];
 			Buffer.BlockCopy(@in, 0, @out, 0, @out.Length);
 			return @out;
 		}
@@ -62,10 +62,10 @@ namespace LEA.padding
 			if (@in.Length % blocksize != 0)
 				throw new ArgumentException("Bad padding");
 
-			int count = @in[@in.Length - 1] & 0xff;
+			var count = @in[@in.Length - 1] & 0xff;
 			var isBadPadding = false;
-			int lower_bound = @in.Length - count;
-			for (int i = @in.Length - 1; i > lower_bound; --i)
+			var lower_bound = @in.Length - count;
+			for (var i = @in.Length - 1; i > lower_bound; --i)
 			{
 				if (@in[i] != count)
 					isBadPadding = true;

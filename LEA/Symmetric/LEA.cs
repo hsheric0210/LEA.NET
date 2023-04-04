@@ -4,10 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using LEA.engine;
-using LEA.mode;
-using LEA.mac;
+using LEA.OperatingMode;
+using LEA.Macs;
 
-namespace LEA.symm
+namespace LEA.Symmetric
 {
 	public class LEA
 	{

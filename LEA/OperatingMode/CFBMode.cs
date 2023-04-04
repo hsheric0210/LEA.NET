@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using static LEA.BlockCipher;
-using static LEA.util.Ops;
+using static LEA.Utils.Ops;
 
-namespace LEA.mode
+namespace LEA.OperatingMode
 {
 	// DONE: block vs buffer
 	public class CFBMode : BlockCipherModeStream

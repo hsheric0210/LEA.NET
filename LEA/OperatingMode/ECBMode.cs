@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using static LEA.BlockCipher;
 
-namespace LEA.mode
+namespace LEA.OperatingMode
 {
 	public class ECBMode : BlockCipherModeBlock
 	{

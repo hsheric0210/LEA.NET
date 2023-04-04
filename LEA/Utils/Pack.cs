@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace LEA.util
+namespace LEA.Utils
 {
 	public abstract class Pack
 	{

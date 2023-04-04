@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using static LEA.BlockCipher;
-using static LEA.util.Ops;
+using static LEA.Utils.Ops;
 
-namespace LEA.mode
+namespace LEA.OperatingMode
 {
 	public class CTRMode : BlockCipherModeStream
 	{
@@ -47,7 +47,7 @@ namespace LEA.mode
 
 		private void AddCounter()
 		{
-			for (int i = ctr.Length - 1; i >= 0; --i)
+			for (var i = ctr.Length - 1; i >= 0; --i)
 			{
 				if (++ctr[i] != 0)
 					break;
