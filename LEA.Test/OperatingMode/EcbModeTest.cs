@@ -1,4 +1,5 @@
 using LEA.Symmetric;
+using static LEA.BlockCipher;
 
 namespace LEA.Test.OpMode
 {
@@ -198,14 +199,14 @@ namespace LEA.Test.OpMode
 		public void LEA256_ECB_Encryption_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Lea.Ecb();
+			var cipher = new Symmetric.LEA.ECB();
 
 			for (var i = 0; i < Lea256EcbTestVectors.Length; i++)
 			{
 				TestVector testvector = Lea256EcbTestVectors[i];
 
 				// Act
-				cipher.Init(Mode.Encrypt, testvector.Key);
+				cipher.Init(Mode.ENCRYPT, testvector.Key);
 				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
 				cipher.Reset();
 
@@ -218,14 +219,14 @@ namespace LEA.Test.OpMode
 		public void LEA256_ECB_Decryption_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Lea.Ecb();
+			var cipher = new Symmetric.LEA.ECB();
 
 			for (var i = 0; i < Lea256EcbTestVectors.Length; i++)
 			{
 				TestVector testvector = Lea256EcbTestVectors[i];
 
 				// Act
-				cipher.Init(Mode.Decrypt, testvector.Key);
+				cipher.Init(Mode.DECRYPT, testvector.Key);
 				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.CipherText);
 				cipher.Reset();
 
@@ -238,14 +239,14 @@ namespace LEA.Test.OpMode
 		public void LEA192_ECB_Encryption_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Lea.Ecb();
+			var cipher = new Symmetric.LEA.ECB();
 
 			for (var i = 0; i < Lea192EcbTestVectors.Length; i++)
 			{
 				TestVector testvector = Lea192EcbTestVectors[i];
 
 				// Act
-				cipher.Init(Mode.Encrypt, testvector.Key);
+				cipher.Init(Mode.ENCRYPT, testvector.Key);
 				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
 				cipher.Reset();
 
@@ -258,14 +259,14 @@ namespace LEA.Test.OpMode
 		public void LEA192_ECB_Decryption_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Lea.Ecb();
+			var cipher = new Symmetric.LEA.ECB();
 
 			for (var i = 0; i < Lea192EcbTestVectors.Length; i++)
 			{
 				TestVector testvector = Lea192EcbTestVectors[i];
 
 				// Act
-				cipher.Init(Mode.Decrypt, testvector.Key);
+				cipher.Init(Mode.DECRYPT, testvector.Key);
 				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.CipherText);
 				cipher.Reset();
 
@@ -279,14 +280,14 @@ namespace LEA.Test.OpMode
 		public void LEA128_ECB_Encryption_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Lea.Ecb();
+			var cipher = new Symmetric.LEA.ECB();
 
 			for (var i = 0; i < Lea128EcbTestVectors.Length; i++)
 			{
 				TestVector testvector = Lea128EcbTestVectors[i];
 
 				// Act
-				cipher.Init(Mode.Encrypt, testvector.Key);
+				cipher.Init(Mode.ENCRYPT, testvector.Key);
 				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
 				cipher.Reset();
 
@@ -299,14 +300,14 @@ namespace LEA.Test.OpMode
 		public void LEA128_ECB_Decryption_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Lea.Ecb();
+			var cipher = new Symmetric.LEA.ECB();
 
 			for (var i = 0; i < Lea128EcbTestVectors.Length; i++)
 			{
 				TestVector testvector = Lea128EcbTestVectors[i];
 
 				// Act
-				cipher.Init(Mode.Decrypt, testvector.Key);
+				cipher.Init(Mode.DECRYPT, testvector.Key);
 				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.CipherText);
 				cipher.Reset();
 

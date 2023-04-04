@@ -1,4 +1,5 @@
 using LEA.Symmetric;
+using static LEA.BlockCipher;
 
 namespace LEA.Test.OpMode
 {
@@ -287,11 +288,11 @@ namespace LEA.Test.OpMode
 			{
 				// Arrange
 				TestVectorAE testvector = Lea256GcmTestVectors[i];
-				var cipher = new Lea.Gcm();
+				var cipher = new Symmetric.LEA.GCM();
 
 				// Act
-				cipher.Init(Mode.Encrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
-				cipher.UpdateAssociatedData(testvector.AAD);
+				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
+				cipher.UpdateAAD(testvector.AAD);
 				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
 				ReadOnlySpan<byte> tag = actual.Slice(actual.Length - 16, 16);
 				ReadOnlySpan<byte> cipherText = actual.Slice(0, actual.Length - 16);
@@ -309,11 +310,11 @@ namespace LEA.Test.OpMode
 			{
 				// Arrange
 				TestVectorAE testvector = Lea256GcmTestVectors[i];
-				var cipher = new Lea.Gcm();
+				var cipher = new Symmetric.LEA.GCM();
 
 				// Act
-				cipher.Init(Mode.Decrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
-				cipher.UpdateAssociatedData(testvector.AAD);
+				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
+				cipher.UpdateAAD(testvector.AAD);
 				var aggregated = new byte[testvector.CipherText.Length + testvector.Tag.Length];
 				testvector.CipherText.CopyTo(aggregated, 0);
 				testvector.Tag.CopyTo(aggregated, testvector.CipherText.Length);
@@ -331,11 +332,11 @@ namespace LEA.Test.OpMode
 			{
 				// Arrange
 				TestVectorAE testvector = Lea192GcmTestVectors[i];
-				var cipher = new Lea.Gcm();
+				var cipher = new Symmetric.LEA.GCM();
 
 				// Act
-				cipher.Init(Mode.Encrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
-				cipher.UpdateAssociatedData(testvector.AAD);
+				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
+				cipher.UpdateAAD(testvector.AAD);
 				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
 				ReadOnlySpan<byte> tag = actual.Slice(actual.Length - 16, 16);
 				ReadOnlySpan<byte> cipherText = actual[..^16];
@@ -353,11 +354,11 @@ namespace LEA.Test.OpMode
 			{
 				// Arrange
 				TestVectorAE testvector = Lea192GcmTestVectors[i];
-				var cipher = new Lea.Gcm();
+				var cipher = new Symmetric.LEA.GCM();
 
 				// Act
-				cipher.Init(Mode.Decrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
-				cipher.UpdateAssociatedData(testvector.AAD);
+				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
+				cipher.UpdateAAD(testvector.AAD);
 				var aggregated = new byte[testvector.CipherText.Length + testvector.Tag.Length];
 				testvector.CipherText.CopyTo(aggregated, 0);
 				testvector.Tag.CopyTo(aggregated, testvector.CipherText.Length);
@@ -375,11 +376,11 @@ namespace LEA.Test.OpMode
 			{
 				// Arrange
 				TestVectorAE testvector = Lea128GcmTestVectors[i];
-				var cipher = new Lea.Gcm();
+				var cipher = new Symmetric.LEA.GCM();
 
 				// Act
-				cipher.Init(Mode.Encrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
-				cipher.UpdateAssociatedData(testvector.AAD);
+				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
+				cipher.UpdateAAD(testvector.AAD);
 				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
 				ReadOnlySpan<byte> tag = actual.Slice(actual.Length - 16, 16);
 				ReadOnlySpan<byte> cipherText = actual[..^16];
@@ -397,11 +398,11 @@ namespace LEA.Test.OpMode
 			{
 				// Arrange
 				TestVectorAE testvector = Lea128GcmTestVectors[i];
-				var cipher = new Lea.Gcm();
+				var cipher = new Symmetric.LEA.GCM();
 
 				// Act
-				cipher.Init(Mode.Decrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
-				cipher.UpdateAssociatedData(testvector.AAD);
+				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
+				cipher.UpdateAAD(testvector.AAD);
 				var aggregated = new byte[testvector.CipherText.Length + testvector.Tag.Length];
 				testvector.CipherText.CopyTo(aggregated, 0);
 				testvector.Tag.CopyTo(aggregated, testvector.CipherText.Length);
