@@ -10,7 +10,7 @@
 		<Title>LEA.NET - .NET implementation of LEA</Title>
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\LEA.NET.snk</AssemblyOriginatorKeyFile>
-		<Version>1.0.1</Version>
+		<Version>1.0.1.1</Version>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<Authors>hsheric0210, KISA, LEA.NET Contributors</Authors>
 		<Product>$(AssemblyName)</Product>
@@ -19,11 +19,13 @@
 		<RepositoryUrl>https://github.com/hsheric0210/LEA.NET</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>crypto;cryptography;encryption;security;lea</PackageTags>
-		<PackageReleaseNotes>Initial version, all test vectors passing</PackageReleaseNotes>
+		<PackageReleaseNotes>Complete rewritten version, supports wide version of .NET</PackageReleaseNotes>
 		<RootNamespace>LEA</RootNamespace>
-		<AssemblyVersion>1.0.1</AssemblyVersion>
+		<AssemblyVersion>1.0.1.1</AssemblyVersion>
 		<FileVersion>$(AssemblyVersion)</FileVersion>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageIcon>img_seed_top_04.jpg</PackageIcon>
+		<Copyright>https://seed.kisa.or.kr/kisa/algorithm/EgovLeaInfo.do</Copyright>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<WarningLevel>9999</WarningLevel>
@@ -32,6 +34,10 @@
 		<WarningLevel>9999</WarningLevel>
 	</PropertyGroup>
 	<ItemGroup>
+		<None Include="..\img_seed_top_04.jpg">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+		</None>
 		<None Include="..\README.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
