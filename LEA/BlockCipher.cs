@@ -1,38 +1,56 @@
 namespace LEA
 {
 	/// <summary>
-	/// Interface for single block encryption or decryption of block cipher
+	/// 블록암호 한블록 암/복호화 구현을 위한 인터페이스
 	/// </summary>
 	public abstract class BlockCipher
 	{
-		public abstract int BlockSizeBytes { get; }
+		public enum Mode
+		{
+			/// <summary>
+			/// 암호화 모드
+			/// </summary>
+			ENCRYPT,
+			/// <summary>
+			/// 복호화 모드
+			/// </summary>
+			DECRYPT
+		}
 
 		/// <summary>
-		/// Initialization method
+		/// 초기화 함수
 		/// </summary>
-		/// <param name="mode"><see cref="BlockCipher.Mode"/></param>
-		/// <param name="key">Encryption key</param>
-		public abstract void Init(Mode mode, ReadOnlySpan<byte> key);
-
+		/// <param name="mode">
+		///            {@link BlockCipher.Mode}</param>
+		/// <param name="key">
+		///            암호화 키</param>
+		public abstract void Init(Mode mode, byte[] key);
 		/// <summary>
-		/// Reset the internal state to process new data
+		/// 새로운 데이터를 처리하기 위해 init을 수행한 상태로 복원
 		/// </summary>
 		public abstract void Reset();
-
 		/// <summary>
-		/// Returns the name of algorithm
+		/// 암호화 알고리즘 이름을 리턴
 		/// </summary>
-		/// <returns>The name of algorithm</returns>
+		/// <returns>알고리즘 이름</returns>
 		public abstract string GetAlgorithmName();
-
 		/// <summary>
-		/// Perform encryption for single block
+		/// 암호화 알고리즘의 한 블록 크기를 리턴
 		/// </summary>
-		/// <param name="inBlock">Input byte array</param>
-		/// <param name="inOffset">Offset of <paramref name="inBlock"/></param>
-		/// <param name="outBlock">Output byte array</param>
-		/// <param name="outOffset">Offset of <paramref name="outBlock"/></param>
-		/// <returns>Processed length</returns>
-		public abstract int ProcessBlock(ReadOnlySpan<byte> inBlock, int inOffset, Span<byte> outBlock, int outOffset);
+		/// <returns>한 블록 크기</returns>
+		public abstract int GetBlockSize();
+		/// <summary>
+		/// 한블록 암호화
+		/// </summary>
+		/// <param name="in">
+		///            입력</param>
+		/// <param name="inOffset">
+		///            입력 시작 위치</param>
+		/// <param name="out">
+		///            출력</param>
+		/// <param name="outOffset">
+		///            출력 시작 위치</param>
+		/// <returns>처리한 데이터의 길이</returns>
+		public abstract int ProcessBlock(byte[] inBytes, int inOffset, byte[] outBytes, int outOffset);
 	}
 }

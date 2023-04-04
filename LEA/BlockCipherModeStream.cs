@@ -1,70 +1,74 @@
+using System;
+using static LEA.BlockCipher;
+
 namespace LEA
 {
 	public abstract class BlockCipherModeStream : BlockCipherModeCore
 	{
-		public override PaddingBase? Padding
-		{
-			protected get => null;
-			set => _ = value; // Stream cipher mode doesn't require padding
-		}
-
 		protected BlockCipherModeStream(BlockCipher cipher) : base(cipher)
 		{
 		}
 
-		public override int GetOutputSize(int length) => length + BlockBufferOffset;
+		public override int GetOutputSize(int length) => length + bufferOffset;
 
-		public override int GetUpdateOutputSize(int length) => length + BlockBufferOffset & BlockMask;
+		public override int GetUpdateOutputSize(int length) => length + bufferOffset & blockmask;
 
-		public override void Init(Mode mode, ReadOnlySpan<byte> key) => throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
+		public override void Init(Mode mode, byte[] key) => throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
 
-		public override void Init(Mode mode, ReadOnlySpan<byte> key, ReadOnlySpan<byte> iv) => throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
+		public override void Init(Mode mode, byte[] key, byte[] iv) => throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
 
 		public override void Reset()
 		{
-			BlockBufferOffset = 0;
-			Array.Fill(BlockBuffer, (byte)0);
+			bufferOffset = 0;
+			buffer.FillBy((byte)0);
 		}
 
-		public override ReadOnlySpan<byte> Update(ReadOnlySpan<byte> message)
+		public override void SetPadding(Padding padding)
 		{
-			var length = message.Length;
-			var gap = BlockBuffer.Length - BlockBufferOffset;
+		}
+
+		public override byte[] Update(byte[] message)
+		{
+			if (message == null)
+				return null;
+
+			var len = message.Length;
+			var gap = buffer.Length - bufferOffset;
 			var inOffset = 0;
 			var outOffset = 0;
-			var output = new byte[GetUpdateOutputSize(length)];
-			if (length >= gap)
+			var outBytes = new byte[GetUpdateOutputSize(len)];
+			if (len >= gap)
 			{
-				message.Slice(inOffset, gap).CopyTo(BlockBuffer.AsSpan()[BlockBufferOffset..]);
-				outOffset += ProcessBlock(BlockBuffer, 0, output, outOffset);
-				BlockBufferOffset = 0;
-				length -= gap;
+				Buffer.BlockCopy(message, inOffset, buffer, bufferOffset, gap);
+				outOffset += ProcessBlock(buffer, 0, outBytes, outOffset);
+				bufferOffset = 0;
+				len -= gap;
 				inOffset += gap;
-				while (length >= BlockBuffer.Length)
+				while (len >= buffer.Length)
 				{
-					outOffset += ProcessBlock(message, inOffset, output, outOffset);
-					length -= BlockSizeBytes;
-					inOffset += BlockSizeBytes;
+					outOffset += ProcessBlock(message, inOffset, outBytes, outOffset);
+					len -= blocksize;
+					inOffset += blocksize;
 				}
 			}
 
-			if (length > 0)
+			if (len > 0)
 			{
-				message.Slice(inOffset, length).CopyTo(BlockBuffer.AsSpan()[BlockBufferOffset..]);
-				BlockBufferOffset += length;
+				Buffer.BlockCopy(message, inOffset, buffer, bufferOffset, len);
+				bufferOffset += len;
 			}
 
-			return output;
+			return outBytes;
 		}
 
-		public override ReadOnlySpan<byte> DoFinal()
+		public override byte[] DoFinal()
 		{
-			if (BlockBufferOffset == 0)
-				return Array.Empty<byte>();
+			if (bufferOffset == 0)
+				return null;
 
-			var output = new byte[BlockBufferOffset];
-			ProcessBlock(BlockBuffer, 0, output, 0, BlockBufferOffset);
-			return output;
+			var outBytes = new byte[bufferOffset];
+			ProcessBlock(buffer, 0, outBytes, 0, bufferOffset);
+			return outBytes;
 		}
 	}
 }

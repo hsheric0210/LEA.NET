@@ -1,48 +1,60 @@
+using System;
+using static LEA.BlockCipher;
+
 namespace LEA
 {
 	public abstract class BlockCipherModeCore : BlockCipherMode
 	{
-		protected BlockCipher Engine { get; }
-		protected Mode Mode { get; set; }
-
-		protected byte[] BlockBuffer { get; }
-		protected int BlockBufferOffset { get; set; }
-
-		protected int BlockSizeBytes { get; }
-		protected int BlockMask { get; }
-
+		protected Mode mode;
+		protected BlockCipher engine;
+		protected byte[] buffer;
+		protected int bufferOffset;
+		protected int blocksize;
+		protected int blockmask;
 		protected BlockCipherModeCore(BlockCipher cipher)
 		{
-			Engine = cipher;
-			BlockSizeBytes = Engine.BlockSizeBytes;
-			BlockMask = GetBlockmask(BlockSizeBytes);
-			BlockBuffer = new byte[BlockSizeBytes];
+			engine = cipher;
+			blocksize = engine.GetBlockSize();
+			blockmask = GetBlockmask(blocksize);
+			buffer = new byte[blocksize];
 		}
 
-		public override ReadOnlySpan<byte> DoFinal(ReadOnlySpan<byte> message)
+		public override byte[] DoFinal(byte[] message)
 		{
-			ReadOnlySpan<byte> part1 = Update(message);
-			ReadOnlySpan<byte> part2 = DoFinal();
-			var output = new byte[part1.Length + part2.Length];
-			if (part1.Length > 0)
-				part1.CopyTo(output);
-			if (part2.Length > 0)
-				part2.CopyTo(output.AsSpan()[part1.Length..]);
-			return output;
+			var part1 = Update(message);
+			var part2 = DoFinal();
+			var len1 = (part1?.Length) ?? 0;
+			var len2 = (part2?.Length) ?? 0;
+			var outBytes = new byte[len1 + len2];
+			if (len1 > 0)
+				Buffer.BlockCopy(part1, 0, outBytes, 0, len1);
+
+			if (len2 > 0)
+				Buffer.BlockCopy(part2, 0, outBytes, len1, len2);
+
+			return outBytes;
 		}
 
-		protected abstract int ProcessBlock(ReadOnlySpan<byte> inBlock, int inOffset, Span<byte> outBlock, int outOffset, int outLength);
-		protected virtual int ProcessBlock(ReadOnlySpan<byte> inBlock, int inOffset, Span<byte> outBlock, int outOffset) => ProcessBlock(inBlock, inOffset, outBlock, outOffset, BlockSizeBytes);
+		protected abstract int ProcessBlock(byte[] inBytes, int inOffset, byte[] outBytes, int outOffset, int outLength);
+		protected virtual int ProcessBlock(byte[] inBytes, int inOffset, byte[] outBytes, int outOffset) => ProcessBlock(inBytes, inOffset, outBytes, outOffset, blocksize);
 
-		protected static int GetBlockmask(int blockSize)
+		protected static int GetBlockmask(int blocksize)
 		{
-			return unchecked((int)(blockSize switch
+			var mask = 0;
+			switch (blocksize)
 			{
-				8 => 0xfffffff7u,
-				16 => 0xfffffff0u,
-				32 => 0xffffffe0u,
-				_ => 0u,
-			}));
+				case 8:
+					mask = unchecked((int)0xfffffff7);
+					break;
+				case 16:
+					mask = unchecked((int)0xfffffff0);
+					break;
+				case 32:
+					mask = unchecked((int)0xffffffe0);
+					break;
+			}
+
+			return mask;
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using LEA.Padding;
+﻿
+using LEA.Paddings;
 
 namespace LEA.Test.Padding
 {
@@ -44,7 +45,7 @@ namespace LEA.Test.Padding
 
 			// Act
 			// Assert
-			Assert.Throws<ArgumentException>(() => _ = impl.Pad(unpadded));
+			Assert.Throws<InvalidOperationException>(() => _ = impl.Pad(unpadded));
 		}
 
 		[Fact]
@@ -132,7 +133,7 @@ namespace LEA.Test.Padding
 
 			// Act
 			// Assert
-			Assert.Throws<ArgumentException>(() => _ = impl.Unpad(badPadded));
+			Assert.Throws<OverflowException>(() => _ = impl.Unpad(badPadded));
 		}
 	}
 }

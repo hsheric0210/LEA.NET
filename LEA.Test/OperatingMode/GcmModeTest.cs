@@ -1,10 +1,10 @@
-using LEA.Symmetric;
+using static LEA.BlockCipher;
 
 namespace LEA.Test.OpMode
 {
 	public class GcmModeTest
 	{
-		private readonly TestVectorAE[] Lea256GcmTestVectors =
+		private readonly TestVectorAE[] lea256GcmTestVectors =
 		{
 		new TestVectorAE
 		{
@@ -97,7 +97,7 @@ namespace LEA.Test.OpMode
 			Tag = new byte[] { 0x41, 0xFE, 0xD2, 0x2B, 0x59, 0x3A, 0x9, 0x7A, 0xF8, 0xE8, 0xAB, 0xB1, 0xF4, 0x61, 0xC0, 0xAB },
 		}
 	};
-		private readonly TestVectorAE[] Lea192GcmTestVectors =
+		private readonly TestVectorAE[] lea192GcmTestVectors =
 		{
 		new TestVectorAE
 		{
@@ -190,7 +190,7 @@ namespace LEA.Test.OpMode
 			Tag = new byte[] { 0x39, 0xB7, 0xDA, 0xF0, 0x2B, 0xBA, 0x69, 0xE1, 0xD0, 0x12, 0xB1, 0x39, 0x29, 0xE, 0x6B, 0x14 },
 		}
 	};
-		private readonly TestVectorAE[] Lea128GcmTestVectors =
+		private readonly TestVectorAE[] lea128GcmTestVectors =
 		{
 		new TestVectorAE
 		{
@@ -283,18 +283,18 @@ namespace LEA.Test.OpMode
 		[Fact]
 		public void LEA256_GCM_Encryption_AllTestVectorsPassing()
 		{
-			for (var i = 0; i < Lea256GcmTestVectors.Length; i++)
+			for (var i = 0; i < lea256GcmTestVectors.Length; i++)
 			{
 				// Arrange
-				TestVectorAE testvector = Lea256GcmTestVectors[i];
-				var cipher = new Lea.Gcm();
+				var testvector = lea256GcmTestVectors[i];
+				var cipher = new Symmetric.Lea.Gcm();
 
 				// Act
-				cipher.Init(Mode.Encrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
-				cipher.UpdateAssociatedData(testvector.AAD);
+				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
+				cipher.UpdateAAD(testvector.AAD);
 				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
-				ReadOnlySpan<byte> tag = actual.Slice(actual.Length - 16, 16);
-				ReadOnlySpan<byte> cipherText = actual.Slice(0, actual.Length - 16);
+				var tag = actual.Slice(actual.Length - 16, 16);
+				var cipherText = actual.Slice(0, actual.Length - 16);
 
 				// Assert
 				Assert.True(cipherText.SequenceEqual(testvector.CipherText), "LEA-256-GCM encryption ciphertext test case #" + (i + 1));
@@ -305,15 +305,15 @@ namespace LEA.Test.OpMode
 		[Fact]
 		public void LEA256_GCM_Decryption_AllTestVectorsPassing()
 		{
-			for (var i = 0; i < Lea256GcmTestVectors.Length; i++)
+			for (var i = 0; i < lea256GcmTestVectors.Length; i++)
 			{
 				// Arrange
-				TestVectorAE testvector = Lea256GcmTestVectors[i];
-				var cipher = new Lea.Gcm();
+				var testvector = lea256GcmTestVectors[i];
+				var cipher = new Symmetric.Lea.Gcm();
 
 				// Act
-				cipher.Init(Mode.Decrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
-				cipher.UpdateAssociatedData(testvector.AAD);
+				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
+				cipher.UpdateAAD(testvector.AAD);
 				var aggregated = new byte[testvector.CipherText.Length + testvector.Tag.Length];
 				testvector.CipherText.CopyTo(aggregated, 0);
 				testvector.Tag.CopyTo(aggregated, testvector.CipherText.Length);
@@ -327,18 +327,18 @@ namespace LEA.Test.OpMode
 		[Fact]
 		public void LEA192_GCM_Encryption_AllTestVectorsPassing()
 		{
-			for (var i = 0; i < Lea192GcmTestVectors.Length; i++)
+			for (var i = 0; i < lea192GcmTestVectors.Length; i++)
 			{
 				// Arrange
-				TestVectorAE testvector = Lea192GcmTestVectors[i];
-				var cipher = new Lea.Gcm();
+				var testvector = lea192GcmTestVectors[i];
+				var cipher = new Symmetric.Lea.Gcm();
 
 				// Act
-				cipher.Init(Mode.Encrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
-				cipher.UpdateAssociatedData(testvector.AAD);
+				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
+				cipher.UpdateAAD(testvector.AAD);
 				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
-				ReadOnlySpan<byte> tag = actual.Slice(actual.Length - 16, 16);
-				ReadOnlySpan<byte> cipherText = actual[..^16];
+				var tag = actual.Slice(actual.Length - 16, 16);
+				var cipherText = actual[..^16];
 
 				// Assert
 				Assert.True(cipherText.SequenceEqual(testvector.CipherText), "LEA-192-GCM encryption ciphertext test case #" + (i + 1));
@@ -349,15 +349,15 @@ namespace LEA.Test.OpMode
 		[Fact]
 		public void LEA192_GCM_Decryption_AllTestVectorsPassing()
 		{
-			for (var i = 0; i < Lea192GcmTestVectors.Length; i++)
+			for (var i = 0; i < lea192GcmTestVectors.Length; i++)
 			{
 				// Arrange
-				TestVectorAE testvector = Lea192GcmTestVectors[i];
-				var cipher = new Lea.Gcm();
+				var testvector = lea192GcmTestVectors[i];
+				var cipher = new Symmetric.Lea.Gcm();
 
 				// Act
-				cipher.Init(Mode.Decrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
-				cipher.UpdateAssociatedData(testvector.AAD);
+				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
+				cipher.UpdateAAD(testvector.AAD);
 				var aggregated = new byte[testvector.CipherText.Length + testvector.Tag.Length];
 				testvector.CipherText.CopyTo(aggregated, 0);
 				testvector.Tag.CopyTo(aggregated, testvector.CipherText.Length);
@@ -371,18 +371,18 @@ namespace LEA.Test.OpMode
 		[Fact]
 		public void LEA128_GCM_Encryption_AllTestVectorsPassing()
 		{
-			for (var i = 0; i < Lea128GcmTestVectors.Length; i++)
+			for (var i = 0; i < lea128GcmTestVectors.Length; i++)
 			{
 				// Arrange
-				TestVectorAE testvector = Lea128GcmTestVectors[i];
-				var cipher = new Lea.Gcm();
+				var testvector = lea128GcmTestVectors[i];
+				var cipher = new Symmetric.Lea.Gcm();
 
 				// Act
-				cipher.Init(Mode.Encrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
-				cipher.UpdateAssociatedData(testvector.AAD);
+				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
+				cipher.UpdateAAD(testvector.AAD);
 				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
-				ReadOnlySpan<byte> tag = actual.Slice(actual.Length - 16, 16);
-				ReadOnlySpan<byte> cipherText = actual[..^16];
+				var tag = actual.Slice(actual.Length - 16, 16);
+				var cipherText = actual[..^16];
 
 				// Assert
 				Assert.True(cipherText.SequenceEqual(testvector.CipherText), "LEA-128-GCM encryption ciphertext test case #" + (i + 1));
@@ -393,15 +393,15 @@ namespace LEA.Test.OpMode
 		[Fact]
 		public void LEA128_GCM_Decryption_AllTestVectorsPassing()
 		{
-			for (var i = 0; i < Lea128GcmTestVectors.Length; i++)
+			for (var i = 0; i < lea128GcmTestVectors.Length; i++)
 			{
 				// Arrange
-				TestVectorAE testvector = Lea128GcmTestVectors[i];
-				var cipher = new Lea.Gcm();
+				var testvector = lea128GcmTestVectors[i];
+				var cipher = new Symmetric.Lea.Gcm();
 
 				// Act
-				cipher.Init(Mode.Decrypt, testvector.Key, testvector.IV, testvector.Tag.Length);
-				cipher.UpdateAssociatedData(testvector.AAD);
+				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
+				cipher.UpdateAAD(testvector.AAD);
 				var aggregated = new byte[testvector.CipherText.Length + testvector.Tag.Length];
 				testvector.CipherText.CopyTo(aggregated, 0);
 				testvector.Tag.CopyTo(aggregated, testvector.CipherText.Length);

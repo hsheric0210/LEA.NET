@@ -1,10 +1,8 @@
-using LEA.Symmetric;
-
 namespace LEA.Test.Mac
 {
 	public class CMacModeTest
 	{
-		private readonly TestVectorMac[] Lea256CMacTestVectors =
+		private readonly TestVectorMac[] lea256CMacTestVectors =
 		{
 		new TestVectorMac
 		{
@@ -67,7 +65,7 @@ namespace LEA.Test.Mac
 			Mac = new byte[] { 0x16, 0x24, 0xA3, 0x82, 0x6, 0xED, 0x78, 0x46, 0x72, 0x26, 0xFF, 0x90, 0xB9, 0xBD, 0x90, 0x48 },
 		}
 	};
-		private readonly TestVectorMac[] Lea192CMacTestVectors =
+		private readonly TestVectorMac[] lea192CMacTestVectors =
 		{
 		new TestVectorMac
 		{
@@ -130,7 +128,7 @@ namespace LEA.Test.Mac
 			Mac = new byte[] { 0xF6, 0x9A, 0xAC, 0x6A, 0xDD, 0xD3, 0x63, 0x22, 0xC0, 0x13, 0x8E, 0x2, 0x3F, 0xBD, 0x27, 0x0 },
 		}
 	};
-		private readonly TestVectorMac[] Lea128CMacTestVectors =
+		private readonly TestVectorMac[] lea128CMacTestVectors =
 		{
 		new TestVectorMac
 		{
@@ -198,11 +196,11 @@ namespace LEA.Test.Mac
 		public void LEA256_CMAC_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Lea.CMac();
+			var cipher = new Symmetric.Lea.CMac();
 
-			for (var i = 0; i < Lea256CMacTestVectors.Length; i++)
+			for (var i = 0; i < lea256CMacTestVectors.Length; i++)
 			{
-				TestVectorMac testvector = Lea256CMacTestVectors[i];
+				var testvector = lea256CMacTestVectors[i];
 				// Act
 				cipher.Init(testvector.Key);
 				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.Data);
@@ -217,11 +215,11 @@ namespace LEA.Test.Mac
 		public void LEA192_CMAC_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Lea.CMac();
+			var cipher = new Symmetric.Lea.CMac();
 
-			for (var i = 0; i < Lea192CMacTestVectors.Length; i++)
+			for (var i = 0; i < lea192CMacTestVectors.Length; i++)
 			{
-				TestVectorMac testvector = Lea192CMacTestVectors[i];
+				var testvector = lea192CMacTestVectors[i];
 
 				// Act
 				cipher.Init(testvector.Key);
@@ -237,11 +235,11 @@ namespace LEA.Test.Mac
 		public void LEA128_CMAC_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Lea.CMac();
+			var cipher = new Symmetric.Lea.CMac();
 
-			for (var i = 0; i < Lea128CMacTestVectors.Length; i++)
+			for (var i = 0; i < lea128CMacTestVectors.Length; i++)
 			{
-				TestVectorMac testvector = Lea128CMacTestVectors[i];
+				var testvector = lea128CMacTestVectors[i];
 
 				// Act
 				cipher.Init(testvector.Key);

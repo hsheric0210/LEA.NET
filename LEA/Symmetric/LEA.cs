@@ -1,16 +1,16 @@
-using LEA.Engine;
-using LEA.Mac;
-using LEA.OpMode;
+using System.Diagnostics;
+using LEA.engine;
+using LEA.OperatingMode;
+using LEA.Macs;
 
 namespace LEA.Symmetric
 {
-	public static class Lea
+	public class Lea
 	{
+		private Lea() => Debug.Assert(true);
+
 		public static BlockCipher GetEngine() => new LeaEngine();
 
-		/// <summary>
-		/// Electronic CodeBook mode
-		/// </summary>
 		public sealed class Ecb : EcbMode
 		{
 			public Ecb() : base(GetEngine())
@@ -18,9 +18,6 @@ namespace LEA.Symmetric
 			}
 		}
 
-		/// <summary>
-		/// Cipher Block Chaining mode
-		/// </summary>
 		public sealed class Cbc : CbcMode
 		{
 			public Cbc() : base(GetEngine())
@@ -28,9 +25,6 @@ namespace LEA.Symmetric
 			}
 		}
 
-		/// <summary>
-		/// Counter mode
-		/// </summary>
 		public sealed class Ctr : CtrMode
 		{
 			public Ctr() : base(GetEngine())
@@ -38,9 +32,6 @@ namespace LEA.Symmetric
 			}
 		}
 
-		/// <summary>
-		/// Cipher FeedBack mode
-		/// </summary>
 		public sealed class Cfb : CfbMode
 		{
 			public Cfb() : base(GetEngine())
@@ -48,9 +39,6 @@ namespace LEA.Symmetric
 			}
 		}
 
-		/// <summary>
-		/// Output FeedBack mode
-		/// </summary>
 		public sealed class Ofb : OfbMode
 		{
 			public Ofb() : base(GetEngine())
@@ -58,9 +46,6 @@ namespace LEA.Symmetric
 			}
 		}
 
-		/// <summary>
-		/// Counter with CBC-MAC mode
-		/// </summary>
 		public sealed class Ccm : CcmMode
 		{
 			public Ccm() : base(GetEngine())
@@ -68,9 +53,6 @@ namespace LEA.Symmetric
 			}
 		}
 
-		/// <summary>
-		/// Galois Counter Mode
-		/// </summary>
 		public sealed class Gcm : GcmMode
 		{
 			public Gcm() : base(GetEngine())
@@ -78,10 +60,7 @@ namespace LEA.Symmetric
 			}
 		}
 
-		/// <summary>
-		/// CBC-MAC mode
-		/// </summary>
-		public sealed class CMac : Mac.CMac
+		public sealed class CMac : Macs.CMac
 		{
 			public CMac() : base(GetEngine())
 			{

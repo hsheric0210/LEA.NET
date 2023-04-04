@@ -1,8 +1,9 @@
-﻿using LEA.Padding;
+﻿
+using LEA.Paddings;
 
 namespace LEA.Test.Padding
 {
-	public class Pkcs5PaddingTest
+	public class PKCS5PaddingTest
 	{
 		[Fact]
 		public void Padding_16bytes_WhenLengthShorterThanBlockSize()
@@ -42,7 +43,7 @@ namespace LEA.Test.Padding
 
 			// Act
 			// Assert
-			Assert.Throws<ArgumentException>(() => _ = impl.Pad(unpadded));
+			Assert.Throws<InvalidOperationException>(() => _ = impl.Pad(unpadded));
 		}
 
 		[Fact]
@@ -73,7 +74,6 @@ namespace LEA.Test.Padding
 			// Assert
 			Assert.Throws<ArgumentException>(() => impl.Pad(unpadded, 50));
 		}
-
 
 		[Fact]
 		public void Unpadding_16bytes_WhenLengthShorterThanBlockSize()
