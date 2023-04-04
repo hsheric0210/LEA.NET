@@ -1,5 +1,3 @@
-using LEA.Symmetric;
-
 namespace LEA.Test.Mac
 {
 	public class CMacModeTest

@@ -1,4 +1,3 @@
-using LEA.Symmetric;
 using static LEA.BlockCipher;
 
 namespace LEA.Test.OpMode
