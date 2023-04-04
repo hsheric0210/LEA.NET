@@ -43,8 +43,8 @@ namespace LEA.mac
 		public override void Reset()
 		{
 			engine.Reset();
-			Array.Fill(block, (byte)0);
-			Array.Fill(mac, (byte)0);
+			block.FillBy((byte)0);
+			mac.FillBy((byte)0);
 			blkIdx = 0;
 		}
 
@@ -96,13 +96,13 @@ namespace LEA.mac
 			if (blkIdx < blocksize)
 			{
 				block[blkIdx] = 0x80;
-				Array.Fill(block, blkIdx + 1, blocksize, (byte)0x00);
+				block.FillRange(blkIdx + 1, blocksize, (byte)0x0);
 			}
 
 			XOR(block, blkIdx == blocksize ? k1 : k2);
 			XOR(block, mac);
 			engine.ProcessBlock(block, 0, mac, 0);
-			return mac.Clone();
+			return mac.CopyOf();
 		}
 
 		private void SelectRB()

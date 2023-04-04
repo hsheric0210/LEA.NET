@@ -29,7 +29,7 @@ namespace LEA.engine
 
 		public override void Reset()
 		{
-			Array.Fill(block, 0);
+			block.FillBy((byte)0);
 		}
 
 		public override string GetAlgorithmName()

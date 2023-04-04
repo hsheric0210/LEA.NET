@@ -68,13 +68,13 @@ namespace LEA.mode
 			aadOff = 0;
 			msglen = 0;
 			aadlen = 0;
-			Array.Fill(block, (byte)0x00);
-			Array.Fill(nonce, (byte)0x00);
-			Array.Fill(hashBlock, (byte)0x00);
-			Array.Fill(macBlock, (byte)0x00);
-			Array.Fill(aadBlock, (byte)0x00);
-			Array.Fill(mulBlock, (byte)0x00);
-			Array.Fill(inBuffer, (byte)0x00);
+			block.FillBy((byte)0);
+			nonce.FillBy((byte)0);
+			hashBlock.FillBy((byte)0);
+			macBlock.FillBy((byte)0);
+			aadBlock.FillBy((byte)0);
+			mulBlock.FillBy((byte)0);
+			inBuffer.FillBy((byte)0);
 			if (baos != null)
 				baos.SetLength(0);
 		}
@@ -100,7 +100,7 @@ namespace LEA.mode
 				Ghash(this.nonce, X, blocksize);
 			}
 
-			initialCtr = this.nonce.Clone();
+			initialCtr = this.nonce.CopyOf();
 		}
 
 		private void SetTaglen(int taglen)
@@ -225,7 +225,7 @@ namespace LEA.mode
 			if (mode == Mode.DECRYPT)
 				msglen -= taglen;
 
-			Array.Fill(block, (byte)0x00);
+			block.FillBy((byte)0);
 			IntToBigEndian(aadlen *= 8, block, 4);
 			IntToBigEndian(msglen *= 8, block, 12);
 			Ghash(macBlock, block, blocksize);
@@ -235,8 +235,8 @@ namespace LEA.mode
 				Buffer.BlockCopy(macBlock, 0, @out, outOff, taglen);
 			else
 			{
-				macBlock = Array.CopyOf(macBlock, taglen); // fixme
-				if (!Arrays.Equals(macBlock, tag) && @out != null) // fixme
+				macBlock = macBlock.CopyOf(taglen);
+				if (!macBlock.SequenceEqual(tag) && @out != null) // fixme: side-channel timing attack
 				{
 					baos.SetLength(0);
 					@out = null;
@@ -325,7 +325,7 @@ namespace LEA.mode
 
 			try
 			{
-				baos.Write(@out);
+				baos.Write(@out, 0, @out.Length);
 			}
 			catch (Exception e)
 			{
@@ -410,7 +410,7 @@ namespace LEA.mode
 
 		private void Gfmul(byte[] r, byte[] x)
 		{
-			Array.Fill(mulBlock, (byte)0x00);
+			mulBlock.FillBy((byte)0);
 			var rowIdx = 0;
 			for (rowIdx = 15; rowIdx > 0; --rowIdx)
 			{

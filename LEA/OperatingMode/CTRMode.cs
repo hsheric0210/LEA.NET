@@ -25,7 +25,7 @@ namespace LEA.mode
 		{
 			this.mode = mode;
 			engine.Init(Mode.ENCRYPT, mk);
-			this.iv = iv.Clone();
+			this.iv = iv.CopyOf();
 			ctr = new byte[blocksize];
 			block = new byte[blocksize];
 			Reset();

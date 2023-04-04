@@ -87,9 +87,9 @@ namespace LEA.mode
 			}
 			else
 			{
-				mac = Array.CopyOf(mac, taglen); // FIXME
-				if (!Array.Equals(tag, mac)) // FIXME
-					Array.Fill(@out, (byte)0);
+				mac = mac.CopyOf(taglen); // FIXME
+				if (!tag.SequenceEqual(mac))
+					@out.FillBy((byte)0);
 			}
 
 			return @out;
@@ -136,7 +136,7 @@ namespace LEA.mode
 
 		private void ResetCounter()
 		{
-			Array.Fill(ctr, noncelen + 1, ctr.Length, (byte)0); // FIXME
+			ctr.FillRange(noncelen + 1, ctr.Length, (byte)0x0);
 		}
 
 		private void IncreaseCounter()
@@ -153,7 +153,7 @@ namespace LEA.mode
 		private void ProcessAAD()
 		{
 			byte[] aad = aadBytes.ToArray();
-			Array.Fill(block, (byte)0);
+			block.FillBy((byte)0);
 			var alen = 0;
 			if (aad.Length < 0xff00)
 			{

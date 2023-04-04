@@ -35,7 +35,7 @@ namespace LEA
 		public override void Reset()
 		{
 			bufferOffset = 0;
-			Array.Fill(buffer, (byte)0);
+			buffer.FillBy((byte)0);
 		}
 
 		public override void SetPadding(Padding padding)

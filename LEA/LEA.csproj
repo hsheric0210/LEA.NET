@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFrameworks>net6.0;net7.0;netstandard2.0;netstandard2.1;net462;net472;net48</TargetFrameworks>
 		<ImplicitUsings>disable</ImplicitUsings>
-		<Nullable>annotations</Nullable>
+		<Nullable>disable</Nullable>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<AssemblyName>LEA.NET</AssemblyName>
 		<PackageId>$(AssemblyName)</PackageId>
