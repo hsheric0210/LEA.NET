@@ -15,10 +15,10 @@ namespace LEA.OperatingMode
 
 		public override string GetAlgorithmName() => engine.GetAlgorithmName() + "/OFB";
 
-		public override void Init(Mode mode, byte[] mk, byte[] iv)
+		public override void Init(Mode mode, byte[] key, byte[] iv)
 		{
 			this.mode = mode;
-			engine.Init(Mode.ENCRYPT, mk);
+			engine.Init(Mode.ENCRYPT, key);
 			this.iv = iv.CopyOf();
 			block = new byte[blocksize];
 			Reset();
@@ -30,10 +30,10 @@ namespace LEA.OperatingMode
 			Buffer.BlockCopy(iv, 0, block, 0, blocksize);
 		}
 
-		protected override int ProcessBlock(byte[] @in, int inOff, byte[] @out, int outOff, int outlen)
+		protected override int ProcessBlock(byte[] inBytes, int inOffset, byte[] outBytes, int outOffset, int outLength)
 		{
 			var length = engine.ProcessBlock(block, 0, block, 0);
-			XOR(@out, outOff, @in, inOff, block, 0, outlen);
+			XOR(outBytes, outOffset, inBytes, inOffset, block, 0, outLength);
 			return length;
 		}
 	}

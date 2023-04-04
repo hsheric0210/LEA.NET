@@ -5,9 +5,9 @@ using LEA.Macs;
 
 namespace LEA.Symmetric
 {
-	public class LEA
+	public class Lea
 	{
-		private LEA() => Debug.Assert(true);
+		private Lea() => Debug.Assert(true);
 
 		public static BlockCipher GetEngine() => new LeaEngine();
 

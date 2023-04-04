@@ -9,28 +9,28 @@ namespace LEA.OperatingMode
 {
 	public class CcmMode : BlockCipherModeAE
 	{
-		private byte[] ctr;
+		private byte[] counter;
 		private byte[] mac;
 		private byte[] tag;
 		private byte[] block;
 		private MemoryStream aadBytes;
 		private MemoryStream inputBytes;
-		private int msglen;
-		private int noncelen;
+		private int messageLength;
+		private int nonceLength;
 		public CcmMode(BlockCipher cipher) : base(cipher)
 		{
-			ctr = new byte[blocksize];
+			counter = new byte[blocksize];
 			mac = new byte[blocksize];
 			block = new byte[blocksize];
 		}
 
-		public override void Init(Mode mode, byte[] mk, byte[] nonce, int taglen)
+		public override void Init(Mode mode, byte[] key, byte[] nonce, int tagLength)
 		{
 			this.mode = mode;
-			engine.Init(Mode.ENCRYPT, mk);
+			engine.Init(Mode.ENCRYPT, key);
 			aadBytes = new MemoryStream();
 			inputBytes = new MemoryStream();
-			SetTaglen(taglen);
+			SetTagLength(tagLength);
 			SetNonce(nonce);
 		}
 
@@ -42,9 +42,9 @@ namespace LEA.OperatingMode
 			aadBytes.Write(aad, 0, aad.Length);
 		}
 
-		public override byte[] Update(byte[] msg)
+		public override byte[] Update(byte[] message)
 		{
-			inputBytes.Write(msg, 0, msg.Length);
+			inputBytes.Write(message, 0, message.Length);
 			return null;
 		}
 
@@ -53,46 +53,46 @@ namespace LEA.OperatingMode
 			if (aadBytes.Length > 0)
 				block[0] |= 0x40;
 
-			msglen = (int)inputBytes.Length;
+			messageLength = (int)inputBytes.Length;
 			if (mode == Mode.DECRYPT)
-				msglen -= taglen;
+				messageLength -= taglen;
 
-			ToBytes(msglen, block, noncelen + 1, 15 - noncelen);
+			ToBytes(messageLength, block, nonceLength + 1, 15 - nonceLength);
 			engine.ProcessBlock(block, 0, mac, 0);
-			byte[] @out;
+			byte[] outBytes;
 			ProcessAAD();
 			if (mode == Mode.ENCRYPT)
 			{
-				@out = new byte[msglen + taglen];
-				EncryptData(@out, 0);
+				outBytes = new byte[messageLength + taglen];
+				EncryptData(outBytes, 0);
 			}
 			else
 			{
-				@out = new byte[msglen];
-				DecryptData(@out, 0);
+				outBytes = new byte[messageLength];
+				DecryptData(outBytes, 0);
 			}
 
 			ResetCounter();
-			engine.ProcessBlock(ctr, 0, block, 0);
+			engine.ProcessBlock(counter, 0, block, 0);
 			if (mode == Mode.ENCRYPT)
 			{
 				XOR(mac, block);
 				Buffer.BlockCopy(mac, 0, tag, 0, taglen);
-				Buffer.BlockCopy(mac, 0, @out, @out.Length - taglen, taglen);
+				Buffer.BlockCopy(mac, 0, outBytes, outBytes.Length - taglen, taglen);
 			}
 			else
 			{
-				mac = mac.CopyOf(taglen); // FIXME
+				mac = mac.CopyOf(taglen);
 				if (!tag.SequenceEqual(mac))
-					@out.FillBy((byte)0);
+					outBytes.FillBy((byte)0);
 			}
 
-			return @out;
+			return outBytes;
 		}
 
-		public override int GetOutputSize(int len)
+		public override int GetOutputSize(int length)
 		{
-			var outSize = len + bufOff;
+			var outSize = length + bufOff;
 			if (mode == Mode.ENCRYPT)
 				return outSize + taglen;
 
@@ -102,24 +102,24 @@ namespace LEA.OperatingMode
 		private void SetNonce(byte[] nonce)
 		{
 			if (nonce == null)
-				throw new ArgumentNullException("nonce is null");
+				throw new ArgumentNullException(nameof(nonce));
 
-			noncelen = nonce.Length;
-			if (noncelen < 7 || noncelen > 13)
+			nonceLength = nonce.Length;
+			if (nonceLength < 7 || nonceLength > 13)
 				throw new ArgumentException("length of nonce should be 7 ~ 13 bytes");
 
 			// init counter
-			ctr[0] = (byte)(14 - noncelen);
-			Buffer.BlockCopy(nonce, 0, ctr, 1, noncelen);
+			counter[0] = (byte)(14 - nonceLength);
+			Buffer.BlockCopy(nonce, 0, counter, 1, nonceLength);
 
 			// init b0
 			var tagfield = (taglen - 2) / 2;
 			block[0] = (byte)(tagfield << 3 & 0xff);
-			block[0] |= (byte)(14 - noncelen & 0xff);
-			Buffer.BlockCopy(nonce, 0, block, 1, noncelen);
+			block[0] |= (byte)(14 - nonceLength & 0xff);
+			Buffer.BlockCopy(nonce, 0, block, 1, nonceLength);
 		}
 
-		private void SetTaglen(int taglen)
+		private void SetTagLength(int taglen)
 		{
 			if (taglen < 4 || taglen > 16 || (taglen & 0x01) != 0)
 				throw new ArgumentException("length of tag should be 4, 6, 8, 10, 12, 14, 16 bytes");
@@ -128,15 +128,15 @@ namespace LEA.OperatingMode
 			tag = new byte[taglen];
 		}
 
-		private void ResetCounter() => ctr.FillBy(noncelen + 1, ctr.Length, (byte)0);
+		private void ResetCounter() => counter.FillBy(nonceLength + 1, counter.Length, (byte)0);
 
 		private void IncreaseCounter()
 		{
-			var i = ctr.Length - 1;
-			while (++ctr[i] == 0)
+			var i = counter.Length - 1;
+			while (++counter[i] == 0)
 			{
 				--i;
-				if (i < noncelen + 1)
+				if (i < nonceLength + 1)
 					throw new InvalidOperationException("exceed maximum counter");
 			}
 		}
@@ -180,42 +180,42 @@ namespace LEA.OperatingMode
 			}
 		}
 
-		private void EncryptData(byte[] @out, int offset)
+		private void EncryptData(byte[] outBytes, int offset)
 		{
 			var inIdx = 0;
 			var outIdx = offset;
-			var @in = inputBytes.GetBuffer();
-			var remained = msglen;
+			var inBytes = inputBytes.GetBuffer();
+			var remained = messageLength;
 			while (remained > 0)
 			{
 				var processed = remained >= blocksize ? blocksize : remained;
-				XOR(mac, 0, mac, 0, @in, inIdx, processed);
+				XOR(mac, 0, mac, 0, inBytes, inIdx, processed);
 				engine.ProcessBlock(mac, 0, mac, 0);
 				IncreaseCounter();
-				engine.ProcessBlock(ctr, 0, block, 0);
-				XOR(@out, outIdx, block, 0, @in, inIdx, processed);
+				engine.ProcessBlock(counter, 0, block, 0);
+				XOR(outBytes, outIdx, block, 0, inBytes, inIdx, processed);
 				inIdx += processed;
 				outIdx += processed;
 				remained -= processed;
 			}
 		}
 
-		private void DecryptData(byte[] @out, int offset)
+		private void DecryptData(byte[] outBytes, int offset)
 		{
 			var i = 0;
 			var outIdx = offset;
-			var @in = inputBytes.GetBuffer();
-			Buffer.BlockCopy(@in, msglen, tag, 0, taglen);
-			engine.ProcessBlock(ctr, 0, block, 0);
+			var inBytes = inputBytes.GetBuffer();
+			Buffer.BlockCopy(inBytes, messageLength, tag, 0, taglen);
+			engine.ProcessBlock(counter, 0, block, 0);
 			XOR(tag, 0, block, 0, taglen);
-			var remained = msglen;
+			var remained = messageLength;
 			while (remained > 0)
 			{
 				var processed = remained >= blocksize ? blocksize : remained;
 				IncreaseCounter();
-				engine.ProcessBlock(ctr, 0, block, 0);
-				XOR(@out, outIdx, block, 0, @in, i, processed);
-				XOR(mac, 0, mac, 0, @out, outIdx, processed);
+				engine.ProcessBlock(counter, 0, block, 0);
+				XOR(outBytes, outIdx, block, 0, inBytes, i, processed);
+				XOR(mac, 0, mac, 0, outBytes, outIdx, processed);
 				engine.ProcessBlock(mac, 0, mac, 0);
 				i += processed;
 				outIdx += processed;

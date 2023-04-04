@@ -10,28 +10,28 @@ namespace LEA.Macs
 		private static readonly byte[] r128 = new[] { (byte)0x87 };
 		private static readonly byte[] r64 = new[] { (byte)0x1b };
 		private readonly BlockCipher engine;
-		private int blocksize;
-		private int blkIdx;
+		private int blockSize;
+		private int blockIndex;
 		private byte[] block;
 		private byte[] mac;
 		private byte[] rb;
-		private byte[] k1, k2;
+		private byte[] subkey1, subkey2;
 		public CMac(BlockCipher cipher) => engine = cipher;
 
 		public override void Init(byte[] key)
 		{
 			engine.Init(Mode.ENCRYPT, key);
-			blkIdx = 0;
-			blocksize = engine.GetBlockSize();
-			block = new byte[blocksize];
-			mac = new byte[blocksize];
-			k1 = new byte[blocksize];
-			k2 = new byte[blocksize];
+			blockIndex = 0;
+			blockSize = engine.GetBlockSize();
+			block = new byte[blockSize];
+			mac = new byte[blockSize];
+			subkey1 = new byte[blockSize];
+			subkey2 = new byte[blockSize];
 			SelectRB();
-			var zero = new byte[blocksize];
+			var zero = new byte[blockSize];
 			engine.ProcessBlock(zero, 0, zero, 0);
-			Cmac_subkey(k1, zero);
-			Cmac_subkey(k2, k1);
+			Cmac_subkey(subkey1, zero);
+			Cmac_subkey(subkey2, subkey1);
 		}
 
 		public override void Reset()
@@ -39,30 +39,30 @@ namespace LEA.Macs
 			engine.Reset();
 			block.FillBy((byte)0);
 			mac.FillBy((byte)0);
-			blkIdx = 0;
+			blockIndex = 0;
 		}
 
-		public override void Update(byte[] msg)
+		public override void Update(byte[] message)
 		{
-			if (msg == null || msg.Length == 0)
+			if (message == null || message.Length == 0)
 				return;
 
-			var len = msg.Length;
+			var len = message.Length;
 			var msgOff = 0;
-			var gap = blocksize - blkIdx;
+			var gap = blockSize - blockIndex;
 			if (len > gap)
 			{
-				Buffer.BlockCopy(msg, msgOff, block, blkIdx, gap);
-				blkIdx = 0;
+				Buffer.BlockCopy(message, msgOff, block, blockIndex, gap);
+				blockIndex = 0;
 				len -= gap;
 				msgOff += gap;
-				while (len > blocksize)
+				while (len > blockSize)
 				{
 					XOR(block, mac);
 					engine.ProcessBlock(block, 0, mac, 0);
-					Buffer.BlockCopy(msg, msgOff, block, 0, blocksize);
-					len -= blocksize;
-					msgOff += blocksize;
+					Buffer.BlockCopy(message, msgOff, block, 0, blockSize);
+					len -= blockSize;
+					msgOff += blockSize;
 				}
 
 				if (len > 0)
@@ -74,26 +74,26 @@ namespace LEA.Macs
 
 			if (len > 0)
 			{
-				Buffer.BlockCopy(msg, msgOff, block, blkIdx, len);
-				blkIdx += len;
+				Buffer.BlockCopy(message, msgOff, block, blockIndex, len);
+				blockIndex += len;
 			}
 		}
 
-		public override byte[] DoFinal(byte[] msg)
+		public override byte[] DoFinal(byte[] message)
 		{
-			Update(msg);
+			Update(message);
 			return DoFinal();
 		}
 
 		public override byte[] DoFinal()
 		{
-			if (blkIdx < blocksize)
+			if (blockIndex < blockSize)
 			{
-				block[blkIdx] = 0x80;
-				block.FillBy(blkIdx + 1, blocksize, (byte)0);
+				block[blockIndex] = 0x80;
+				block.FillBy(blockIndex + 1, blockSize, (byte)0);
 			}
 
-			XOR(block, blkIdx == blocksize ? k1 : k2);
+			XOR(block, blockIndex == blockSize ? subkey1 : subkey2);
 			XOR(block, mac);
 			engine.ProcessBlock(block, 0, mac, 0);
 			return mac.CopyOf();
@@ -101,7 +101,7 @@ namespace LEA.Macs
 
 		private void SelectRB()
 		{
-			switch (blocksize)
+			switch (blockSize)
 			{
 				case 8:
 					rb = r64;
@@ -115,15 +115,15 @@ namespace LEA.Macs
 			}
 		}
 
-		private void Cmac_subkey(byte[] new_key, byte[] old_key)
+		private void Cmac_subkey(byte[] newKey, byte[] oldKey)
 		{
-			Buffer.BlockCopy(old_key, 0, new_key, 0, blocksize);
-			ShiftLeft(new_key, 1);
-			if ((old_key[0] & 0x80) != 0)
+			Buffer.BlockCopy(oldKey, 0, newKey, 0, blockSize);
+			ShiftLeft(newKey, 1);
+			if ((oldKey[0] & 0x80) != 0)
 			{
 				for (var i = 0; i < rb.Length; ++i)
 				{
-					new_key[blocksize - rb.Length + i] ^= rb[i];
+					newKey[blockSize - rb.Length + i] ^= rb[i];
 				}
 			}
 		}

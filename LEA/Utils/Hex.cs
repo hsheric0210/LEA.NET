@@ -115,13 +115,13 @@ namespace LEA.Utils
 			return sb.ToString();
 		}
 
-		public static string ToBitString(byte[] @in)
+		public static string ToBitString(byte[] inBytes)
 		{
-			if (@in == null)
+			if (inBytes == null)
 				throw new ArgumentNullException("input array shoud not be null");
 
 			var sb = new StringBuilder();
-			foreach (var i in @in)
+			foreach (var i in inBytes)
 			{
 				sb.Append(ToBitString(i));
 			}
@@ -129,24 +129,24 @@ namespace LEA.Utils
 			return sb.ToString();
 		}
 
-		public static string ToBitString(byte @in)
+		public static string ToBitString(byte inBytes)
 		{
 			var sb = new StringBuilder();
 			for (var i = 7; i >= 0; --i)
 			{
-				sb.Append(@in >> i & 1);
+				sb.Append(inBytes >> i & 1);
 			}
 
 			return sb.ToString();
 		}
 
-		public static string ToBitString(int[] @in)
+		public static string ToBitString(int[] inBytes)
 		{
-			if (@in == null)
+			if (inBytes == null)
 				throw new ArgumentNullException("input array shoud not be null");
 
 			var sb = new StringBuilder();
-			foreach (var i in @in)
+			foreach (var i in inBytes)
 			{
 				sb.Append(ToBitString(i));
 			}
@@ -154,12 +154,12 @@ namespace LEA.Utils
 			return sb.ToString();
 		}
 
-		public static string ToBitString(int @in)
+		public static string ToBitString(int inBytes)
 		{
 			var sb = new StringBuilder();
 			for (var i = 31; i >= 0; --i)
 			{
-				sb.Append(@in >> i & 1);
+				sb.Append(inBytes >> i & 1);
 			}
 
 			return sb.ToString();

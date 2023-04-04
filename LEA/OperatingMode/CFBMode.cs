@@ -16,10 +16,10 @@ namespace LEA.OperatingMode
 
 		public override string GetAlgorithmName() => engine.GetAlgorithmName() + "/CFB";
 
-		public override void Init(Mode mode, byte[] mk, byte[] iv)
+		public override void Init(Mode mode, byte[] key, byte[] iv)
 		{
 			this.mode = mode;
-			engine.Init(Mode.ENCRYPT, mk);
+			engine.Init(Mode.ENCRYPT, key);
 			this.iv = iv.CopyOf();
 			block = new byte[blocksize];
 			feedback = new byte[blocksize];
@@ -32,15 +32,15 @@ namespace LEA.OperatingMode
 			Buffer.BlockCopy(iv, 0, feedback, 0, blocksize);
 		}
 
-		protected override int ProcessBlock(byte[] @in, int inOff, byte[] @out, int outOff, int outlen)
+		protected override int ProcessBlock(byte[] inBytes, int inOffset, byte[] outBytes, int outOffset, int outlen)
 		{
 			var length = engine.ProcessBlock(feedback, 0, block, 0);
-			XOR(@out, outOff, @in, inOff, block, 0, outlen);
+			XOR(outBytes, outOffset, inBytes, inOffset, block, 0, outlen);
 			if (mode == Mode.ENCRYPT)
-				Buffer.BlockCopy(@out, outOff, feedback, 0, blocksize);
+				Buffer.BlockCopy(outBytes, outOffset, feedback, 0, blocksize);
 			else
 			{
-				Buffer.BlockCopy(@in, inOff, feedback, 0, blocksize);
+				Buffer.BlockCopy(inBytes, inOffset, feedback, 0, blocksize);
 			}
 
 			return length;

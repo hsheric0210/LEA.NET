@@ -11,21 +11,21 @@ namespace LEA.OperatingMode
 
 		public override string GetAlgorithmName() => engine.GetAlgorithmName() + "/ECB";
 
-		public override void Init(Mode mode, byte[] mk)
+		public override void Init(Mode mode, byte[] key)
 		{
 			this.mode = mode;
-			engine.Init(mode, mk);
+			engine.Init(mode, key);
 		}
 
-		protected override int ProcessBlock(byte[] @in, int inOff, byte[] @out, int outOff, int outlen)
+		protected override int ProcessBlock(byte[] inBytes, int inOffset, byte[] outBytes, int outOffset, int outLength)
 		{
-			if (outlen != blocksize)
+			if (outLength != blocksize)
 				throw new ArgumentException("outlen should be " + blocksize + " in " + GetAlgorithmName());
 
-			if (inOff + blocksize > @in.Length)
+			if (inOffset + blocksize > inBytes.Length)
 				throw new InvalidOperationException("input data too short");
 
-			return engine.ProcessBlock(@in, inOff, @out, outOff);
+			return engine.ProcessBlock(inBytes, inOffset, outBytes, outOffset);
 		}
 	}
 }

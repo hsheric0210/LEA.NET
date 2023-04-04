@@ -14,10 +14,10 @@ namespace LEA.engine
 
 		public LeaEngine() => block = new uint[BlockSize / 4];
 
-		public override void Init(Mode mode, byte[] mk)
+		public override void Init(Mode mode, byte[] key)
 		{
 			this.mode = mode;
-			GenerateRoundKeys(mk);
+			GenerateRoundKeys(key);
 		}
 
 		public override void Reset() => block.FillBy((uint)0);
@@ -26,26 +26,26 @@ namespace LEA.engine
 
 		public override int GetBlockSize() => BlockSize;
 
-		public override int ProcessBlock(byte[] @in, int inOff, byte[] @out, int outOff)
+		public override int ProcessBlock(byte[] inBytes, int inOffset, byte[] outBytes, int outOffset)
 		{
-			if (@in == null || @out == null)
+			if (inBytes == null || outBytes == null)
 				throw new ArgumentNullException("in and out should not be null");
 
-			if (@in.Length - inOff < BlockSize)
-				throw new InvalidOperationException("too short input data " + @in.Length + " " + inOff);
+			if (inBytes.Length - inOffset < BlockSize)
+				throw new InvalidOperationException("too short input data " + inBytes.Length + " " + inOffset);
 
-			if (@out.Length - outOff < BlockSize)
-				throw new InvalidOperationException("too short output buffer " + @out.Length + " / " + outOff);
+			if (outBytes.Length - outOffset < BlockSize)
+				throw new InvalidOperationException("too short output buffer " + outBytes.Length + " / " + outOffset);
 
 			if (mode == Mode.ENCRYPT)
-				return EncryptBlock(@in, inOff, @out, outOff);
+				return EncryptBlock(inBytes, inOffset, outBytes, outOffset);
 
-			return DecryptBlock(@in, inOff, @out, outOff);
+			return DecryptBlock(inBytes, inOffset, outBytes, outOffset);
 		}
 
-		private int EncryptBlock(byte[] @in, int inOff, byte[] @out, int outOff)
+		private int EncryptBlock(byte[] inBytes, int inOffset, byte[] outBytes, int outOffset)
 		{
-			Pack(@in, inOff, block, 0, 16);
+			Pack(inBytes, inOffset, block, 0, 16);
 			for (var i = 0; i < rounds; ++i)
 			{
 				block[3] = ROR((block[2] ^ roundKeys[i][4]) + (block[3] ^ roundKeys[i][5]), 3);
@@ -65,13 +65,13 @@ namespace LEA.engine
 				block[0] = ROL((block[3] ^ roundKeys[i][0]) + (block[0] ^ roundKeys[i][1]), 9);
 			}
 
-			Unpack(block, 0, @out, outOff, 4);
+			Unpack(block, 0, outBytes, outOffset, 4);
 			return BlockSize;
 		}
 
-		private int DecryptBlock(byte[] @in, int inOff, byte[] @out, int outOff)
+		private int DecryptBlock(byte[] inBytes, int inOffset, byte[] outBytes, int outOffset)
 		{
-			Pack(@in, inOff, block, 0, 16);
+			Pack(inBytes, inOffset, block, 0, 16);
 			for (var i = rounds - 1; i >= 0; --i)
 			{
 				block[0] = ROR(block[0], 9) - (block[3] ^ roundKeys[i][0]) ^ roundKeys[i][1];
@@ -91,28 +91,28 @@ namespace LEA.engine
 				block[3] = ROL(block[3], 3) - (block[2] ^ roundKeys[i][4]) ^ roundKeys[i][5];
 			}
 
-			Unpack(block, 0, @out, outOff, 4);
+			Unpack(block, 0, outBytes, outOffset, 4);
 			return BlockSize;
 		}
 
-		private void GenerateRoundKeys(byte[] mk)
+		private void GenerateRoundKeys(byte[] key)
 		{
-			if (mk == null || mk.Length != 16 && mk.Length != 24 && mk.Length != 32)
+			if (key == null || key.Length != 16 && key.Length != 24 && key.Length != 32)
 				throw new ArgumentException("Illegal key");
 
 			var T = new uint[8];
-			rounds = (mk.Length >> 1) + 16;
+			rounds = (key.Length >> 1) + 16;
 			roundKeys = new uint[rounds][]; // FIXME: Convert this to multidimensional array (https://stackoverflow.com/questions/72980478/how-to-initialize-a-multidimensional-array)
 			for (var i = 0; i < rounds; i++)
 				roundKeys[i] = new uint[6];
-			Pack(mk, 0, T, 0, 16);
-			if (mk.Length > 16)
-				Pack(mk, 16, T, 4, 8);
+			Pack(key, 0, T, 0, 16);
+			if (key.Length > 16)
+				Pack(key, 16, T, 4, 8);
 
-			if (mk.Length > 24)
-				Pack(mk, 24, T, 6, 8);
+			if (key.Length > 24)
+				Pack(key, 24, T, 6, 8);
 
-			if (mk.Length == 16)
+			if (key.Length == 16)
 			{
 				for (var i = 0; i < 24; ++i)
 				{
@@ -123,7 +123,7 @@ namespace LEA.engine
 					roundKeys[i][4] = T[3] = ROL(T[3] + ROL(temp, 3), 11);
 				}
 			}
-			else if (mk.Length == 24)
+			else if (key.Length == 24)
 			{
 				for (var i = 0; i < 28; ++i)
 				{

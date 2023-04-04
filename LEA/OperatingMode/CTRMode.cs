@@ -7,7 +7,7 @@ namespace LEA.OperatingMode
 	public class CtrMode : BlockCipherModeStream
 	{
 		private byte[] iv;
-		private byte[] ctr;
+		private byte[] counter;
 		private byte[] block;
 		public CtrMode(BlockCipher cipher) : base(cipher)
 		{
@@ -15,12 +15,12 @@ namespace LEA.OperatingMode
 
 		public override string GetAlgorithmName() => engine.GetAlgorithmName() + "/CTR";
 
-		public override void Init(Mode mode, byte[] mk, byte[] iv)
+		public override void Init(Mode mode, byte[] key, byte[] iv)
 		{
 			this.mode = mode;
-			engine.Init(Mode.ENCRYPT, mk);
+			engine.Init(Mode.ENCRYPT, key);
 			this.iv = iv.CopyOf();
-			ctr = new byte[blocksize];
+			counter = new byte[blocksize];
 			block = new byte[blocksize];
 			Reset();
 		}
@@ -28,22 +28,22 @@ namespace LEA.OperatingMode
 		public override void Reset()
 		{
 			base.Reset();
-			Buffer.BlockCopy(iv, 0, ctr, 0, ctr.Length);
+			Buffer.BlockCopy(iv, 0, counter, 0, counter.Length);
 		}
 
-		protected override int ProcessBlock(byte[] @in, int inOff, byte[] @out, int outOff, int outlen)
+		protected override int ProcessBlock(byte[] inBytes, int inOffset, byte[] outBytes, int outOffset, int outLength)
 		{
-			var length = engine.ProcessBlock(ctr, 0, block, 0);
+			var length = engine.ProcessBlock(counter, 0, block, 0);
 			AddCounter();
-			XOR(@out, outOff, @in, inOff, block, 0, outlen);
+			XOR(outBytes, outOffset, inBytes, inOffset, block, 0, outLength);
 			return length;
 		}
 
 		private void AddCounter()
 		{
-			for (var i = ctr.Length - 1; i >= 0; --i)
+			for (var i = counter.Length - 1; i >= 0; --i)
 			{
-				if (++ctr[i] != 0)
+				if (++counter[i] != 0)
 					break;
 			}
 		}

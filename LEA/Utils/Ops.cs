@@ -73,23 +73,23 @@ namespace LEA.Utils
 		/// <summary>
 		/// </summary>
 		/// <param name="out"></param>
-		/// <param name="outOff"></param>
+		/// <param name="outOffset"></param>
 		/// <param name="len"></param>
 		/// <param name="lhs"></param>
 		/// <param name="lhs1Off"></param>
 		/// <param name="rhs"></param>
 		/// <param name="rhsOff"></param>
-		public static void XOR(byte[] @out, int outOff, byte[] lhs, int lhs1Off, byte[] rhs, int rhsOff, int len)
+		public static void XOR(byte[] outBytes, int outOffset, byte[] lhs, int lhs1Off, byte[] rhs, int rhsOff, int len)
 		{
-			if (@out == null || lhs == null || rhs == null)
+			if (outBytes == null || lhs == null || rhs == null)
 				throw new ArgumentNullException("any of input arrarys should not be null");
 
-			if (@out.Length < outOff + len || lhs.Length < lhs1Off + len || rhs.Length < rhsOff + len)
+			if (outBytes.Length < outOffset + len || lhs.Length < lhs1Off + len || rhs.Length < rhsOff + len)
 				throw new IndexOutOfRangeException();
 
 			for (var i = 0; i < len; ++i)
 			{
-				@out[outOff + i] = (byte)(lhs[lhs1Off + i] ^ rhs[rhsOff + i]);
+				outBytes[outOffset + i] = (byte)(lhs[lhs1Off + i] ^ rhs[rhsOff + i]);
 			}
 		}
 
@@ -228,83 +228,83 @@ namespace LEA.Utils
 		/// <summary>
 		/// byte array to int array
 		/// </summary>
-		public static void Pack(byte[] @in, uint[] @out)
+		public static void Pack(byte[] inBytes, uint[] outBytes)
 		{
-			if (@in == null || @out == null)
+			if (inBytes == null || outBytes == null)
 				throw new ArgumentNullException();
 
-			if (@in.Length != @out.Length * 4)
+			if (inBytes.Length != outBytes.Length * 4)
 				throw new IndexOutOfRangeException();
 
 			var outIdx = 0;
-			for (var inIdx = 0; inIdx < @in.Length; ++inIdx, ++outIdx)
+			for (var inIdx = 0; inIdx < inBytes.Length; ++inIdx, ++outIdx)
 			{
-				@out[outIdx] = @in[inIdx] & 0xffu;
-				@out[outIdx] |= (@in[++inIdx] & 0xffu) << 8;
-				@out[outIdx] |= (@in[++inIdx] & 0xffu) << 16;
-				@out[outIdx] |= (@in[++inIdx] & 0xffu) << 24;
+				outBytes[outIdx] = inBytes[inIdx] & 0xffu;
+				outBytes[outIdx] |= (inBytes[++inIdx] & 0xffu) << 8;
+				outBytes[outIdx] |= (inBytes[++inIdx] & 0xffu) << 16;
+				outBytes[outIdx] |= (inBytes[++inIdx] & 0xffu) << 24;
 			}
 		}
 
-		public static void Pack(byte[] @in, int inOff, uint[] @out, int outOff, int inlen)
+		public static void Pack(byte[] inBytes, int inOffset, uint[] outBytes, int outOffset, int inlen)
 		{
-			if (@in == null || @out == null)
+			if (inBytes == null || outBytes == null)
 				throw new ArgumentNullException();
 
 			if ((inlen & 3) != 0)
 				throw new ArgumentException("length should be multiple of 4");
 
-			if (@in.Length < inOff + inlen || @out.Length < outOff + inlen / 4)
+			if (inBytes.Length < inOffset + inlen || outBytes.Length < outOffset + inlen / 4)
 				throw new IndexOutOfRangeException();
 
-			var outIdx = outOff;
-			var endInIdx = inOff + inlen;
-			for (var inIdx = inOff; inIdx < endInIdx; ++inIdx, ++outIdx)
+			var outIdx = outOffset;
+			var endInIdx = inOffset + inlen;
+			for (var inIdx = inOffset; inIdx < endInIdx; ++inIdx, ++outIdx)
 			{
-				@out[outIdx] = @in[inIdx] & 0xffu;
-				@out[outIdx] |= (@in[++inIdx] & 0xffu) << 8;
-				@out[outIdx] |= (@in[++inIdx] & 0xffu) << 16;
-				@out[outIdx] |= (@in[++inIdx] & 0xffu) << 24;
+				outBytes[outIdx] = inBytes[inIdx] & 0xffu;
+				outBytes[outIdx] |= (inBytes[++inIdx] & 0xffu) << 8;
+				outBytes[outIdx] |= (inBytes[++inIdx] & 0xffu) << 16;
+				outBytes[outIdx] |= (inBytes[++inIdx] & 0xffu) << 24;
 			}
 		}
 
 		/// <summary>
 		/// int array to byte array
 		/// </summary>
-		public static void Unpack(uint[] @in, byte[] @out)
+		public static void Unpack(uint[] inBytes, byte[] outBytes)
 		{
-			if (@in == null || @out == null)
+			if (inBytes == null || outBytes == null)
 				throw new ArgumentNullException();
 
-			if (@in.Length * 4 != @out.Length)
+			if (inBytes.Length * 4 != outBytes.Length)
 				throw new IndexOutOfRangeException();
 
 			var outIdx = 0;
-			for (var inIdx = 0; inIdx < @in.Length; ++inIdx, ++outIdx)
+			for (var inIdx = 0; inIdx < inBytes.Length; ++inIdx, ++outIdx)
 			{
-				@out[outIdx] = (byte)@in[inIdx];
-				@out[++outIdx] = (byte)(@in[inIdx] >> 8);
-				@out[++outIdx] = (byte)(@in[inIdx] >> 16);
-				@out[++outIdx] = (byte)(@in[inIdx] >> 24);
+				outBytes[outIdx] = (byte)inBytes[inIdx];
+				outBytes[++outIdx] = (byte)(inBytes[inIdx] >> 8);
+				outBytes[++outIdx] = (byte)(inBytes[inIdx] >> 16);
+				outBytes[++outIdx] = (byte)(inBytes[inIdx] >> 24);
 			}
 		}
 
-		public static void Unpack(uint[] @in, int inOff, byte[] @out, int outOff, int inlen)
+		public static void Unpack(uint[] inBytes, int inOffset, byte[] outBytes, int outOffset, int inlen)
 		{
-			if (@in == null || @out == null)
+			if (inBytes == null || outBytes == null)
 				throw new ArgumentNullException();
 
-			if (@in.Length < inOff + inlen || @out.Length < outOff + inlen * 4)
+			if (inBytes.Length < inOffset + inlen || outBytes.Length < outOffset + inlen * 4)
 				throw new IndexOutOfRangeException();
 
-			var outIdx = outOff;
-			var endInIdx = inOff + inlen;
-			for (var inIdx = inOff; inIdx < endInIdx; ++inIdx, ++outIdx)
+			var outIdx = outOffset;
+			var endInIdx = inOffset + inlen;
+			for (var inIdx = inOffset; inIdx < endInIdx; ++inIdx, ++outIdx)
 			{
-				@out[outIdx] = (byte)@in[inIdx];
-				@out[++outIdx] = (byte)(@in[inIdx] >> 8);
-				@out[++outIdx] = (byte)(@in[inIdx] >> 16);
-				@out[++outIdx] = (byte)(@in[inIdx] >> 24);
+				outBytes[outIdx] = (byte)inBytes[inIdx];
+				outBytes[++outIdx] = (byte)(inBytes[inIdx] >> 8);
+				outBytes[++outIdx] = (byte)(inBytes[inIdx] >> 16);
+				outBytes[++outIdx] = (byte)(inBytes[inIdx] >> 24);
 			}
 		}
 	}

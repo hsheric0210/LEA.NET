@@ -196,7 +196,7 @@ namespace LEA.Test.Mac
 		public void LEA256_CMAC_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Symmetric.LEA.CMac();
+			var cipher = new Symmetric.Lea.CMac();
 
 			for (var i = 0; i < lea256CMacTestVectors.Length; i++)
 			{
@@ -215,7 +215,7 @@ namespace LEA.Test.Mac
 		public void LEA192_CMAC_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Symmetric.LEA.CMac();
+			var cipher = new Symmetric.Lea.CMac();
 
 			for (var i = 0; i < lea192CMacTestVectors.Length; i++)
 			{
@@ -235,7 +235,7 @@ namespace LEA.Test.Mac
 		public void LEA128_CMAC_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Symmetric.LEA.CMac();
+			var cipher = new Symmetric.Lea.CMac();
 
 			for (var i = 0; i < lea128CMacTestVectors.Length; i++)
 			{

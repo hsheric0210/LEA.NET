@@ -19,24 +19,24 @@ namespace LEA
 			buffer = new byte[blocksize];
 		}
 
-		public override byte[] DoFinal(byte[] msg)
+		public override byte[] DoFinal(byte[] message)
 		{
-			var part1 = Update(msg);
+			var part1 = Update(message);
 			var part2 = DoFinal();
 			var len1 = (part1?.Length) ?? 0;
 			var len2 = (part2?.Length) ?? 0;
-			var @out = new byte[len1 + len2];
+			var outBytes = new byte[len1 + len2];
 			if (len1 > 0)
-				Buffer.BlockCopy(part1, 0, @out, 0, len1);
+				Buffer.BlockCopy(part1, 0, outBytes, 0, len1);
 
 			if (len2 > 0)
-				Buffer.BlockCopy(part2, 0, @out, len1, len2);
+				Buffer.BlockCopy(part2, 0, outBytes, len1, len2);
 
-			return @out;
+			return outBytes;
 		}
 
-		protected abstract int ProcessBlock(byte[] @in, int inOff, byte[] @out, int outOff, int length);
-		protected virtual int ProcessBlock(byte[] @in, int inOff, byte[] @out, int outOff) => ProcessBlock(@in, inOff, @out, outOff, blocksize);
+		protected abstract int ProcessBlock(byte[] inBytes, int inOffset, byte[] outBytes, int outOffset, int outLength);
+		protected virtual int ProcessBlock(byte[] inBytes, int inOffset, byte[] outBytes, int outOffset) => ProcessBlock(inBytes, inOffset, outBytes, outOffset, blocksize);
 
 		protected static int GetBlockmask(int blocksize)
 		{
@@ -55,16 +55,6 @@ namespace LEA
 			}
 
 			return mask;
-		}
-
-		protected static byte[] Clone(byte[] array)
-		{
-			if (array == null)
-				return null;
-
-			var clone = new byte[array.Length];
-			Buffer.BlockCopy(array, 0, clone, 0, clone.Length);
-			return clone;
 		}
 	}
 }

@@ -228,7 +228,7 @@ namespace LEA.Test.OpMode
 		public void LEA256_CFB_Encryption_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Symmetric.LEA.Cfb();
+			var cipher = new Symmetric.Lea.Cfb();
 
 			for (var i = 0; i < lea256CfbTestVectors.Length; i++)
 			{
@@ -248,7 +248,7 @@ namespace LEA.Test.OpMode
 		public void LEA256_CFB_Decryption_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Symmetric.LEA.Cfb();
+			var cipher = new Symmetric.Lea.Cfb();
 
 			for (var i = 0; i < lea256CfbTestVectors.Length; i++)
 			{
@@ -268,7 +268,7 @@ namespace LEA.Test.OpMode
 		public void LEA192_CFB_Encryption_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Symmetric.LEA.Cfb();
+			var cipher = new Symmetric.Lea.Cfb();
 
 			for (var i = 0; i < lea192CfbTestVectors.Length; i++)
 			{
@@ -288,7 +288,7 @@ namespace LEA.Test.OpMode
 		public void LEA192_CFB_Decryption_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Symmetric.LEA.Cfb();
+			var cipher = new Symmetric.Lea.Cfb();
 
 			for (var i = 0; i < lea192CfbTestVectors.Length; i++)
 			{
@@ -308,7 +308,7 @@ namespace LEA.Test.OpMode
 		public void LEA128_CFB_Encryption_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Symmetric.LEA.Cfb();
+			var cipher = new Symmetric.Lea.Cfb();
 
 			for (var i = 0; i < lea128CfbTestVectors.Length; i++)
 			{
@@ -328,7 +328,7 @@ namespace LEA.Test.OpMode
 		public void LEA128_CFB_Decryption_AllTestVectorsPassing()
 		{
 			// Arrange
-			var cipher = new Symmetric.LEA.Cfb();
+			var cipher = new Symmetric.Lea.Cfb();
 
 			for (var i = 0; i < lea128CfbTestVectors.Length; i++)
 			{

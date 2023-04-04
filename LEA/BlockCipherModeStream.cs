@@ -9,13 +9,13 @@ namespace LEA
 		{
 		}
 
-		public override int GetOutputSize(int len) => len + bufferOffset;
+		public override int GetOutputSize(int length) => length + bufferOffset;
 
-		public override int GetUpdateOutputSize(int len) => len + bufferOffset & blockmask;
+		public override int GetUpdateOutputSize(int length) => length + bufferOffset & blockmask;
 
-		public override void Init(Mode mode, byte[] mk) => throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
+		public override void Init(Mode mode, byte[] key) => throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
 
-		public override void Init(Mode mode, byte[] mk, byte[] iv) => throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
+		public override void Init(Mode mode, byte[] key, byte[] iv) => throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
 
 		public override void Reset()
 		{
@@ -27,38 +27,38 @@ namespace LEA
 		{
 		}
 
-		public override byte[] Update(byte[] msg)
+		public override byte[] Update(byte[] message)
 		{
-			if (msg == null)
+			if (message == null)
 				return null;
 
-			var len = msg.Length;
+			var len = message.Length;
 			var gap = buffer.Length - bufferOffset;
-			var inOff = 0;
-			var outOff = 0;
-			var @out = new byte[GetUpdateOutputSize(len)];
+			var inOffset = 0;
+			var outOffset = 0;
+			var outBytes = new byte[GetUpdateOutputSize(len)];
 			if (len >= gap)
 			{
-				Buffer.BlockCopy(msg, inOff, buffer, bufferOffset, gap);
-				outOff += ProcessBlock(buffer, 0, @out, outOff);
+				Buffer.BlockCopy(message, inOffset, buffer, bufferOffset, gap);
+				outOffset += ProcessBlock(buffer, 0, outBytes, outOffset);
 				bufferOffset = 0;
 				len -= gap;
-				inOff += gap;
+				inOffset += gap;
 				while (len >= buffer.Length)
 				{
-					outOff += ProcessBlock(msg, inOff, @out, outOff);
+					outOffset += ProcessBlock(message, inOffset, outBytes, outOffset);
 					len -= blocksize;
-					inOff += blocksize;
+					inOffset += blocksize;
 				}
 			}
 
 			if (len > 0)
 			{
-				Buffer.BlockCopy(msg, inOff, buffer, bufferOffset, len);
+				Buffer.BlockCopy(message, inOffset, buffer, bufferOffset, len);
 				bufferOffset += len;
 			}
 
-			return @out;
+			return outBytes;
 		}
 
 		public override byte[] DoFinal()
@@ -66,9 +66,9 @@ namespace LEA
 			if (bufferOffset == 0)
 				return null;
 
-			var @out = new byte[bufferOffset];
-			ProcessBlock(buffer, 0, @out, 0, bufferOffset);
-			return @out;
+			var outBytes = new byte[bufferOffset];
+			ProcessBlock(buffer, 0, outBytes, 0, bufferOffset);
+			return outBytes;
 		}
 	}
 }

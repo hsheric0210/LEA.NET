@@ -22,9 +22,9 @@ namespace LEA
 		/// </summary>
 		/// <param name="mode">
 		///            {@link BlockCipher.Mode}</param>
-		/// <param name="mk">
+		/// <param name="key">
 		///            암호화 키</param>
-		public abstract void Init(Mode mode, byte[] mk);
+		public abstract void Init(Mode mode, byte[] key);
 		/// <summary>
 		/// 새로운 데이터를 처리하기 위해 init을 수행한 상태로 복원
 		/// </summary>
@@ -44,13 +44,13 @@ namespace LEA
 		/// </summary>
 		/// <param name="in">
 		///            입력</param>
-		/// <param name="inOff">
+		/// <param name="inOffset">
 		///            입력 시작 위치</param>
 		/// <param name="out">
 		///            출력</param>
-		/// <param name="outOff">
+		/// <param name="outOffset">
 		///            출력 시작 위치</param>
 		/// <returns>처리한 데이터의 길이</returns>
-		public abstract int ProcessBlock(byte[] @in, int inOff, byte[] @out, int outOff);
+		public abstract int ProcessBlock(byte[] inBytes, int inOffset, byte[] outBytes, int outOffset);
 	}
 }

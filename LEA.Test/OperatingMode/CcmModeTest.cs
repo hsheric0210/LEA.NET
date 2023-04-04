@@ -291,7 +291,7 @@ namespace LEA.Test.OpMode
 			{
 				// Arrange
 				var testvector = lea256CcmTestVectors[i];
-				var cipher = new Symmetric.LEA.Ccm();
+				var cipher = new Symmetric.Lea.Ccm();
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
@@ -313,7 +313,7 @@ namespace LEA.Test.OpMode
 			{
 				// Arrange
 				var testvector = lea256CcmTestVectors[i];
-				var cipher = new Symmetric.LEA.Ccm();
+				var cipher = new Symmetric.Lea.Ccm();
 
 				// Act
 				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
@@ -335,7 +335,7 @@ namespace LEA.Test.OpMode
 			{
 				// Arrange
 				var testvector = lea192CcmTestVectors[i];
-				var cipher = new Symmetric.LEA.Ccm();
+				var cipher = new Symmetric.Lea.Ccm();
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
@@ -357,7 +357,7 @@ namespace LEA.Test.OpMode
 			{
 				// Arrange
 				var testvector = lea192CcmTestVectors[i];
-				var cipher = new Symmetric.LEA.Ccm();
+				var cipher = new Symmetric.Lea.Ccm();
 
 				// Act
 				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
@@ -379,7 +379,7 @@ namespace LEA.Test.OpMode
 			{
 				// Arrange
 				var testvector = lea128CcmTestVectors[i];
-				var cipher = new Symmetric.LEA.Ccm();
+				var cipher = new Symmetric.Lea.Ccm();
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
@@ -401,7 +401,7 @@ namespace LEA.Test.OpMode
 			{
 				// Arrange
 				var testvector = lea128CcmTestVectors[i];
-				var cipher = new Symmetric.LEA.Ccm();
+				var cipher = new Symmetric.Lea.Ccm();
 
 				// Act
 				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);

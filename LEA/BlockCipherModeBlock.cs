@@ -10,27 +10,27 @@ namespace LEA
 		{
 		}
 
-		public override int GetOutputSize(int len)
+		public override int GetOutputSize(int length)
 		{
 			// TODO
-			var size = (len + bufferOffset & blockmask) + blocksize;
+			var size = (length + bufferOffset & blockmask) + blocksize;
 			if (mode == Mode.ENCRYPT)
-				return padding != null ? size : len;
+				return padding != null ? size : length;
 
-			return len;
+			return length;
 		}
 
-		public override int GetUpdateOutputSize(int len)
+		public override int GetUpdateOutputSize(int length)
 		{
 			if (mode == Mode.DECRYPT && padding != null)
-				return len + bufferOffset - blocksize & blockmask;
+				return length + bufferOffset - blocksize & blockmask;
 
-			return len + bufferOffset & blockmask;
+			return length + bufferOffset & blockmask;
 		}
 
-		public override void Init(Mode mode, byte[] mk) => throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
+		public override void Init(Mode mode, byte[] key) => throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
 
-		public override void Init(Mode mode, byte[] mk, byte[] iv) => throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
+		public override void Init(Mode mode, byte[] key, byte[] iv) => throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
 
 		public override void Reset()
 		{
@@ -40,41 +40,41 @@ namespace LEA
 
 		public override void SetPadding(Padding padding) => this.padding = padding;
 
-		public override byte[] Update(byte[] msg)
+		public override byte[] Update(byte[] message)
 		{
 			if (padding != null && mode == Mode.DECRYPT)
-				return DecryptWithPadding(msg);
+				return DecryptWithPadding(message);
 
-			if (msg == null)
+			if (message == null)
 				return null;
 
-			var len = msg.Length;
+			var len = message.Length;
 			var gap = buffer.Length - bufferOffset;
-			var inOff = 0;
-			var outOff = 0;
-			var @out = new byte[GetUpdateOutputSize(len)];
+			var inOffset = 0;
+			var outOffset = 0;
+			var outBytes = new byte[GetUpdateOutputSize(len)];
 			if (len >= gap)
 			{
-				Buffer.BlockCopy(msg, inOff, buffer, bufferOffset, gap);
-				outOff += ProcessBlock(buffer, 0, @out, outOff);
+				Buffer.BlockCopy(message, inOffset, buffer, bufferOffset, gap);
+				outOffset += ProcessBlock(buffer, 0, outBytes, outOffset);
 				bufferOffset = 0;
 				len -= gap;
-				inOff += gap;
+				inOffset += gap;
 				while (len >= buffer.Length)
 				{
-					outOff += ProcessBlock(msg, inOff, @out, outOff);
+					outOffset += ProcessBlock(message, inOffset, outBytes, outOffset);
 					len -= blocksize;
-					inOff += blocksize;
+					inOffset += blocksize;
 				}
 			}
 
 			if (len > 0)
 			{
-				Buffer.BlockCopy(msg, inOff, buffer, bufferOffset, len);
+				Buffer.BlockCopy(message, inOffset, buffer, bufferOffset, len);
 				bufferOffset += len;
 			}
 
-			return @out;
+			return outBytes;
 		}
 
 		public override byte[] DoFinal()
@@ -89,48 +89,48 @@ namespace LEA
 				throw new InvalidOperationException("Bad padding");
 			}
 
-			var @out = new byte[blocksize];
-			ProcessBlock(buffer, 0, @out, 0, blocksize);
-			return @out;
+			var outBytes = new byte[blocksize];
+			ProcessBlock(buffer, 0, outBytes, 0, blocksize);
+			return outBytes;
 		}
 
 		/// <summary>
 		/// 패딩 사용시 복호화 처리, 마지막 블록을 위해 데이터를 남겨둠
 		/// </summary>
-		/// <param name="msg"></param>
+		/// <param name="message"></param>
 		/// <returns></returns>
-		private byte[] DecryptWithPadding(byte[] msg)
+		private byte[] DecryptWithPadding(byte[] message)
 		{
-			if (msg == null)
+			if (message == null)
 				return null;
 
-			var len = msg.Length;
+			var len = message.Length;
 			var gap = buffer.Length - bufferOffset;
-			var inOff = 0;
-			var outOff = 0;
-			var @out = new byte[GetUpdateOutputSize(len)];
+			var inOffset = 0;
+			var outOffset = 0;
+			var outBytes = new byte[GetUpdateOutputSize(len)];
 			if (len > gap)
 			{
-				Buffer.BlockCopy(msg, inOff, buffer, bufferOffset, gap);
-				outOff += ProcessBlock(buffer, 0, @out, outOff);
+				Buffer.BlockCopy(message, inOffset, buffer, bufferOffset, gap);
+				outOffset += ProcessBlock(buffer, 0, outBytes, outOffset);
 				bufferOffset = 0;
 				len -= gap;
-				inOff += gap;
+				inOffset += gap;
 				while (len > buffer.Length)
 				{
-					outOff += ProcessBlock(msg, inOff, @out, outOff);
+					outOffset += ProcessBlock(message, inOffset, outBytes, outOffset);
 					len -= blocksize;
-					inOff += blocksize;
+					inOffset += blocksize;
 				}
 			}
 
 			if (len > 0)
 			{
-				Buffer.BlockCopy(msg, inOff, buffer, bufferOffset, len);
+				Buffer.BlockCopy(message, inOffset, buffer, bufferOffset, len);
 				bufferOffset += len;
 			}
 
-			return @out;
+			return outBytes;
 		}
 
 		/// <summary>
@@ -139,21 +139,21 @@ namespace LEA
 		/// <returns></returns>
 		private byte[] DoFinalWithPadding()
 		{
-			byte[] @out;
+			byte[] outBytes;
 			if (mode == Mode.ENCRYPT)
 			{
 				padding.Pad(buffer, bufferOffset);
-				@out = new byte[GetOutputSize(0)];
-				ProcessBlock(buffer, 0, @out, 0);
+				outBytes = new byte[GetOutputSize(0)];
+				ProcessBlock(buffer, 0, outBytes, 0);
 			}
 			else
 			{
 				var blk = new byte[blocksize];
 				ProcessBlock(buffer, 0, blk, 0);
-				@out = padding.Unpad(blk);
+				outBytes = padding.Unpad(blk);
 			}
 
-			return @out;
+			return outBytes;
 		}
 	}
 }

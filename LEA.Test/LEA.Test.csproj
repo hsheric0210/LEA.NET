@@ -9,10 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Padding\Iso10126PaddingTest.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Padding\Iso10126PaddingTest.cs.bak" />
   </ItemGroup>
 

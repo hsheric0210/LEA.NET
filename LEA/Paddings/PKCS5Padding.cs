@@ -8,63 +8,63 @@ namespace LEA.Paddings
 		{
 		}
 
-		public override byte[] Pad(byte[] @in)
+		public override byte[] Pad(byte[] inBytes)
 		{
-			if (@in == null)
-				throw new ArgumentNullException();
+			if (inBytes == null)
+				throw new ArgumentNullException(nameof(inBytes));
 
-			if (@in.Length < 0 || @in.Length > blocksize)
+			if (inBytes.Length > blocksize)
 				throw new InvalidOperationException("input should be shorter than blocksize");
 
-			var @out = new byte[blocksize];
-			Buffer.BlockCopy(@in, 0, @out, 0, @in.Length);
-			Pad(@out, @in.Length);
-			return @out;
+			var outBytes = new byte[blocksize];
+			Buffer.BlockCopy(inBytes, 0, outBytes, 0, inBytes.Length);
+			Pad(outBytes, inBytes.Length);
+			return outBytes;
 		}
 
-		public override void Pad(byte[] @in, int inOff)
+		public override void Pad(byte[] inBytes, int inOffset)
 		{
-			if (@in == null)
-				throw new ArgumentNullException();
+			if (inBytes == null)
+				throw new ArgumentNullException(nameof(inBytes));
 
-			if (@in.Length < inOff)
+			if (inBytes.Length < inOffset)
 				throw new ArgumentException();
 
-			var code = (byte)(@in.Length - inOff);
-			@in.FillBy(inOff, @in.Length, code);
+			var code = (byte)(inBytes.Length - inOffset);
+			inBytes.FillBy(inOffset, inBytes.Length, code);
 		}
 
-		public override byte[] Unpad(byte[] @in)
+		public override byte[] Unpad(byte[] inBytes)
 		{
-			if (@in == null || @in.Length < 1)
-				throw new ArgumentNullException();
+			if (inBytes == null)
+				throw new ArgumentNullException(nameof(inBytes));
 
-			if (@in.Length % blocksize != 0)
+			if (inBytes.Length < 1 || inBytes.Length % blocksize != 0)
 				throw new ArgumentException("Bad padding");
 
-			var cnt = @in.Length - GetPadCount(@in);
+			var cnt = inBytes.Length - GetPadCount(inBytes);
 			if (cnt == 0)
 				return null;
 
-			var @out = new byte[cnt];
-			Buffer.BlockCopy(@in, 0, @out, 0, @out.Length);
-			return @out;
+			var outBytes = new byte[cnt];
+			Buffer.BlockCopy(inBytes, 0, outBytes, 0, outBytes.Length);
+			return outBytes;
 		}
 
-		public override int GetPadCount(byte[] @in)
+		public override int GetPadCount(byte[] inBytes)
 		{
-			if (@in == null || @in.Length < 1)
-				throw new ArgumentNullException();
+			if (inBytes == null)
+				throw new ArgumentNullException(nameof(inBytes));
 
-			if (@in.Length % blocksize != 0)
+			if (inBytes.Length < 1 || inBytes.Length % blocksize != 0)
 				throw new ArgumentException("Bad padding");
 
-			var count = @in[@in.Length - 1] & 0xff;
+			var count = inBytes[inBytes.Length - 1] & 0xff;
 			var isBadPadding = false;
-			var lower_bound = @in.Length - count;
-			for (var i = @in.Length - 1; i > lower_bound; --i)
+			var lower_bound = inBytes.Length - count;
+			for (var i = inBytes.Length - 1; i > lower_bound; --i)
 			{
-				if (@in[i] != count)
+				if (inBytes[i] != count)
 					isBadPadding = true;
 			}
 
