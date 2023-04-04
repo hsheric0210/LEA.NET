@@ -12,10 +12,7 @@ namespace LEA.engine
 		protected uint[][] roundKeys;
 		private uint[] block;
 
-		public LeaEngine()
-		{
-			block = new uint[BLOCKSIZE / 4];
-		}
+		public LeaEngine() => block = new uint[BLOCKSIZE / 4];
 
 		public override void Init(Mode mode, byte[] mk)
 		{
@@ -23,20 +20,11 @@ namespace LEA.engine
 			GenerateRoundKeys(mk);
 		}
 
-		public override void Reset()
-		{
-			block.FillBy((uint)0);
-		}
+		public override void Reset() => block.FillBy((uint)0);
 
-		public override string GetAlgorithmName()
-		{
-			return "LEA";
-		}
+		public override string GetAlgorithmName() => "LEA";
 
-		public override int GetBlockSize()
-		{
-			return BLOCKSIZE;
-		}
+		public override int GetBlockSize() => BLOCKSIZE;
 
 		public override int ProcessBlock(byte[] @in, int inOff, byte[] @out, int outOff)
 		{
@@ -115,7 +103,7 @@ namespace LEA.engine
 			var T = new uint[8];
 			rounds = (mk.Length >> 1) + 16;
 			roundKeys = new uint[rounds][]; // FIXME: Convert this to multidimensional array (https://stackoverflow.com/questions/72980478/how-to-initialize-a-multidimensional-array)
-			for (int i = 0; i < rounds; i++)
+			for (var i = 0; i < rounds; i++)
 				roundKeys[i] = new uint[6];
 			Pack(mk, 0, T, 0, 16);
 			if (mk.Length > 16)
@@ -164,14 +152,8 @@ namespace LEA.engine
 		}
 
 		// utilities
-		private static uint ROL(uint state, int num)
-		{
-			return state << num | state >> 32 - num;
-		}
+		private static uint ROL(uint state, int num) => state << num | state >> 32 - num;
 
-		private static uint ROR(uint state, int num)
-		{
-			return state >> num | state << 32 - num;
-		}
+		private static uint ROR(uint state, int num) => state >> num | state << 32 - num;
 	}
 }

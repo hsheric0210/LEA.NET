@@ -7,15 +7,9 @@ namespace LEA.Symmetric
 {
 	public class LEA
 	{
-		private LEA()
-		{
-			Debug.Assert(true);
-		}
+		private LEA() => Debug.Assert(true);
 
-		public static BlockCipher GetEngine()
-		{
-			return new LeaEngine();
-		}
+		public static BlockCipher GetEngine() => new LeaEngine();
 
 		public sealed class ECB : ECBMode
 		{

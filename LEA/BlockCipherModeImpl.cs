@@ -23,9 +23,9 @@ namespace LEA
 		{
 			var part1 = Update(msg);
 			var part2 = DoFinal();
-			int len1 = part1 == null ? 0 : part1.Length;
-			int len2 = part2 == null ? 0 : part2.Length;
-			byte[] @out = new byte[len1 + len2];
+			var len1 = part1 == null ? 0 : part1.Length;
+			var len2 = part2 == null ? 0 : part2.Length;
+			var @out = new byte[len1 + len2];
 			if (len1 > 0)
 				Buffer.BlockCopy(part1, 0, @out, 0, len1);
 
@@ -36,10 +36,7 @@ namespace LEA
 		}
 
 		protected abstract int ProcessBlock(byte[] @in, int inOff, byte[] @out, int outOff, int length);
-		protected virtual int ProcessBlock(byte[] @in, int inOff, byte[] @out, int outOff)
-		{
-			return ProcessBlock(@in, inOff, @out, outOff, blocksize);
-		}
+		protected virtual int ProcessBlock(byte[] @in, int inOff, byte[] @out, int outOff) => ProcessBlock(@in, inOff, @out, outOff, blocksize);
 
 		protected static int GetBlockmask(int blocksize)
 		{

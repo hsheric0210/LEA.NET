@@ -13,10 +13,7 @@ namespace LEA.OperatingMode
 		{
 		}
 
-		public override string GetAlgorithmName()
-		{
-			return engine.GetAlgorithmName() + "/CTR";
-		}
+		public override string GetAlgorithmName() => engine.GetAlgorithmName() + "/CTR";
 
 		public override void Init(Mode mode, byte[] mk, byte[] iv)
 		{

@@ -6,10 +6,7 @@ namespace LEA.Utils
 {
 	public class Hex
 	{
-		private Hex()
-		{
-			Debug.Assert(true, "Can't create an instance of class Hex");
-		}
+		private Hex() => Debug.Assert(true, "Can't create an instance of class Hex");
 
 		public static byte[] DecodeHexString(string hexString)
 		{

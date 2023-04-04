@@ -29,15 +29,9 @@ namespace LEA
 			return len + bufferOffset & blockmask;
 		}
 
-		public override void Init(Mode mode, byte[] mk)
-		{
-			throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
-		}
+		public override void Init(Mode mode, byte[] mk) => throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
 
-		public override void Init(Mode mode, byte[] mk, byte[] iv)
-		{
-			throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
-		}
+		public override void Init(Mode mode, byte[] mk, byte[] iv) => throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
 
 		public override void Reset()
 		{
@@ -45,10 +39,7 @@ namespace LEA
 			buffer.FillBy((byte)0);
 		}
 
-		public override void SetPadding(Padding padding)
-		{
-			this.padding = padding;
-		}
+		public override void SetPadding(Padding padding) => this.padding = padding;
 
 		public override byte[] Update(byte[] msg)
 		{
@@ -58,11 +49,11 @@ namespace LEA
 			if (msg == null)
 				return null;
 
-			int len = msg.Length;
-			int gap = buffer.Length - bufferOffset;
+			var len = msg.Length;
+			var gap = buffer.Length - bufferOffset;
 			var inOff = 0;
 			var outOff = 0;
-			byte[] @out = new byte[GetUpdateOutputSize(len)];
+			var @out = new byte[GetUpdateOutputSize(len)];
 			if (len >= gap)
 			{
 				Buffer.BlockCopy(msg, inOff, buffer, bufferOffset, gap);
@@ -100,7 +91,7 @@ namespace LEA
 				throw new InvalidOperationException("Bad padding");
 			}
 
-			byte[] @out = new byte[blocksize];
+			var @out = new byte[blocksize];
 			ProcessBlock(buffer, 0, @out, 0, blocksize);
 			return @out;
 		}
@@ -115,11 +106,11 @@ namespace LEA
 			if (msg == null)
 				return null;
 
-			int len = msg.Length;
-			int gap = buffer.Length - bufferOffset;
+			var len = msg.Length;
+			var gap = buffer.Length - bufferOffset;
 			var inOff = 0;
 			var outOff = 0;
-			byte[] @out = new byte[GetUpdateOutputSize(len)];
+			var @out = new byte[GetUpdateOutputSize(len)];
 			if (len > gap)
 			{
 				Buffer.BlockCopy(msg, inOff, buffer, bufferOffset, gap);

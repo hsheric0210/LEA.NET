@@ -5,10 +5,7 @@ namespace LEA.Utils
 {
 	public class Ops
 	{
-		private Ops()
-		{
-			Debug.Assert(true, "Can't create an instance of class Ops");
-		}
+		private Ops() => Debug.Assert(true, "Can't create an instance of class Ops");
 
 		/// <summary>
 		/// lhs ^= rhs

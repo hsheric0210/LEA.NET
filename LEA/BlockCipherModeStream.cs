@@ -9,25 +9,13 @@ namespace LEA
 		{
 		}
 
-		public override int GetOutputSize(int len)
-		{
-			return len + bufferOffset;
-		}
+		public override int GetOutputSize(int len) => len + bufferOffset;
 
-		public override int GetUpdateOutputSize(int len)
-		{
-			return len + bufferOffset & blockmask;
-		}
+		public override int GetUpdateOutputSize(int len) => len + bufferOffset & blockmask;
 
-		public override void Init(Mode mode, byte[] mk)
-		{
-			throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
-		}
+		public override void Init(Mode mode, byte[] mk) => throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
 
-		public override void Init(Mode mode, byte[] mk, byte[] iv)
-		{
-			throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
-		}
+		public override void Init(Mode mode, byte[] mk, byte[] iv) => throw new InvalidOperationException("This init method is not applicable to " + GetAlgorithmName());
 
 		public override void Reset()
 		{
@@ -44,11 +32,11 @@ namespace LEA
 			if (msg == null)
 				return null;
 
-			int len = msg.Length;
-			int gap = buffer.Length - bufferOffset;
+			var len = msg.Length;
+			var gap = buffer.Length - bufferOffset;
 			var inOff = 0;
 			var outOff = 0;
-			byte[] @out = new byte[GetUpdateOutputSize(len)];
+			var @out = new byte[GetUpdateOutputSize(len)];
 			if (len >= gap)
 			{
 				Buffer.BlockCopy(msg, inOff, buffer, bufferOffset, gap);
@@ -79,7 +67,7 @@ namespace LEA
 			if (bufferOffset == 0)
 				return null;
 
-			byte[] @out = new byte[bufferOffset];
+			var @out = new byte[bufferOffset];
 			ProcessBlock(buffer, 0, @out, 0, bufferOffset);
 			return @out;
 		}

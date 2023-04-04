@@ -9,10 +9,7 @@ namespace LEA.OperatingMode
 		{
 		}
 
-		public override string GetAlgorithmName()
-		{
-			return engine.GetAlgorithmName() + "/ECB";
-		}
+		public override string GetAlgorithmName() => engine.GetAlgorithmName() + "/ECB";
 
 		public override void Init(Mode mode, byte[] mk)
 		{

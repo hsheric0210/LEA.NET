@@ -16,10 +16,7 @@ namespace LEA.Macs
 		private byte[] mac;
 		private byte[] RB;
 		private byte[] k1, k2;
-		public CMac(BlockCipher cipher)
-		{
-			engine = cipher;
-		}
+		public CMac(BlockCipher cipher) => engine = cipher;
 
 		public override void Init(byte[] key)
 		{

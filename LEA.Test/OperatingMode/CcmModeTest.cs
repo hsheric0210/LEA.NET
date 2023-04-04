@@ -290,15 +290,15 @@ namespace LEA.Test.OpMode
 			for (var i = 0; i < Lea256CcmTestVectors.Length; i++)
 			{
 				// Arrange
-				TestVectorAE testvector = Lea256CcmTestVectors[i];
+				var testvector = Lea256CcmTestVectors[i];
 				var cipher = new Symmetric.LEA.CCM();
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
 				cipher.UpdateAAD(testvector.AAD);
 				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
-				ReadOnlySpan<byte> tag = actual.Slice(actual.Length - 16, 16);
-				ReadOnlySpan<byte> cipherText = actual[..^16];
+				var tag = actual.Slice(actual.Length - 16, 16);
+				var cipherText = actual[..^16];
 
 				// Assert
 				Assert.True(cipherText.SequenceEqual(testvector.CipherText), "LEA-256-CCM encryption ciphertext test case #" + (i + 1));
@@ -312,7 +312,7 @@ namespace LEA.Test.OpMode
 			for (var i = 0; i < Lea256CcmTestVectors.Length; i++)
 			{
 				// Arrange
-				TestVectorAE testvector = Lea256CcmTestVectors[i];
+				var testvector = Lea256CcmTestVectors[i];
 				var cipher = new Symmetric.LEA.CCM();
 
 				// Act
@@ -334,15 +334,15 @@ namespace LEA.Test.OpMode
 			for (var i = 0; i < Lea192CcmTestVectors.Length; i++)
 			{
 				// Arrange
-				TestVectorAE testvector = Lea192CcmTestVectors[i];
+				var testvector = Lea192CcmTestVectors[i];
 				var cipher = new Symmetric.LEA.CCM();
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
 				cipher.UpdateAAD(testvector.AAD);
 				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
-				ReadOnlySpan<byte> tag = actual.Slice(actual.Length - 16, 16);
-				ReadOnlySpan<byte> cipherText = actual[..^16];
+				var tag = actual.Slice(actual.Length - 16, 16);
+				var cipherText = actual[..^16];
 
 				// Assert
 				Assert.True(cipherText.SequenceEqual(testvector.CipherText), "LEA-192-CCM encryption ciphertext test case #" + (i + 1));
@@ -356,7 +356,7 @@ namespace LEA.Test.OpMode
 			for (var i = 0; i < Lea192CcmTestVectors.Length; i++)
 			{
 				// Arrange
-				TestVectorAE testvector = Lea192CcmTestVectors[i];
+				var testvector = Lea192CcmTestVectors[i];
 				var cipher = new Symmetric.LEA.CCM();
 
 				// Act
@@ -378,15 +378,15 @@ namespace LEA.Test.OpMode
 			for (var i = 0; i < Lea128CcmTestVectors.Length; i++)
 			{
 				// Arrange
-				TestVectorAE testvector = Lea128CcmTestVectors[i];
+				var testvector = Lea128CcmTestVectors[i];
 				var cipher = new Symmetric.LEA.CCM();
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
 				cipher.UpdateAAD(testvector.AAD);
 				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
-				ReadOnlySpan<byte> tag = actual.Slice(actual.Length - 16, 16);
-				ReadOnlySpan<byte> cipherText = actual[..^16];
+				var tag = actual.Slice(actual.Length - 16, 16);
+				var cipherText = actual[..^16];
 
 				// Assert
 				Assert.True(cipherText.SequenceEqual(testvector.CipherText), "LEA-128-CCM encryption ciphertext test case #" + (i + 1));
@@ -400,7 +400,7 @@ namespace LEA.Test.OpMode
 			for (var i = 0; i < Lea128CcmTestVectors.Length; i++)
 			{
 				// Arrange
-				TestVectorAE testvector = Lea128CcmTestVectors[i];
+				var testvector = Lea128CcmTestVectors[i];
 				var cipher = new Symmetric.LEA.CCM();
 
 				// Act

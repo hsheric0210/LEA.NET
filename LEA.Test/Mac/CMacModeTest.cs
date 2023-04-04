@@ -200,7 +200,7 @@ namespace LEA.Test.Mac
 
 			for (var i = 0; i < Lea256CMacTestVectors.Length; i++)
 			{
-				TestVectorMac testvector = Lea256CMacTestVectors[i];
+				var testvector = Lea256CMacTestVectors[i];
 				// Act
 				cipher.Init(testvector.Key);
 				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.Data);
@@ -220,7 +220,7 @@ namespace LEA.Test.Mac
 
 			for (var i = 0; i < Lea192CMacTestVectors.Length; i++)
 			{
-				TestVectorMac testvector = Lea192CMacTestVectors[i];
+				var testvector = Lea192CMacTestVectors[i];
 
 				// Act
 				cipher.Init(testvector.Key);
@@ -241,7 +241,7 @@ namespace LEA.Test.Mac
 
 			for (var i = 0; i < Lea128CMacTestVectors.Length; i++)
 			{
-				TestVectorMac testvector = Lea128CMacTestVectors[i];
+				var testvector = Lea128CMacTestVectors[i];
 
 				// Act
 				cipher.Init(testvector.Key);

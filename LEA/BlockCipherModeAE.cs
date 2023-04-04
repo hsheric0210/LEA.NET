@@ -31,8 +31,8 @@ namespace LEA
 			{
 				var part1 = Update(msg);
 				var part2 = DoFinal();
-				int len1 = part1 == null ? 0 : part1.Length;
-				int len2 = part2 == null ? 0 : part2.Length;
+				var len1 = part1 == null ? 0 : part1.Length;
+				var len2 = part2 == null ? 0 : part2.Length;
 				@out = new byte[len1 + len2];
 				if (part1 != null)
 					Buffer.BlockCopy(part1, 0, @out, 0, len1);

@@ -14,10 +14,7 @@ namespace LEA.OperatingMode
 		{
 		}
 
-		public override string GetAlgorithmName()
-		{
-			return engine.GetAlgorithmName() + "/CFB";
-		}
+		public override string GetAlgorithmName() => engine.GetAlgorithmName() + "/CFB";
 
 		public override void Init(Mode mode, byte[] mk, byte[] iv)
 		{

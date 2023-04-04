@@ -4,10 +4,7 @@ namespace LEA.Utils
 {
 	public abstract class Pack
 	{
-		private Pack()
-		{
-			Debug.Assert(true, "Can't create an instance of class Pack");
-		}
+		private Pack() => Debug.Assert(true, "Can't create an instance of class Pack");
 
 		public static int BigEndianToInt(byte[] bs, int off)
 		{

@@ -130,10 +130,7 @@ namespace LEA.OperatingMode
 			tag = new byte[taglen];
 		}
 
-		private void ResetCounter()
-		{
-			ctr.FillBy(noncelen + 1, ctr.Length, (byte)0);
-		}
+		private void ResetCounter() => ctr.FillBy(noncelen + 1, ctr.Length, (byte)0);
 
 		private void IncreaseCounter()
 		{

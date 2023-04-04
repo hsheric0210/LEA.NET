@@ -232,7 +232,7 @@ namespace LEA.Test.OpMode
 
 			for (var i = 0; i < Lea256CbcTestVectors.Length; i++)
 			{
-				TestVector testvector = Lea256CbcTestVectors[i];
+				var testvector = Lea256CbcTestVectors[i];
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV);
@@ -253,7 +253,7 @@ namespace LEA.Test.OpMode
 
 			for (var i = 0; i < Lea256CbcTestVectors.Length; i++)
 			{
-				TestVector testvector = Lea256CbcTestVectors[i];
+				var testvector = Lea256CbcTestVectors[i];
 
 				// Act
 				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV);
@@ -274,7 +274,7 @@ namespace LEA.Test.OpMode
 
 			for (var i = 0; i < Lea192CbcTestVectors.Length; i++)
 			{
-				TestVector testvector = Lea192CbcTestVectors[i];
+				var testvector = Lea192CbcTestVectors[i];
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV);
@@ -294,7 +294,7 @@ namespace LEA.Test.OpMode
 
 			for (var i = 0; i < Lea192CbcTestVectors.Length; i++)
 			{
-				TestVector testvector = Lea192CbcTestVectors[i];
+				var testvector = Lea192CbcTestVectors[i];
 
 				// Act
 				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV);
@@ -315,7 +315,7 @@ namespace LEA.Test.OpMode
 
 			for (var i = 0; i < Lea128CbcTestVectors.Length; i++)
 			{
-				TestVector testvector = Lea128CbcTestVectors[i];
+				var testvector = Lea128CbcTestVectors[i];
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV);
@@ -335,7 +335,7 @@ namespace LEA.Test.OpMode
 
 			for (var i = 0; i < Lea128CbcTestVectors.Length; i++)
 			{
-				TestVector testvector = Lea128CbcTestVectors[i];
+				var testvector = Lea128CbcTestVectors[i];
 
 				// Act
 				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV);

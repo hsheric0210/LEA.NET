@@ -6,10 +6,7 @@ namespace LEA
 	public abstract class Padding
 	{
 		protected int blocksize;
-		public Padding(int blocksize)
-		{
-			this.blocksize = blocksize;
-		}
+		public Padding(int blocksize) => this.blocksize = blocksize;
 
 		/// <summary>
 		/// 패딩 추가
