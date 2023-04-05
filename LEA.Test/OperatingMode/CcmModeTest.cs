@@ -1,8 +1,11 @@
+using System;
+using System.Linq;
+using Xunit;
 using static LEA.BlockCipher;
 
 namespace LEA.Test.OpMode
 {
-	public class CcmModeTest
+    public class CcmModeTest
 	{
 		private readonly TestVectorAE[] lea256CcmTestVectors =
 		{
@@ -291,14 +294,49 @@ namespace LEA.Test.OpMode
 			{
 				// Arrange
 				var testvector = lea256CcmTestVectors[i];
+
+/* Unmerged change from project 'LEA.Test (net7.0)'
+Before:
 				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net472)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net48)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net462)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net481)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+				var cipher = new Lea.Ccm();
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
 				cipher.UpdateAAD(testvector.AAD);
-				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
-				var tag = actual.Slice(actual.Length - 16, 16);
-				var cipherText = actual[..^16];
+				var actual = cipher.DoFinal(testvector.PlainText);
+				var cipherText = new ArraySegment<byte>(actual, 0, actual.Length - 16);
+				var tag = new ArraySegment<byte>(actual, actual.Length - 16, 16);
 
 				// Assert
 				Assert.True(cipherText.SequenceEqual(testvector.CipherText), "LEA-256-CCM encryption ciphertext test case #" + (i + 1));
@@ -313,7 +351,42 @@ namespace LEA.Test.OpMode
 			{
 				// Arrange
 				var testvector = lea256CcmTestVectors[i];
+
+/* Unmerged change from project 'LEA.Test (net7.0)'
+Before:
 				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net472)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net48)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net462)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net481)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+				var cipher = new Lea.Ccm();
 
 				// Act
 				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
@@ -321,7 +394,7 @@ namespace LEA.Test.OpMode
 				var aggregated = new byte[testvector.CipherText.Length + testvector.Tag.Length];
 				testvector.CipherText.CopyTo(aggregated, 0);
 				testvector.Tag.CopyTo(aggregated, testvector.CipherText.Length);
-				ReadOnlySpan<byte> actual = cipher.DoFinal(aggregated);
+				var actual = cipher.DoFinal(aggregated);
 
 				// Assert
 				Assert.True(actual.SequenceEqual(testvector.PlainText), "LEA-256-CCM decryption test case #" + (i + 1));
@@ -335,14 +408,49 @@ namespace LEA.Test.OpMode
 			{
 				// Arrange
 				var testvector = lea192CcmTestVectors[i];
+
+/* Unmerged change from project 'LEA.Test (net7.0)'
+Before:
 				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net472)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net48)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net462)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net481)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+				var cipher = new Lea.Ccm();
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
 				cipher.UpdateAAD(testvector.AAD);
-				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
-				var tag = actual.Slice(actual.Length - 16, 16);
-				var cipherText = actual[..^16];
+				var actual = cipher.DoFinal(testvector.PlainText);
+				var cipherText = new ArraySegment<byte>(actual, 0, actual.Length - 16);
+				var tag = new ArraySegment<byte>(actual, actual.Length - 16, 16);
 
 				// Assert
 				Assert.True(cipherText.SequenceEqual(testvector.CipherText), "LEA-192-CCM encryption ciphertext test case #" + (i + 1));
@@ -357,7 +465,42 @@ namespace LEA.Test.OpMode
 			{
 				// Arrange
 				var testvector = lea192CcmTestVectors[i];
+
+/* Unmerged change from project 'LEA.Test (net7.0)'
+Before:
 				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net472)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net48)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net462)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net481)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+				var cipher = new Lea.Ccm();
 
 				// Act
 				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
@@ -365,7 +508,7 @@ namespace LEA.Test.OpMode
 				var aggregated = new byte[testvector.CipherText.Length + testvector.Tag.Length];
 				testvector.CipherText.CopyTo(aggregated, 0);
 				testvector.Tag.CopyTo(aggregated, testvector.CipherText.Length);
-				ReadOnlySpan<byte> actual = cipher.DoFinal(aggregated);
+				var actual = cipher.DoFinal(aggregated);
 
 				// Assert
 				Assert.True(actual.SequenceEqual(testvector.PlainText), "LEA-192-CCM decryption test case #" + (i + 1));
@@ -379,14 +522,49 @@ namespace LEA.Test.OpMode
 			{
 				// Arrange
 				var testvector = lea128CcmTestVectors[i];
+
+/* Unmerged change from project 'LEA.Test (net7.0)'
+Before:
 				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net472)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net48)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net462)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net481)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+				var cipher = new Lea.Ccm();
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
 				cipher.UpdateAAD(testvector.AAD);
-				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
-				var tag = actual.Slice(actual.Length - 16, 16);
-				var cipherText = actual[..^16];
+				var actual = cipher.DoFinal(testvector.PlainText);
+				var cipherText = new ArraySegment<byte>(actual, 0, actual.Length - 16);
+				var tag = new ArraySegment<byte>(actual, actual.Length - 16, 16);
 
 				// Assert
 				Assert.True(cipherText.SequenceEqual(testvector.CipherText), "LEA-128-CCM encryption ciphertext test case #" + (i + 1));
@@ -401,7 +579,42 @@ namespace LEA.Test.OpMode
 			{
 				// Arrange
 				var testvector = lea128CcmTestVectors[i];
+
+/* Unmerged change from project 'LEA.Test (net7.0)'
+Before:
 				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net472)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net48)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net462)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+
+/* Unmerged change from project 'LEA.Test (net481)'
+Before:
+				var cipher = new Symmetric.Lea.Ccm();
+After:
+				var cipher = new LEA.Lea.Ccm();
+*/
+				var cipher = new Lea.Ccm();
 
 				// Act
 				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV, testvector.Tag.Length);
@@ -409,7 +622,7 @@ namespace LEA.Test.OpMode
 				var aggregated = new byte[testvector.CipherText.Length + testvector.Tag.Length];
 				testvector.CipherText.CopyTo(aggregated, 0);
 				testvector.Tag.CopyTo(aggregated, testvector.CipherText.Length);
-				ReadOnlySpan<byte> actual = cipher.DoFinal(aggregated);
+				var actual = cipher.DoFinal(aggregated);
 
 				// Assert
 				Assert.True(actual.SequenceEqual(testvector.PlainText), "LEA-128-CCM decryption test case #" + (i + 1));

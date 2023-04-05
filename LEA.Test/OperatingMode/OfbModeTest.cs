@@ -1,8 +1,11 @@
+using System;
+using System.Linq;
+using Xunit;
 using static LEA.BlockCipher;
 
 namespace LEA.Test.OpMode
 {
-	public class OfbModeTest
+    public class OfbModeTest
 	{
 		private readonly TestVector[] lea256OfbTestVectors =
 		{
@@ -228,7 +231,42 @@ namespace LEA.Test.OpMode
 		public void LEA256_OFB_Encryption_AllTestVectorsPassing()
 		{
 			// Arrange
+
+/* Unmerged change from project 'LEA.Test (net7.0)'
+Before:
 			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net472)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net48)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net462)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net481)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+			var cipher = new Lea.Ofb();
 
 			for (var i = 0; i < lea256OfbTestVectors.Length; i++)
 			{
@@ -236,7 +274,7 @@ namespace LEA.Test.OpMode
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV);
-				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
+				var actual = cipher.DoFinal(testvector.PlainText);
 				cipher.Reset();
 
 				// Assert
@@ -248,7 +286,42 @@ namespace LEA.Test.OpMode
 		public void LEA256_OFB_Decryption_AllTestVectorsPassing()
 		{
 			// Arrange
+
+/* Unmerged change from project 'LEA.Test (net7.0)'
+Before:
 			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net472)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net48)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net462)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net481)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+			var cipher = new Lea.Ofb();
 
 			for (var i = 0; i < lea256OfbTestVectors.Length; i++)
 			{
@@ -256,7 +329,7 @@ namespace LEA.Test.OpMode
 
 				// Act
 				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV);
-				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.CipherText);
+				var actual = cipher.DoFinal(testvector.CipherText);
 				cipher.Reset();
 
 				// Assert
@@ -268,7 +341,42 @@ namespace LEA.Test.OpMode
 		public void LEA192_OFB_Encryption_AllTestVectorsPassing()
 		{
 			// Arrange
+
+/* Unmerged change from project 'LEA.Test (net7.0)'
+Before:
 			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net472)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net48)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net462)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net481)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+			var cipher = new Lea.Ofb();
 
 			for (var i = 0; i < lea192OfbTestVectors.Length; i++)
 			{
@@ -276,7 +384,7 @@ namespace LEA.Test.OpMode
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV);
-				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
+				var actual = cipher.DoFinal(testvector.PlainText);
 				cipher.Reset();
 
 				// Assert
@@ -288,7 +396,42 @@ namespace LEA.Test.OpMode
 		public void LEA192_OFB_Decryption_AllTestVectorsPassing()
 		{
 			// Arrange
+
+/* Unmerged change from project 'LEA.Test (net7.0)'
+Before:
 			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net472)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net48)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net462)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net481)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+			var cipher = new Lea.Ofb();
 
 			for (var i = 0; i < lea192OfbTestVectors.Length; i++)
 			{
@@ -296,7 +439,7 @@ namespace LEA.Test.OpMode
 
 				// Act
 				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV);
-				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.CipherText);
+				var actual = cipher.DoFinal(testvector.CipherText);
 				cipher.Reset();
 
 				// Assert
@@ -308,7 +451,42 @@ namespace LEA.Test.OpMode
 		public void LEA128_OFB_Encryption_AllTestVectorsPassing()
 		{
 			// Arrange
+
+/* Unmerged change from project 'LEA.Test (net7.0)'
+Before:
 			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net472)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net48)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net462)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net481)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+			var cipher = new Lea.Ofb();
 
 			for (var i = 0; i < lea128OfbTestVectors.Length; i++)
 			{
@@ -316,7 +494,7 @@ namespace LEA.Test.OpMode
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV);
-				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
+				var actual = cipher.DoFinal(testvector.PlainText);
 				cipher.Reset();
 
 				// Assert
@@ -328,7 +506,42 @@ namespace LEA.Test.OpMode
 		public void LEA128_OFB_Decryption_AllTestVectorsPassing()
 		{
 			// Arrange
+
+/* Unmerged change from project 'LEA.Test (net7.0)'
+Before:
 			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net472)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net48)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net462)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+
+/* Unmerged change from project 'LEA.Test (net481)'
+Before:
+			var cipher = new Symmetric.Lea.Ofb();
+After:
+			var cipher = new LEA.Lea.Ofb();
+*/
+			var cipher = new Lea.Ofb();
 
 			for (var i = 0; i < lea128OfbTestVectors.Length; i++)
 			{
@@ -336,7 +549,7 @@ namespace LEA.Test.OpMode
 
 				// Act
 				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV);
-				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.CipherText);
+				var actual = cipher.DoFinal(testvector.CipherText);
 				cipher.Reset();
 
 				// Assert

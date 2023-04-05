@@ -5,7 +5,9 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LEA", "LEA\LEA.csproj", "{C4A67270-29B7-4A4B-B34E-5B9CB80C3A7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LEA.Test", "LEA.Test\LEA.Test.csproj", "{4DEF3B6D-B771-4435-BC61-5F0DB0E9805A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LEA.Test", "LEA.Test\LEA.Test.csproj", "{4DEF3B6D-B771-4435-BC61-5F0DB0E9805A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LEA.Benchmark", "LEA.Benchmark\LEA.Benchmark.csproj", "{C9F32DB6-5BD2-4AE3-A10F-D9E242ADF46E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{4DEF3B6D-B771-4435-BC61-5F0DB0E9805A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DEF3B6D-B771-4435-BC61-5F0DB0E9805A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DEF3B6D-B771-4435-BC61-5F0DB0E9805A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9F32DB6-5BD2-4AE3-A10F-D9E242ADF46E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9F32DB6-5BD2-4AE3-A10F-D9E242ADF46E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9F32DB6-5BD2-4AE3-A10F-D9E242ADF46E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9F32DB6-5BD2-4AE3-A10F-D9E242ADF46E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

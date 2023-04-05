@@ -1,4 +1,6 @@
-﻿
+﻿using System;
+using System.Linq;
+using Xunit;
 using LEA.Paddings;
 
 namespace LEA.Test.Padding
@@ -17,7 +19,7 @@ namespace LEA.Test.Padding
 			var paddedActual = impl.Pad(unpadded);
 
 			// Assert
-			Assert.Equal(paddedExpected.ToArray(), paddedActual.ToArray());
+			Assert.Equal(paddedExpected, paddedActual);
 		}
 
 		[Fact]
@@ -31,7 +33,7 @@ namespace LEA.Test.Padding
 			var paddedActual = impl.Pad(unpadded);
 
 			// Assert
-			Assert.Equal(unpadded.ToArray(), paddedActual.ToArray());
+			Assert.Equal(unpadded, paddedActual);
 		}
 
 		[Fact]
@@ -54,13 +56,13 @@ namespace LEA.Test.Padding
 			var unpadded = new byte[] { 0xff, 0xff, 0xff, 0xff };
 			var paddedExpected = new byte[] { 0xff, 0xff, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14 };
 			var paddedActual = new byte[16];
-			unpadded.CopyTo(paddedActual.AsSpan());
+			Buffer.BlockCopy(unpadded, 0, paddedActual, 0, unpadded.Length);
 
 			// Act
 			impl.Pad(paddedActual, 2);
 
 			// Assert
-			Assert.Equal(paddedExpected.ToArray(), paddedActual.ToArray());
+			Assert.Equal(paddedExpected, paddedActual);
 		}
 
 		[Fact]
@@ -87,7 +89,7 @@ namespace LEA.Test.Padding
 			var unpaddedActual = impl.Unpad(padded);
 
 			// Assert
-			Assert.Equal(unpaddedExpected, unpaddedActual.ToArray());
+			Assert.Equal(unpaddedExpected, unpaddedActual);
 		}
 
 		[Fact]
@@ -102,7 +104,7 @@ namespace LEA.Test.Padding
 			var unpaddedActual = impl.Unpad(padded);
 
 			// Assert
-			Assert.Equal(unpaddedExpected.ToArray(), unpaddedActual.ToArray());
+			Assert.Equal(unpaddedExpected, unpaddedActual);
 		}
 
 		[Fact]

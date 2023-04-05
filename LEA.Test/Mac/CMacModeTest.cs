@@ -1,6 +1,10 @@
+using System;
+using System.Linq;
+using Xunit;
+
 namespace LEA.Test.Mac
 {
-	public class CMacModeTest
+    public class CMacModeTest
 	{
 		private readonly TestVectorMac[] lea256CMacTestVectors =
 		{
@@ -196,14 +200,49 @@ namespace LEA.Test.Mac
 		public void LEA256_CMAC_AllTestVectorsPassing()
 		{
 			// Arrange
+
+/* Unmerged change from project 'LEA.Test (net7.0)'
+Before:
 			var cipher = new Symmetric.Lea.CMac();
+After:
+			var cipher = new LEA.Lea.CMac();
+*/
+
+/* Unmerged change from project 'LEA.Test (net472)'
+Before:
+			var cipher = new Symmetric.Lea.CMac();
+After:
+			var cipher = new LEA.Lea.CMac();
+*/
+
+/* Unmerged change from project 'LEA.Test (net48)'
+Before:
+			var cipher = new Symmetric.Lea.CMac();
+After:
+			var cipher = new LEA.Lea.CMac();
+*/
+
+/* Unmerged change from project 'LEA.Test (net462)'
+Before:
+			var cipher = new Symmetric.Lea.CMac();
+After:
+			var cipher = new LEA.Lea.CMac();
+*/
+
+/* Unmerged change from project 'LEA.Test (net481)'
+Before:
+			var cipher = new Symmetric.Lea.CMac();
+After:
+			var cipher = new LEA.Lea.CMac();
+*/
+			var cipher = new Lea.CMac();
 
 			for (var i = 0; i < lea256CMacTestVectors.Length; i++)
 			{
 				var testvector = lea256CMacTestVectors[i];
 				// Act
 				cipher.Init(testvector.Key);
-				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.Data);
+				var actual = cipher.DoFinal(testvector.Data);
 				cipher.Reset();
 
 				// Assert
@@ -215,7 +254,42 @@ namespace LEA.Test.Mac
 		public void LEA192_CMAC_AllTestVectorsPassing()
 		{
 			// Arrange
+
+/* Unmerged change from project 'LEA.Test (net7.0)'
+Before:
 			var cipher = new Symmetric.Lea.CMac();
+After:
+			var cipher = new LEA.Lea.CMac();
+*/
+
+/* Unmerged change from project 'LEA.Test (net472)'
+Before:
+			var cipher = new Symmetric.Lea.CMac();
+After:
+			var cipher = new LEA.Lea.CMac();
+*/
+
+/* Unmerged change from project 'LEA.Test (net48)'
+Before:
+			var cipher = new Symmetric.Lea.CMac();
+After:
+			var cipher = new LEA.Lea.CMac();
+*/
+
+/* Unmerged change from project 'LEA.Test (net462)'
+Before:
+			var cipher = new Symmetric.Lea.CMac();
+After:
+			var cipher = new LEA.Lea.CMac();
+*/
+
+/* Unmerged change from project 'LEA.Test (net481)'
+Before:
+			var cipher = new Symmetric.Lea.CMac();
+After:
+			var cipher = new LEA.Lea.CMac();
+*/
+			var cipher = new Lea.CMac();
 
 			for (var i = 0; i < lea192CMacTestVectors.Length; i++)
 			{
@@ -223,7 +297,7 @@ namespace LEA.Test.Mac
 
 				// Act
 				cipher.Init(testvector.Key);
-				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.Data);
+				var actual = cipher.DoFinal(testvector.Data);
 				cipher.Reset();
 
 				// Assert
@@ -235,7 +309,42 @@ namespace LEA.Test.Mac
 		public void LEA128_CMAC_AllTestVectorsPassing()
 		{
 			// Arrange
+
+/* Unmerged change from project 'LEA.Test (net7.0)'
+Before:
 			var cipher = new Symmetric.Lea.CMac();
+After:
+			var cipher = new LEA.Lea.CMac();
+*/
+
+/* Unmerged change from project 'LEA.Test (net472)'
+Before:
+			var cipher = new Symmetric.Lea.CMac();
+After:
+			var cipher = new LEA.Lea.CMac();
+*/
+
+/* Unmerged change from project 'LEA.Test (net48)'
+Before:
+			var cipher = new Symmetric.Lea.CMac();
+After:
+			var cipher = new LEA.Lea.CMac();
+*/
+
+/* Unmerged change from project 'LEA.Test (net462)'
+Before:
+			var cipher = new Symmetric.Lea.CMac();
+After:
+			var cipher = new LEA.Lea.CMac();
+*/
+
+/* Unmerged change from project 'LEA.Test (net481)'
+Before:
+			var cipher = new Symmetric.Lea.CMac();
+After:
+			var cipher = new LEA.Lea.CMac();
+*/
+			var cipher = new Lea.CMac();
 
 			for (var i = 0; i < lea128CMacTestVectors.Length; i++)
 			{
@@ -243,7 +352,7 @@ namespace LEA.Test.Mac
 
 				// Act
 				cipher.Init(testvector.Key);
-				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.Data);
+				var actual = cipher.DoFinal(testvector.Data);
 				cipher.Reset();
 
 				// Assert

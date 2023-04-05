@@ -1,8 +1,11 @@
+using System;
+using System.Linq;
+using Xunit;
 using static LEA.BlockCipher;
 
 namespace LEA.Test.OpMode
 {
-	public class CtrModeTest
+    public class CtrModeTest
 	{
 		private readonly TestVector[] lea256CtrTestVectors =
 		{
@@ -228,7 +231,42 @@ namespace LEA.Test.OpMode
 		public void LEA256_CTR_Encryption_AllTestVectorsPassing()
 		{
 			// Arrange
+
+/* Unmerged change from project 'LEA.Test (net7.0)'
+Before:
 			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net472)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net48)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net462)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net481)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+			var cipher = new Lea.Ctr();
 
 			for (var i = 0; i < lea256CtrTestVectors.Length; i++)
 			{
@@ -236,7 +274,7 @@ namespace LEA.Test.OpMode
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV);
-				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
+				var actual = cipher.DoFinal(testvector.PlainText);
 				cipher.Reset();
 
 				// Assert
@@ -248,7 +286,42 @@ namespace LEA.Test.OpMode
 		public void LEA256_CTR_Decryption_AllTestVectorsPassing()
 		{
 			// Arrange
+
+/* Unmerged change from project 'LEA.Test (net7.0)'
+Before:
 			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net472)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net48)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net462)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net481)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+			var cipher = new Lea.Ctr();
 
 			for (var i = 0; i < lea256CtrTestVectors.Length; i++)
 			{
@@ -256,7 +329,7 @@ namespace LEA.Test.OpMode
 
 				// Act
 				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV);
-				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.CipherText);
+				var actual = cipher.DoFinal(testvector.CipherText);
 				cipher.Reset();
 
 				// Assert
@@ -268,7 +341,42 @@ namespace LEA.Test.OpMode
 		public void LEA192_CTR_Encryption_AllTestVectorsPassing()
 		{
 			// Arrange
+
+/* Unmerged change from project 'LEA.Test (net7.0)'
+Before:
 			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net472)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net48)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net462)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net481)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+			var cipher = new Lea.Ctr();
 
 			for (var i = 0; i < lea192CtrTestVectors.Length; i++)
 			{
@@ -276,7 +384,7 @@ namespace LEA.Test.OpMode
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV);
-				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
+				var actual = cipher.DoFinal(testvector.PlainText);
 				cipher.Reset();
 
 				// Assert
@@ -288,7 +396,42 @@ namespace LEA.Test.OpMode
 		public void LEA192_CTR_Decryption_AllTestVectorsPassing()
 		{
 			// Arrange
+
+/* Unmerged change from project 'LEA.Test (net7.0)'
+Before:
 			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net472)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net48)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net462)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net481)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+			var cipher = new Lea.Ctr();
 
 			for (var i = 0; i < lea192CtrTestVectors.Length; i++)
 			{
@@ -296,7 +439,7 @@ namespace LEA.Test.OpMode
 
 				// Act
 				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV);
-				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.CipherText);
+				var actual = cipher.DoFinal(testvector.CipherText);
 				cipher.Reset();
 
 				// Assert
@@ -308,7 +451,42 @@ namespace LEA.Test.OpMode
 		public void LEA128_CTR_Encryption_AllTestVectorsPassing()
 		{
 			// Arrange
+
+/* Unmerged change from project 'LEA.Test (net7.0)'
+Before:
 			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net472)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net48)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net462)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net481)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+			var cipher = new Lea.Ctr();
 
 			for (var i = 0; i < lea128CtrTestVectors.Length; i++)
 			{
@@ -316,7 +494,7 @@ namespace LEA.Test.OpMode
 
 				// Act
 				cipher.Init(Mode.ENCRYPT, testvector.Key, testvector.IV);
-				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.PlainText);
+				var actual = cipher.DoFinal(testvector.PlainText);
 				cipher.Reset();
 
 				// Assert
@@ -328,7 +506,42 @@ namespace LEA.Test.OpMode
 		public void LEA128_CTR_Decryption_AllTestVectorsPassing()
 		{
 			// Arrange
+
+/* Unmerged change from project 'LEA.Test (net7.0)'
+Before:
 			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net472)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net48)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net462)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+
+/* Unmerged change from project 'LEA.Test (net481)'
+Before:
+			var cipher = new Symmetric.Lea.Ctr();
+After:
+			var cipher = new LEA.Lea.Ctr();
+*/
+			var cipher = new Lea.Ctr();
 
 			for (var i = 0; i < lea128CtrTestVectors.Length; i++)
 			{
@@ -336,7 +549,7 @@ namespace LEA.Test.OpMode
 
 				// Act
 				cipher.Init(Mode.DECRYPT, testvector.Key, testvector.IV);
-				ReadOnlySpan<byte> actual = cipher.DoFinal(testvector.CipherText);
+				var actual = cipher.DoFinal(testvector.CipherText);
 				cipher.Reset();
 
 				// Assert

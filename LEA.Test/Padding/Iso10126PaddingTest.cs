@@ -1,4 +1,6 @@
-﻿
+﻿using System;
+using System.Linq;
+using Xunit;
 using LEA.Paddings;
 
 namespace LEA.Test.Padding
@@ -18,8 +20,8 @@ namespace LEA.Test.Padding
 			var paddedActual = impl.Pad(unpadded);
 
 			// Assert
-			Assert.Equal(paddedExpected[..unpaddedLength], paddedExpected[..unpaddedLength]);
-			Assert.True(paddedExpected[^1] == paddedActual[^1], "Padding length mismatch");
+			Assert.Equal(new ArraySegment<byte>(paddedExpected, 0, unpaddedLength), new ArraySegment<byte>(paddedActual, 0, unpaddedLength));
+			Assert.Equal(paddedExpected.Last(), paddedActual.Last());
 		}
 
 		[Fact]
@@ -33,7 +35,7 @@ namespace LEA.Test.Padding
 			var paddedActual = impl.Pad(unpadded);
 
 			// Assert
-			Assert.Equal(unpadded.ToArray(), paddedActual.ToArray());
+			Assert.Equal(unpadded, paddedActual);
 		}
 
 		[Fact]
@@ -57,14 +59,14 @@ namespace LEA.Test.Padding
 			var unpaddedLength = 2;
 			var paddedExpected = new byte[] { 0xff, 0xff, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14 };
 			var paddedActual = new byte[16];
-			unpadded.CopyTo(paddedActual.AsSpan());
+			Buffer.BlockCopy(unpadded, 0, paddedActual, 0, unpadded.Length);
 
 			// Act
 			impl.Pad(paddedActual, unpaddedLength);
 
 			// Assert
-			Assert.Equal(paddedExpected[..unpaddedLength], paddedActual[..unpaddedLength]);
-			Assert.True(paddedExpected[^1] == paddedActual[^1], "Padding length mismatch");
+			Assert.Equal(new ArraySegment<byte>(paddedExpected, 0, unpaddedLength), new ArraySegment<byte>(paddedActual, 0, unpaddedLength));
+			Assert.Equal(paddedExpected.Last(), paddedActual.Last());
 		}
 
 		[Fact]
@@ -92,7 +94,7 @@ namespace LEA.Test.Padding
 			var unpaddedActual = impl.Unpad(padded);
 
 			// Assert
-			Assert.Equal(unpaddedExpected, unpaddedActual.ToArray());
+			Assert.Equal(unpaddedExpected, unpaddedActual);
 		}
 
 		[Fact]
@@ -107,7 +109,7 @@ namespace LEA.Test.Padding
 			var unpaddedActual = impl.Unpad(padded);
 
 			// Assert
-			Assert.Equal(unpaddedExpected.ToArray(), unpaddedActual.ToArray());
+			Assert.Equal(unpaddedExpected, unpaddedActual);
 		}
 
 		[Fact]
