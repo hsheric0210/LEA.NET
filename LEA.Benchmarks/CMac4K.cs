@@ -15,14 +15,12 @@ namespace LEA.Benchmarks
 	[SimpleJob(runtimeMoniker: RuntimeMoniker.Net462)]
 	[SimpleJob(runtimeMoniker: RuntimeMoniker.NativeAot60)]
 	[RPlotExporter, MinColumn, MaxColumn, StdDevColumn, MedianColumn]
-	public class CMac
+	public class CMac4K
 	{
+		private const int DataSize = 4096;
 		private Mac mac;
 		private byte[] plaintext;
 		private byte[] key;
-
-		[Params(4096, 8388608)]
-		public int dataSize;
 
 		[Params(128, 192, 256)]
 		public int keySize;
@@ -33,8 +31,8 @@ namespace LEA.Benchmarks
 			mac = new Lea.CMac();
 			var prng = RandomNumberGenerator.Create();
 
-			plaintext = new byte[dataSize];
-			prng.GetBytes(plaintext, 0, dataSize);
+			plaintext = new byte[DataSize];
+			prng.GetBytes(plaintext, 0, DataSize);
 
 			key = new byte[keySize / 8];
 			prng.GetBytes(key, 0, key.Length);

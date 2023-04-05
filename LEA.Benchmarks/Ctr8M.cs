@@ -8,23 +8,21 @@ namespace LEA.Benchmarks
 	[SimpleJob(runtimeMoniker: RuntimeMoniker.Net462)]
 	[SimpleJob(runtimeMoniker: RuntimeMoniker.NativeAot60)]
 	[RPlotExporter, MinColumn, MaxColumn, StdDevColumn, MedianColumn]
-	public class Cbc
+	public class Ctr8M
 	{
+		private const int DataSize = 8388608;
 		private CipherBenchmark bench;
-
-		[Params(4096, 8388608)]
-		public int dataSize;
 
 		[Params(128, 192, 256)]
 		public int keySize;
 
 		[GlobalSetup]
-		public void GlobalSetup() => bench = new CipherBenchmark(new Lea.Cbc(), dataSize, keySize / 8);
+		public void GlobalSetup() => bench = new CipherBenchmark(new Lea.Ctr(), DataSize, keySize / 8);
 
 		[Benchmark]
-		public byte[] CBC_Encryption() => bench.Encryption();
+		public byte[] CTR_Enc() => bench.Encryption();
 
 		[Benchmark]
-		public byte[] CBC_Decryption() => bench.Decryption();
+		public byte[] CTR_Dec() => bench.Decryption();
 	}
 }

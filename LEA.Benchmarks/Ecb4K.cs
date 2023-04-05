@@ -15,15 +15,13 @@ namespace LEA.Benchmarks
 	[SimpleJob(runtimeMoniker: RuntimeMoniker.Net462)]
 	[SimpleJob(runtimeMoniker: RuntimeMoniker.NativeAot60)]
 	[RPlotExporter, MinColumn, MaxColumn, StdDevColumn, MedianColumn]
-	public class Ecb
+	public class Ecb4K
 	{
+		private const int DataSize = 4096;
 		private BlockCipherMode cipher;
 		private byte[] plaintext;
 		private byte[] ciphertext;
 		private byte[] key;
-
-		[Params(4096, 8388608)]
-		public int dataSize;
 
 		[Params(128, 192, 256)]
 		public int keySize;
@@ -33,14 +31,14 @@ namespace LEA.Benchmarks
 		{
 			var prng = RandomNumberGenerator.Create();
 
-			plaintext = new byte[dataSize];
-			prng.GetBytes(plaintext, 0, dataSize);
+			plaintext = new byte[DataSize];
+			prng.GetBytes(plaintext, 0, DataSize);
 
 			key = new byte[keySize / 8];
 			prng.GetBytes(key, 0, key.Length);
 
-			var data = new byte[dataSize];
-			prng.GetBytes(data, 0, dataSize);
+			var data = new byte[DataSize];
+			prng.GetBytes(data, 0, DataSize);
 
 			cipher = new Lea.Ecb();
 			cipher.Init(Mode.ENCRYPT, key);
@@ -48,14 +46,14 @@ namespace LEA.Benchmarks
 		}
 
 		[Benchmark]
-		public byte[] ECB_Encryption()
+		public byte[] ECB_Enc()
 		{
 			cipher.Init(Mode.ENCRYPT, key);
 			return cipher.DoFinal(plaintext);
 		}
 
 		[Benchmark]
-		public byte[] ECB_Decryption()
+		public byte[] ECB_Dec()
 		{
 			cipher.Init(Mode.DECRYPT, key);
 			return cipher.DoFinal(ciphertext);

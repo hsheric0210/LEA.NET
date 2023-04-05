@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using static LEA.BlockCipher;
 
 namespace LEA.Benchmarks
@@ -15,9 +16,9 @@ namespace LEA.Benchmarks
 		private readonly byte[] plaintext;
 		private readonly byte[] ciphertext;
 		private readonly byte[] key;
-		private readonly byte[] iv;
+		private readonly byte[] nonce;
 
-		public CipherBenchmarkAE(BlockCipherModeAE cipher, int dataSize, int keySize)
+		public CipherBenchmarkAE(BlockCipherModeAE cipher, int dataSize, int keySize, int nonceSize)
 		{
 			this.cipher = cipher;
 			var prng = RandomNumberGenerator.Create();
@@ -27,25 +28,25 @@ namespace LEA.Benchmarks
 			key = new byte[keySize];
 			prng.GetBytes(key, 0, keySize);
 
-			iv = new byte[16];
-			prng.GetBytes(iv, 0, 16);
+			nonce = new byte[16];
+			prng.GetBytes(nonce, 0, 16);
 
 			var data = new byte[dataSize];
 			prng.GetBytes(data, 0, dataSize);
 
-			cipher.Init(Mode.ENCRYPT, key, iv, 16);
+			cipher.Init(Mode.ENCRYPT, key, nonce, 16);
 			ciphertext = cipher.DoFinal(data);
 		}
 
 		public byte[] Encryption()
 		{
-			cipher.Init(Mode.ENCRYPT, key, iv, 16);
+			cipher.Init(Mode.ENCRYPT, key, nonce, 16);
 			return cipher.DoFinal(plaintext);
 		}
 
 		public byte[] Decryption()
 		{
-			cipher.Init(Mode.DECRYPT, key, iv, 16);
+			cipher.Init(Mode.DECRYPT, key, nonce, 16);
 			return cipher.DoFinal(ciphertext);
 		}
 	}

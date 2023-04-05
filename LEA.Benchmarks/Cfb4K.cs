@@ -8,23 +8,21 @@ namespace LEA.Benchmarks
 	[SimpleJob(runtimeMoniker: RuntimeMoniker.Net462)]
 	[SimpleJob(runtimeMoniker: RuntimeMoniker.NativeAot60)]
 	[RPlotExporter, MinColumn, MaxColumn, StdDevColumn, MedianColumn]
-	public class Gcm
+	public class Cfb4K
 	{
-		private CipherBenchmarkAE bench;
-
-		[Params(4096, 8388608)]
-		public int dataSize;
+		private const int DataSize = 4096;
+		private CipherBenchmark bench;
 
 		[Params(128, 192, 256)]
 		public int keySize;
 
 		[GlobalSetup]
-		public void GlobalSetup() => bench = new CipherBenchmarkAE(new Lea.Gcm(), dataSize, keySize / 8);
+		public void GlobalSetup() => bench = new CipherBenchmark(new Lea.Cfb(), DataSize, keySize / 8);
 
 		[Benchmark]
-		public byte[] GCM_Encryption() => bench.Encryption();
+		public byte[] CFB_Enc() => bench.Encryption();
 
 		[Benchmark]
-		public byte[] GCM_Decryption() => bench.Decryption();
+		public byte[] CFB_Dec() => bench.Decryption();
 	}
 }
