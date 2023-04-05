@@ -5,7 +5,7 @@ using static LEA.BlockCipher;
 
 namespace LEA.Test.OpMode
 {
-    public class EcbModeTest
+	public class EcbModeTest
 	{
 		private readonly TestVector[] lea256EcbTestVectors =
 		{

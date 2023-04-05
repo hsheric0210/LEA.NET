@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LEA", "LEA\LEA.csproj", "{C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LEA.Test", "LEA.Test\LEA.Test.csproj", "{4DEF3B6D-B771-4435-BC61-5F0DB0E9805A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LEA.Benchmark", "LEA.Benchmark\LEA.Benchmark.csproj", "{C9F32DB6-5BD2-4AE3-A10F-D9E242ADF46E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LEA.Benchmarks", "LEA.Benchmarks\LEA.Benchmarks.csproj", "{C9F32DB6-5BD2-4AE3-A10F-D9E242ADF46E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

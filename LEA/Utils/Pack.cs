@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace LEA.Utils
 {
 	public static class Pack

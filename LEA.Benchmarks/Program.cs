@@ -1,10 +1,10 @@
 ﻿using BenchmarkDotNet.Running;
-using LEA.Benchmark;
+using LEA.Benchmarks;
 
 internal class Program
 {
 	private static void Main(string[] args)
 	{
-		BenchmarkRunner.Run<CbcModeBenchmark>();
+		BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args);
 	}
 }

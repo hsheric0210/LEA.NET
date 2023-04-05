@@ -1,9 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace LEA
 {
-	public static class MemoryStreamCompatExtension
+	internal static class MemoryStreamCompatExtension
 	{
 		public static byte[] BufferData(this MemoryStream stream)
 		{

@@ -2,7 +2,7 @@
 
 namespace LEA
 {
-	public static class ArrayCompatExtension
+	internal static class ArrayCompatExtension
 	{
 		public static T[] CopyOf<T>(this T[] array) => array.CopyOf(0, array.Length);
 
