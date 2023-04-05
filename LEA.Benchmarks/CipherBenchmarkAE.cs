@@ -28,8 +28,8 @@ namespace LEA.Benchmarks
 			key = new byte[keySize];
 			prng.GetBytes(key, 0, keySize);
 
-			nonce = new byte[16];
-			prng.GetBytes(nonce, 0, 16);
+			nonce = new byte[nonceSize];
+			prng.GetBytes(nonce, 0, nonceSize);
 
 			var data = new byte[dataSize];
 			prng.GetBytes(data, 0, dataSize);
